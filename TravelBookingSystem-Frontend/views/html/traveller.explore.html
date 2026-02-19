@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Explore</title>
+    <link rel="stylesheet" href="../../public/css/traveller.dashboard.css">
+    <link rel="stylesheet" href="../../public/css/traveller.explore.css">
+</head>
+<body>
+    <!--Sidebar-->
+    <div class="sidebar">
+        <div class="logo">
+            <img src="../../assets/logo.jpg" alt="TripZip Logo" class="logo-img">
+        </div>
+        <div class="nav">
+            <a class="nav-item" href="../../views/html/traveller.dashboard.html">
+                🏠 Dashboard
+            </a>
+            <a class="nav-item active" href="traveller.explore.html">
+                📋 Explore
+            </a>
+        </div>
+    </div>
+    <!--Main content-->
+    <div class="main">
+        <div class="topbar">
+            <h1 class="topbar-title">Explore</h1>
+            <div class="profile" id="profile">
+                <button class="profile-btn" id="profileBtn" type="button">
+                    <img class="avatar" src="../../assets/avatar.png" alt="User avatar">
+                    <span class="profile-name">
+                        Emily Smith
+                        <span class="profile-role">Traveller</span>
+                    </span>
+                </button>
+                <div class="dropdown" id="profileMenu">
+                    <div class="dropdown-header">
+                        <div class="dropdown-name">Emily Smith</div>
+                        <div class="dropdown-email">emily@gmail.com</div>
+                    </div>
+                    <a class="dropdown-item" href="#">View Profile</a>
+                    <button class="dropdown-item" type="button">Log Out</button>
+                </div>
+            </div>
+        </div>
+        <!-- Content -->
+        <div class="content">
+            <div class="search-area">
+                <div class="one-field destination-field">
+                    <p class="small-title">Destination</p>
+                    <input class="text-input" type="text" placeholder="Search...">
+                </div>
+                <div class="one-field price-field">
+                    <p class="small-title">Price Range</p>
+                    <div class="price-inputs">
+                        <input class="text-input" type="number" placeholder="Min Price" />
+                    <span class="dash">-</span>
+                    <input class="text-input" type="number" placeholder="Max Price" />
+                    </div>
+                </div>
+            </div>
+            <div class="cards">
+                <div class="package-card">
+                    <img class="card-img" src="../../assets/Hawaii.png" alt="Beach Getaway">
+                    <div class="card-info">
+                        <h3>Beach Getaway</h3>
+                        <p>📍 Hawaii</p>
+                        <p>🗓 Dates: May 28 - June 6, 2026</p>
+                        <p>£ 1,880</p>
+                        <button class="btn" type="button">View Details</button>
+                    </div>
+                </div>
+                <div class="package-card">
+                    <img class="card-img" src="../../assets/Bali.png" alt="Beach Getaway">
+                    <div class="card-info">
+                        <h3>Tropical Paradise</h3>
+                        <p>📍 Bali</p>
+                        <p>🗓 Dates: August 1 - August 8, 2026</p>
+                        <p>£ 2,975</p>
+                        <button class="btn" type="button">View Details</button>
+                    </div>
+                </div>
+                <div class="package-card">
+                    <img class="card-img" src="../../assets/France.png" alt="Europe Trip">
+                    <div class="card-info">
+                        <h3>Europe Trip</h3>
+                        <p>📍 France, Spain, Portugal</p>
+                        <p>🗓 Dates: June 1 - June 14, 2026</p>
+                        <p>£ 1,250</p>
+                        <button class="btn" type="button">View Details</button>
+                    </div>
+                </div>
+
+                <div class="package-card">
+                    <img class="card-img" src="../../assets/Balkan.png" alt="Balkan Trip">
+                    <div class="card-info">
+                        <h3>Balkan Trip</h3>
+                        <p>📍 Albania, Bulgaria, Croatia</p>
+                        <p>🗓 Dates: June 2 - June 16, 2026</p>
+                        <p>£ 700</p>
+                        <button class="btn" type="button">View Details</button>
+                    </div>
+                </div>
+                <div class="package-card">
+                    <img class="card-img" src="../../assets/Switzerland.png" alt="Mountain Adventure">
+                    <div class="card-info">
+                        <h3>Mountain Adventure</h3>
+                        <p>📍 Swiss Alps</p>
+                        <p>🗓 Dates: July 5 - July 12, 2026</p>
+                        <p>£ 1,430</p>
+                        <button class="btn" type="button">View Details</button>
+                    </div>
+                </div>
+                <div class="package-card">
+                    <img class="card-img" src="../../assets/Vietnam.png" alt="Amazing Adventure Tour">
+                    <div class="card-info">
+                        <h3>Amazing Adventure Tour</h3>
+                        <p>📍 Vietnam</p>
+                        <p>🗓 Dates: July 15 - July 25, 2026</p>
+                        <p>£ 2,500</p>
+                        <button class="btn" type="button">View Details</button>
+                    </div>
+                </div>
+                <div class="package-card">
+                    <img class="card-img" src="../../assets/Iceland.png" alt="Nature Exploration">
+                    <div class="card-info">
+                        <h3>Nature Exploration</h3>
+                        <p>📍 Iceland</p>
+                        <p>🗓 Dates: June 2 - June 8, 2026</p>
+                        <p>£ 800</p>
+                        <button class="btn" type="button">View Details</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="../../public/js/traveller.dashboard.js"></script>
+</body>
+</html>
