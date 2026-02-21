@@ -1,0 +1,137 @@
+/* Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Segoe UI', Arial, sans-serif;
+}
+
+/* Container split */
+.container {
+  display: flex;
+  height: 100vh;
+  width: 100%;
+}
+
+/* Left side - background image (larger than right) */
+.left-half {
+  flex: 5; /* left wider portion */
+  background-image: url('../assets/background.jpeg');
+  background-size: cover;
+  background-position: left center; /* show left side of image */
+}
+
+/* Right side - forms */
+.right-half {
+  flex: 3;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(10px);
+}
+
+/* Form container */
+.form-container {
+  width: 80%;
+  max-width: 400px;
+  padding: 30px;
+  background-color: rgba(255,255,255,0.8);
+  border-radius: 16px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: #5a381e; /* brown text */
+}
+
+/* Logo */
+.logo {
+  width: 120px;
+  height: auto;
+  margin-bottom: 25px;
+}
+
+/* Form box */
+.form-box {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* Hide elements */
+.hidden {
+  display: none;
+}
+
+/* Headings */
+.form-box h2 {
+  text-align: center;
+  color: #8b5e3c; /* dark brown */
+  margin-bottom: 15px;
+}
+
+/* Labels */
+.form-box label {
+  font-weight: bold;
+  font-size: 14px;
+}
+
+/* Inputs */
+.form-box input, .form-box select {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 12px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+  background-color: white;
+  color: #5a381e;
+}
+
+/* Submit button */
+.submit-btn {
+  width: 100%;
+  padding: 12px;
+  border: none;
+  border-radius: 6px;
+  background-color: #8b5e3c;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.submit-btn:hover {
+  background-color: #70452a;
+}
+
+/* Forgot password */
+.forgot-password {
+  font-size: 13px;
+  color: #8b5e3c;
+  text-decoration: none;
+  align-self: flex-end;
+  margin-bottom: 10px;
+}
+
+.forgot-password:hover {
+  text-decoration: underline;
+}
+
+/* Sign Up link button */
+.signup-link {
+  background: none;
+  border: none;
+  color: #8b5e3c;
+  font-weight: bold;
+  cursor: pointer;
+  margin-top: 15px;
+  font-size: 14px;
+  transition: transform 0.2s;
+}
+
+.signup-link:hover {
+  transform: translateY(-2px);
+  text-decoration: underline;
+}

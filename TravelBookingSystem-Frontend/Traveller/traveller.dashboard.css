@@ -1,0 +1,248 @@
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #f3eee9;
+    color: #2b1b14;
+}
+.app {
+    display: flex;
+    min-height: 100vh;
+}
+.sidebar {
+    width: 240px;
+    background: #6a3e2b;
+    color: white;
+    padding: 20px;
+    position: fixed;
+    height: 100vh;
+    left: 0;
+    top: 0;
+}
+.logo {
+    font-weight: bold;
+    font-size: 22px;
+    margin-bottom: 20px;
+}
+.nav {
+    margin-top: 120px;
+}
+.nav-item {
+    color: white;
+    text-decoration: none;
+    padding: 12px;
+    border-radius: 8px;
+    display: block;
+    margin-bottom: 10px;
+}
+.nav-item:hover {
+    background: rgba(255, 255, 255, 0.15);
+}
+.nav-item.active {
+    background: rgba(255, 255, 255, 0.25);
+}
+.main {
+    margin-left: 280px;
+    min-height: 100vh;
+}
+.topbar {
+    background: #6a3e2b;
+    color: white;
+    padding: 16px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 72px;
+    box-sizing: border-box;
+}
+.topbar-title {
+    font-size: 24px;
+    margin: 0;
+}
+.profile {
+    position: relative;
+}
+.profile-btn {
+    background: transparent;
+    border: none;
+    color: white;
+    cursor: pointer;
+    padding: 8px 10px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.profile-btn:hover {
+    background: rgba(255, 255, 255, 0.15);
+}
+.avatar {
+    width: 36px;
+    height: 36px;
+    background: #d8c6ba;
+    border-radius: 50%;
+    vertical-align: middle;
+    margin-right: 10px;
+}
+.profile-name {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    font-weight: bold;
+    font-size: 14px;
+    line-height: 1.1;
+}
+.profile-role {
+    font-weight: normal;
+    font-size: 12px;
+    opacity: 0.8;
+    margin-top: 2px;
+}
+.dropdown {
+    position: absolute;
+    right: 0;
+    top: 50px;
+    width: 220px;
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    padding: 10px;
+    display: none;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+}
+.dropdown.open {
+    display: block;
+}
+.dropdown-header {
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+    margin-bottom: 6px;
+}
+.dropdown-name {
+    font-weight: bold;
+    font-size: 14px;
+    color: #2b1b14;
+    margin-bottom: 3px;
+}
+.dropdown-email {
+    font-size: 12px;
+    color: #555;
+    margin-top: 2px;
+}
+.dropdown-item {
+    display: block;
+    width: 100%;
+    text-align: left;
+    padding: 10px 8px;
+    border-radius: 8px;
+    text-decoration: none;
+    color: #2b1b14;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+}
+.dropdown-item:hover {
+    background: #f1f1f1;
+}
+.content {
+    padding: 24px;
+    max-width: 1100px;
+}
+.section-title {
+    margin: 16px 0 12px;
+    font-size: 32px;
+}
+.stats {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 24px;
+}
+.stat {
+    flex: 1;
+    background: white;
+    border-radius: 12px;
+    padding: 18px;
+    border: 1px solid #e6d8cf;
+}
+.stat-number {
+    font-size: 30px;
+    font-weight: bold;
+}
+.stat-text {
+    margin-top: 6px;
+    font-size: 14px;
+    color: #6a3e2b;
+}
+.table-card {
+    background: white;
+    border-radius: 12px;
+    border: 1px solid #e6d8cf;
+    overflow: hidden;
+}
+.table {
+    width: 100%;
+    border-collapse: collapse;
+}
+.table th,
+.table td {
+    padding: 14px 16px;
+    border-bottom: 1px solid #eee;
+}
+.table th:last-child,
+.table td:last-child {
+    width: 220px;
+}
+.table th {
+    background: #f7f2ee;
+    text-align: left;
+}
+.table-right {
+    text-align: right;
+}
+.table-right .btn {
+    margin-left: 8px;
+}
+.pill {
+    display: inline-block;
+    padding: 6px 12px;
+    border-radius: 20px;
+    color: white;
+    font-size: 13px;
+}
+.pill-active {
+    background: #6a3e2b;
+}
+.pill-completed {
+    background: #2e7d32;
+}
+.btn {
+    padding: 8px 14px;
+    border-radius: 10px;
+    border: 1px solid #6a3e2b;
+    background: #6a3e2b;
+    color: white;
+    cursor: pointer
+}
+.btn:hover {
+    opacity: 0.9;
+}
+.btn-ghost {
+    background: transparent;
+    color: #6a3e2b;
+}
+.btn-wide {
+    padding: 12px 18px;
+}
+.center {
+    margin-top: 20px;
+    text-align: center;
+    clear: both;
+}
+.logo {
+    margin-bottom: 10px;
+}
+.logo-img {
+    width: 160px;
+    height: auto;
+    display: block;
+}

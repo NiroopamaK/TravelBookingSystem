@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TripZip</title>
+    <link rel="stylesheet" href="login.css" />
+  </head>
+  <body>
+    <div class="container">
+      <!-- Left half: background image -->
+      <div class="left-half"></div>
+
+      <!-- Right half: logo and forms -->
+      <div class="right-half">
+        <div class="form-container">
+          <!-- Logo -->
+          <img src="../assets/logo.jpg" alt="Logo" class="logo" />
+
+          <!-- Forms container -->
+          <div id="formContent">
+            <!-- Login form-->
+            <div id="loginForm" class="form-box login-form">
+              <h2>Login</h2>
+              <form>
+                <label>Username</label>
+                <input type="text" placeholder="Enter Username" required />
+                <label>Password</label>
+                <input type="password" placeholder="Enter Password" required />
+                <a href="#" class="forgot-password">Forgot Password?</a>
+                <button type="submit" class="submit-btn">Login</button>
+              </form>
+              <button class="signup-link" onclick="loadSignUp()">
+                Sign Up
+              </button>
+            </div>
+
+            <!-- Sign Up form -->
+            <div id="signupForm" class="form-box signup-form hidden">
+              <h2>Sign Up</h2>
+
+              <!-- Step 1 - Account Details -->
+              <form id="signupStep1">
+                <label>Role</label>
+                <select required>
+                  <option value="">Select Role</option>
+                  <option value="admin">Admin</option>
+                  <option value="traveller">Traveller</option>
+                  <option value="travel-agent">Travel Agent</option>
+                </select>
+
+                <label>First Name</label>
+                <input type="text" placeholder="Enter First Name" required />
+
+                <label>Last Name</label>
+                <input type="text" placeholder="Enter Last Name" required />
+
+                <label>Passport Number</label>
+                <input
+                  type="text"
+                  placeholder="Enter Passport Number"
+                  required
+                />
+
+                <label>Address</label>
+                <input type="text" placeholder="Enter Address" required />
+
+                <label>Telephone Number</label>
+                <input
+                  type="tel"
+                  placeholder="Enter Telephone Number"
+                  required
+                />
+
+                <button
+                  type="button"
+                  class="submit-btn"
+                  onclick="signupStep2()"
+                >
+                  Create Account
+                </button>
+              </form>
+
+              <!-- Step 2 - Login Credentials -->
+              <form id="signupStep2" class="hidden">
+                <label>Email</label>
+                <input type="email" placeholder="Enter Email" required />
+
+                <label>Password</label>
+                <input type="password" placeholder="Enter Password" required />
+
+                <label>Re-enter Password</label>
+                <input
+                  type="password"
+                  placeholder="Re-enter Password"
+                  required
+                />
+
+                <button type="submit" class="submit-btn">
+                  Finish Registration
+                </button>
+              </form>
+
+              <button class="signup-link" onclick="loadLogin()">
+                Back to Login
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="login.js"></script>
+  </body>
+</html>

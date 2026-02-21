@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Traveller Dashboard</title>
+    <link rel="stylesheet" href="../../public/css/traveller.dashboard.css">
+  </head>
+  <body>
+<!--Sidebar-->
+    <div class="sidebar">
+        <div class="logo">
+            <img src="../../assets/logo.jpg" alt="TripZip Logo" class="logo-img">
+        </div>
+        <div class="nav">
+            <a class="nav-item active" href="traveller.dashboard.html">
+                🏠 Dashboard
+            </a>
+            <a class="nav-item" href="traveller.explore.html">
+                📋 Explore
+            </a>
+        </div>
+    </div>
+<!--Main content-->
+    <div class="main">
+        <div class="topbar">
+            <h1 class="topbar-title">Traveller Dashboard</h1>
+            <div class="profile" id="profile">
+                <button class="profile-btn" id="profileBtn" type="button">
+                    <img class="avatar" src="../../assets/avatar.png" alt="User avatar">
+                    <span class="profile-name">
+                        Emily Smith
+                        <span class="profile-role">Traveller</span>
+                    </span>
+                </button>
+                <div class="dropdown" id="profileMenu">
+                    <div class="dropdown-header">
+                        <div class="dropdown-name">Emily Smith</div>
+                        <div class="dropdown-email">emily@gmail.com</div>
+                    </div>
+                    <a class="dropdown-item" href="#">View Profile</a>
+                    <button class="dropdown-item" type="button">Log Out</button>
+                </div>
+            </div>
+        </div>
+<!-- Content -->
+        <div class="content">
+            <h2 class="section-title">My Bookings</h2>
+
+            <div class="stats">
+                <div class="stat">
+                    <div class="stat-number">2</div>
+                    <div class="stat-text">Upcoming Trips</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number">1</div>
+                    <div class="stat-text">Active Trip</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number">1</div>
+                    <div class="stat-text">Completed Trip</div>
+                </div>
+            </div>
+<!-- Table -->
+            <div class="table-card">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Package</th>
+                            <th>Destination</th>
+                            <th>Status</th>
+                            <th class="table-right">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Amazing Adventure Tour</td>
+                            <td>Vietnam</td>
+                            <td><span class="pill pill-active">Active</span></td>
+                            <td class="table-right">
+                                <button class="btn btn-ghost" type="button">Cancel</button>
+                                <button class="btn" type="button">View</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Beach Getaway</td>
+                            <td>Hawaii</td>
+                            <td><span class="pill pill-completed">Completed</span></td>
+                            <td class="table-right">
+                                <button class="btn" type="button">View</button>
+                            </td>
+                        </tr>
+                </table>
+            </div>
+<!-- Browse More Packages Button-->
+            <div class="center">
+                <button class="btn btn-wide" type="button">Browse More Packages</button>
+            </div>
+        </div>
+    </div>
+    <script src="../../public/js/traveller.dashboard.js"></script>
+  </body>
+</html>
