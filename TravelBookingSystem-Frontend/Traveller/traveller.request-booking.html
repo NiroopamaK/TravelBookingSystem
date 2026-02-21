@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Request Booking</title>
+    <link rel="stylesheet" href="../../Traveller/traveller.dashboard.css">
+    <link rel="stylesheet" href="../../Traveller/traveller.request-booking.css">
+</head>
+<body>
+    <div class="sidebar">
+        <div class="logo">
+            <img src="../../Assets/logo.jpg" alt="TripZip Logo" class="logo-img">
+        </div>
+        <div class="nav">
+            <a class="nav-item" href="../../Traveller/traveller.dashboard.html">
+                🏠 Dashboard
+            </a>
+            <a class="nav-item" href="../../Traveller/traveller.explore.html">
+                📋 Explore
+            </a>
+        </div>
+    </div>
+    <div class="main">
+        <div class="topbar">
+            <h1 class="topbar-title">Request Booking</h1>
+            <div class="profile" id="profile">
+                <button class="profile-btn" id="profileBtn" type="button">
+                    <img class="avatar" src="../../Assets/avatar.png" alt="User avatar">
+                    <span class="profile-name">
+                        Emily Smith
+                        <span class="profile-role">Traveller</span>
+                    </span>
+                </button>
+                <div class="dropdown" id="profileMenu">
+                    <div class="dropdown-header">
+                        <div class="dropdown-name">Emily Smith</div>
+                        <div class="dropdown-email">emily@gmail.com</div>
+                    </div>
+                    <a class="dropdown-item" href="#">View Profile</a>
+                    <button class="dropdown-item" type="button">Log Out</button>
+                </div>
+            </div>
+        </div>
+        <div class="content">
+            <a class="back-link" href="../../Traveller/traveller.explore.html">← Back to Explore</a>
+            <div class="booking-card">
+                <form id="bookingForm">
+                    <div class="row">
+                        <div class="field">
+                            <div class="label">Dates</div>
+                            <div class="fake-input">
+                                <span class="icon">📅</span>
+                                <span class="datedText">June 15 - June 25, 2026</span>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <div class="label">Number of People</div>
+                            <input id="people" class="input" type="number" min="1" value="2">
+                        </div>
+                    </div>
+                    <div class="field">
+                        <div class="label">Additional Notes</div>
+                        <textarea id="notes" class="textarea" placeholder="Write anything important here..."></textarea>
+                    </div>
+                    <div class="summary">
+                        <div class="summary-title">Booking Summary</div>
+                        <div classs="summary-box">
+                            <div class="sum-row">
+                                <div class="sum-left">Price per Person</div>
+                                <div class="sum-right" id="pricePerPerson">£ 2,500</div>
+                            </div>
+                            <div class="sum-row">
+                                <div class="sum-left">Number of People</div>
+                                <div class="sum-right" id="peopleOut">2</div>
+                            </div>
+                            <div class="sum-row total">
+                                <div class="sum-left">Total Estimated Cost:</div>
+                                <div class="sum-right" id="totalOut">£ 5,000</div>
+                        </div>          
+                    </div>
+                    <button class="btn submit-btn" type="submit">Submit Request</button>
+                </form>
+                <div class="divider"></div>
+                <div class="success" id="successBox">
+                    <h2>Booking Request Submitted!</h2>
+                    <p>Your booking request has been successfully submitted.</p>
+                    <div class="success-actions">
+                        <a class="btn" href="../../Traveller/traveller.dashboard.html">View My Bookings</a>
+                        <a class="btn" href="../../Traveller/traveller.explore.html">Explore More Packages</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="../../Traveller/traveller.request-booking.js"></script>
+    <script src="../../Traveller/traveller.dashboard.js"></script>
+</body>
+</html>
