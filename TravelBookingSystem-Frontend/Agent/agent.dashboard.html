@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Agent Dashboard</title>
+    <link rel="stylesheet" href="agent.dashboard.css">
+  </head>
+  <body>
+<!--Sidebar-->
+    <div class="sidebar">
+        <div class="logo">
+            <img src="../Assets/logo.jpg" alt="TripZip Logo" class="logo-img">
+        </div>
+        <div class="nav">
+            <a class="nav-item active" href="agent.dashboard.html">
+                🏠 Dashboard
+            </a>
+            <a class="nav-item" href="agent.packages.html">
+                📦 Packages
+            </a>
+            <a class="nav-item" href="#">
+                📋 Bookings
+            </a>
+        </div>
+    </div>
+<!--Main content-->
+    <div class="main">
+        <div class="topbar">
+            <h1 class="topbar-title">Agent Dashboard</h1>
+            <div class="profile" id="profile">
+                <button class="profile-btn" id="profileBtn" type="button">
+                    <img class="avatar" src="../Assets/agent.png" alt="Agent avatar">
+                    <span class="profile-name">
+                        Sarah Johnson
+                        <span class="profile-role">Agent</span>
+                    </span>
+                </button>
+                <div class="dropdown" id="profileMenu">
+                    <div class="dropdown-header">
+                        <div class="dropdown-name">Sarah Johnson</div>
+                        <div class="dropdown-email">sarah@tripzip.com</div>
+                    </div>
+                    <a class="dropdown-item" href="#">View Profile</a>
+                    <button class="dropdown-item" type="button">Log Out</button>
+                </div>
+            </div>
+        </div>
+<!-- Content -->
+        <div class="content">
+            <h2 class="section-title">Overview</h2>
+
+            <div class="stats">
+                <div class="stat">
+                    <div class="stat-number">12</div>
+                    <div class="stat-text">Total Bookings</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number">5</div>
+                    <div class="stat-text">Pending Bookings</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number">4</div>
+                    <div class="stat-text">Active Packages</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number">3</div>
+                    <div class="stat-text">Completed</div>
+                </div>
+            </div>
+<!-- Table -->
+            <h2 class="section-title">Recent Bookings</h2>
+            <div class="table-card">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Traveller</th>
+                            <th>Package</th>
+                            <th>Destination</th>
+                            <th>Status</th>
+                            <th class="table-right">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Emily Smith</td>
+                            <td>Amazing Adventure Tour</td>
+                            <td>Vietnam</td>
+                            <td><span class="pill pill-active">Active</span></td>
+                            <td class="table-right">
+                                <button class="btn btn-ghost" type="button">Cancel</button>
+                                <button class="btn" type="button">View</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>John Doe</td>
+                            <td>Beach Getaway</td>
+                            <td>Hawaii</td>
+                            <td><span class="pill pill-pending">Pending</span></td>
+                            <td class="table-right">
+                                <button class="btn btn-ghost" type="button">Reject</button>
+                                <button class="btn" type="button">Approve</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Alice Brown</td>
+                            <td>Mountain Explorer</td>
+                            <td>Switzerland</td>
+                            <td><span class="pill pill-completed">Completed</span></td>
+                            <td class="table-right">
+                                <button class="btn" type="button">View</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+<!-- Manage Packages Button-->
+            <div class="center">
+                <a class="btn btn-wide" href="agent.packages.html">Manage Packages</a>
+            </div>
+        </div>
+    </div>
+    <script src="agent.dashboard.js"></script>
+  </body>
+</html>
