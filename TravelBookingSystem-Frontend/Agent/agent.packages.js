@@ -1,4 +1,4 @@
-// ── Sample package data (replace with API call) ──────────────────────────────
+
 var packages = [
     { id: 1, name: 'Amazing Adventure Tour', destination: 'Vietnam',     duration: 10, price: 1200, description: 'A thrilling adventure through the heart of Vietnam.',  status: 'Active'   },
     { id: 2, name: 'Beach Getaway',          destination: 'Hawaii',      duration: 7,  price: 1800, description: 'Relax on the beautiful beaches of Hawaii.',            status: 'Active'   },
@@ -6,7 +6,6 @@ var packages = [
     { id: 4, name: 'Cultural Heritage Tour', destination: 'Japan',       duration: 12, price: 2500, description: 'Discover centuries of culture and tradition in Japan.', status: 'Active'   },
 ];
 
-// ── Render table ──────────────────────────────────────────────────────────────
 function renderTable() {
     var tbody = document.getElementById('packagesTbody');
     if (!tbody) return;
@@ -30,7 +29,6 @@ function renderTable() {
     });
 }
 
-// ── Helper: escape HTML to prevent XSS ───────────────────────────────────────
 function escHtml(str) {
     return String(str)
         .replace(/&/g, '&amp;')
@@ -39,7 +37,6 @@ function escHtml(str) {
         .replace(/"/g, '&quot;');
 }
 
-// ── Find package by id ────────────────────────────────────────────────────────
 function findPkg(id) {
     for (var i = 0; i < packages.length; i++) {
         if (packages[i].id === id) return packages[i];
@@ -47,7 +44,6 @@ function findPkg(id) {
     return null;
 }
 
-// ── Edit modal ────────────────────────────────────────────────────────────────
 function openEdit(id) {
     var pkg = findPkg(id);
     if (!pkg) return;
@@ -88,7 +84,6 @@ document.getElementById('editForm').onsubmit = function(e) {
     closeEdit();
 };
 
-// ── Delete modal ──────────────────────────────────────────────────────────────
 var pendingDeleteId = null;
 
 function openDelete(id) {
@@ -116,7 +111,6 @@ document.getElementById('deleteConfirm').onclick = function() {
     closeDelete();
 };
 
-// ── Close modals on overlay click ────────────────────────────────────────────
 document.getElementById('editOverlay').addEventListener('click', function(e) {
     if (e.target === this) closeEdit();
 });
@@ -124,7 +118,6 @@ document.getElementById('deleteOverlay').addEventListener('click', function(e) {
     if (e.target === this) closeDelete();
 });
 
-// ── Close modals on Escape ────────────────────────────────────────────────────
 document.addEventListener('keydown', function(e) {
     if (e.key === 'Escape') {
         closeEdit();
@@ -132,5 +125,4 @@ document.addEventListener('keydown', function(e) {
     }
 });
 
-// ── Init ──────────────────────────────────────────────────────────────────────
 renderTable();

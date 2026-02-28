@@ -1,4 +1,4 @@
-/* ── Packages page extras ── */
+
 
 .pkg-header {
     display: flex;
@@ -7,7 +7,6 @@
     margin-bottom: 4px;
 }
 
-/* ── Modals ── */
 
 .modal-overlay {
     display: none;
@@ -66,7 +65,7 @@
     color: #2b1b14;
 }
 
-/* ── Edit form grid ── */
+
 
 .form-grid {
     display: grid;
@@ -110,7 +109,7 @@
     font-family: inherit;
 }
 
-/* ── Modal footer ── */
+
 
 .modal-footer {
     display: flex;
@@ -119,7 +118,7 @@
     margin-top: 24px;
 }
 
-/* ── Delete modal ── */
+
 
 .delete-msg {
     color: #444;
@@ -138,13 +137,11 @@
     opacity: 0.88;
 }
 
-/* ── Status pill for Inactive ── */
 
 .pill-inactive {
     background: #888;
 }
 
-/* ── Action buttons in table ── */
 
 .btn-edit {
     background: #e8f4fd;
