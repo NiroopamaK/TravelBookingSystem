@@ -1,0 +1,84 @@
+/* Reset default body margins */
+body {
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+}
+
+/* Navbar container */
+.top-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #1e0b05; /* SaddleBrown color */
+  padding: 10px 20px;
+  color: white;
+  width: 100%;      /* Full width */
+  box-sizing: border-box;
+  position: fixed;  /* Stick to top */
+  top: 0;
+  left: 0;
+  z-index: 1000;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+/* Left side - Logo */
+.nav-left .logo {
+  height: 40px;
+}
+
+/* Right side - Profile */
+.nav-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  position: relative;
+}
+
+.profile-name {
+  font-weight: bold;
+}
+
+.profile-role {
+  font-size: 0.9rem;
+  color: #F5DEB3; /* Wheat-ish text */
+}
+
+/* Profile picture */
+.profile-pic {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  cursor: pointer;
+  border: 2px solid #F5DEB3; /* lighter border */
+}
+
+/* Dropdown menu */
+.profile-dropdown-container {
+  position: relative;
+}
+
+.dropdown-menu {
+  display: none; /* hidden by default */
+  position: absolute;
+  right: 0;
+  top: 50px;
+  background-color: #F5DEB3; /* light brown background */
+  color: #8B4513; /* dark text */
+  min-width: 150px;
+  border-radius: 5px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  overflow: hidden;
+  z-index: 100;
+}
+
+.dropdown-menu a {
+  display: block;
+  padding: 10px 15px;
+  text-decoration: none;
+  color: #8B4513;
+}
+
+.dropdown-menu a:hover {
+  background-color: #D2B48C; /* Tan hover */
+}
