@@ -1,0 +1,6 @@
+{
+  "watch": ["server.js", "routes/", "controllers/", "models/", "frontend/"],
+  "ext": "js,json",
+  "delay": "250ms",
+  "legacy-watch": true
+}
