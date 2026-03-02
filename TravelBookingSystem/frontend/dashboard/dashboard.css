@@ -1,0 +1,72 @@
+/* Make body fill full viewport and use flex column */
+body {
+  margin: 0;
+  padding: 0;
+  height: 100vh;               /* full viewport height */
+  display: flex;
+  flex-direction: column;      /* navbar on top, content below */
+}
+
+/* Navbar placeholder (assuming 60px height) */
+#navbar-container {
+  height: 60px;
+  width: 100%;
+}
+
+/* Full height layout below navbar */
+.dashboard-wrapper {
+  display: flex;
+  flex: 1;                     /* take remaining height under navbar */
+  overflow: hidden;            /* prevent unwanted scrollbars */
+}
+
+/* Sidebar */
+#sidebar {
+  width: 200px;
+  background: #EADDCA;
+  color: black;
+
+  display: flex;                /* flex container */
+  flex-direction: column;
+  justify-content: center;      /* vertical centering */
+  align-items: center;          /* horizontal centering */
+  
+  overflow-y: auto;             /* scroll only if menu exceeds height */
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Sidebar menu items */
+#sidebar ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  width: 100%;
+}
+
+#sidebar li {
+  padding: 14px 0;
+  cursor: pointer;
+  text-align: center;
+  width: 100%;
+  transition: background 0.2s;
+}
+
+#sidebar li:hover {
+  background: #334155;
+  color: white;
+}
+
+#sidebar li.active {
+  background: #3b82f6;
+  color: white;
+}
+
+/* Dashboard Content */
+.dashboard-content {
+  flex: 1;
+  padding: 30px;
+  background: #f1f5f9;
+  overflow-y: auto;
+  box-sizing: border-box;
+}
