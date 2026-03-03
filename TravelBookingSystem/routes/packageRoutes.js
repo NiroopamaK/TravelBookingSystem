@@ -1,11 +1,11 @@
 const express = require('express');
 const router = express.Router();
-const package_controller = require('../controllers/packageController');
+const packageController = require('../controllers/packageController');
 
-router.get('/', package_controller.get_all_packages);
-router.get('/:id', package_controller.get_package_by_id);
-router.post('/', package_controller.create_package);
-router.put('/:id', package_controller.update_package);
-router.delete('/:id', package_controller.delete_package);
+router.get('/', packageController.getAllPackages);
+router.get('/:id', packageController.getPackageById);
+router.post('/', packageController.createPackage);
+router.put('/:id', packageController.updatePackage);
+router.delete('/:id', packageController.deletePackage);
 
 module.exports = router;

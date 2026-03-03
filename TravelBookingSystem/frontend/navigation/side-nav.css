@@ -18,10 +18,21 @@
 #sidebar li {
   padding: 12px;
   cursor: pointer;
+  border-radius: 6px;
 }
 
 #sidebar li:hover {
   background: #334155;
+}
+
+#sidebar li.active {
+  background: #334155;
+}
+
+#sidebar li a {
+  color: white;
+  text-decoration: none;
+  display: block;
 }
 
 #content {

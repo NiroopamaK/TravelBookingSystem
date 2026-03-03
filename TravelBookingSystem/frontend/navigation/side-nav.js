@@ -1,5 +1,3 @@
-console.log("sidenav is running");
-
 document.addEventListener("DOMContentLoaded", renderSidebar);
 
 function getUserRole() {
@@ -7,7 +5,6 @@ function getUserRole() {
   if (!token) return null;
 
   const payload = JSON.parse(atob(token.split(".")[1]));
-  console.log("Decoded role:", payload.role);
   return payload.role; // 'ADMIN', 'TRAVELLER', or 'TRAVEL_AGENT'
 }
 
@@ -23,13 +20,13 @@ const menus = {
     { name: "My Bookings", link: "../traveller/bookings.html" },
   ],
   TRAVEL_AGENT: [
-    { name: "Packages", link: "../agent/my-packages.html" },
-    { name: "Bookings", link: "../agent/agent-bookings.html" },
-    { name: "Trips", link: "../agent/my-trips.html" },
+    { name: "Dashboard", link: "../travel-agent/agent.dashboard.html" },
+    { name: "Packages", link: "../travel-agent/agent.packages.html" },
+    { name: "Bookings", link: "#" },
   ],
 };
 
-// Load page content into .dashboard-content
+// Load page content into .dashboard-content (SPA mode)
 async function loadPage(path) {
   try {
     const response = await fetch(path);
@@ -43,7 +40,7 @@ async function loadPage(path) {
   }
 }
 
-// Highlight active sidebar item
+// Highlight active sidebar item (SPA mode)
 function setActive(selectedLi) {
   document.querySelectorAll("#sidebar li").forEach((li) =>
     li.classList.remove("active")
@@ -61,24 +58,40 @@ function renderSidebar() {
     return;
   }
 
+  // SPA mode: page has a .dashboard-content container to load into
+  const isSPA = !!document.querySelector(".dashboard-content");
+  const currentPath = window.location.pathname;
   const ul = document.createElement("ul");
 
   menus[role].forEach((item) => {
     const li = document.createElement("li");
-    li.textContent = item.name;
 
-    li.addEventListener("click", () => {
-      setActive(li);
-      loadPage(item.link); // SPA behavior
-    });
+    if (isSPA) {
+      li.textContent = item.name;
+      li.addEventListener("click", () => {
+        setActive(li);
+        loadPage(item.link);
+      });
+    } else {
+      const a = document.createElement("a");
+      a.textContent = item.name;
+      a.href = item.link;
+      li.appendChild(a);
+
+      // Mark the current page as active
+      const linkFilename = item.link.split("/").pop();
+      if (linkFilename !== "#" && currentPath.includes(linkFilename)) {
+        li.classList.add("active");
+      }
+    }
 
     ul.appendChild(li);
   });
 
   sidebar.appendChild(ul);
 
-  // ✅ Load first menu item by default
-  if (menus[role].length > 0) {
+  // Auto-load first item in SPA mode
+  if (isSPA && menus[role].length > 0) {
     setActive(ul.children[0]);
     loadPage(menus[role][0].link);
   }

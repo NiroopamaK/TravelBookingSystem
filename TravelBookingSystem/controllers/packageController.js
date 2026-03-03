@@ -1,6 +1,6 @@
 const db = require('../config/db');
 
-exports.get_all_packages = async (req, res) => {
+const getAllPackages = async (req, res) => {
     try {
         const [rows] = await db.query('SELECT * FROM package');
         res.json(rows);
@@ -9,23 +9,23 @@ exports.get_all_packages = async (req, res) => {
     }
 };
 
-exports.get_package_by_id = async (req, res) => {
+const getPackageById = async (req, res) => {
     try {
         const [rows] = await db.query('SELECT * FROM package WHERE package_id = ?', [req.params.id]);
-        
+
         if (rows.length === 0) {
             return res.status(404).json({ message: 'Package not found' });
         }
 
         const [events] = await db.query('SELECT activity_name FROM package_events WHERE package_id = ?', [req.params.id]);
-        
+
         res.json({ ...rows[0], events });
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
 };
 
-exports.create_package = async (req, res) => {
+const createPackage = async (req, res) => {
     try {
         const { package_id, title, base_price, duration, description, destination, party_size, events } = req.body;
 
@@ -49,7 +49,7 @@ exports.create_package = async (req, res) => {
     }
 };
 
-exports.update_package = async (req, res) => {
+const updatePackage = async (req, res) => {
     try {
         const { title, base_price, duration, description, destination, party_size, events } = req.body;
 
@@ -75,7 +75,7 @@ exports.update_package = async (req, res) => {
     }
 };
 
-exports.delete_package = async (req, res) => {
+const deletePackage = async (req, res) => {
     try {
         await db.query('DELETE FROM package_events WHERE package_id = ?', [req.params.id]);
         await db.query('DELETE FROM package WHERE package_id = ?', [req.params.id]);
@@ -85,3 +85,5 @@ exports.delete_package = async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 };
+
+module.exports = { getAllPackages, getPackageById, createPackage, updatePackage, deletePackage };
