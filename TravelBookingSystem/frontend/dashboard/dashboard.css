@@ -69,4 +69,126 @@ body {
   background: #f1f5f9;
   overflow-y: auto;
   box-sizing: border-box;
+}/* ===== RESET ===== */
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* ===== TOP NAVBAR ===== */
+.top-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #1e0b05;
+    padding: 10px 20px;
+    color: white;
+    height: 60px;
+    box-sizing: border-box;
+    flex-shrink: 0;
+}
+
+.logo {
+    height: 40px;
+}
+
+.nav-right {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    position: relative;
+}
+
+.profile-name {
+    font-weight: bold;
+}
+
+.profile-role {
+    font-size: 0.9rem;
+    color: #F5DEB3;
+}
+
+.profile-pic {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    cursor: pointer;
+    border: 2px solid #F5DEB3;
+}
+
+/* Dropdown */
+.profile-dropdown-container {
+    position: relative;
+}
+
+.dropdown-menu {
+    display: none;
+    position: absolute;
+    right: 0;
+    top: 50px;
+    background-color: #F5DEB3;
+    color: #8B4513;
+    min-width: 150px;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    overflow: hidden;
+}
+
+.dropdown-menu a {
+    display: block;
+    padding: 10px 15px;
+    text-decoration: none;
+    color: #8B4513;
+}
+
+.dropdown-menu a:hover {
+    background-color: #D2B48C;
+}
+
+/* ===== DASHBOARD LAYOUT ===== */
+.dashboard-wrapper {
+    display: flex;
+    flex: 1;
+    overflow: hidden;
+}
+
+/* Sidebar */
+#sidebar {
+    width: 220px;
+    background: #EADDCA;
+    overflow-y: auto;
+}
+
+#sidebar ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+#sidebar li {
+    padding: 14px;
+    cursor: pointer;
+    text-align: center;
+    transition: 0.2s;
+}
+
+#sidebar li:hover {
+    background: #334155;
+    color: white;
+}
+
+#sidebar li.active {
+    background: #3b82f6;
+    color: white;
+}
+
+/* Main Content */
+.dashboard-content {
+    flex: 1;
+    padding: 30px;
+    background: #f1f5f9;
+    overflow-y: auto;
 }
