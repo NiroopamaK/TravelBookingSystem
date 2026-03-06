@@ -8,7 +8,7 @@ const transporter = nodemailer.createTransport({
   auth: {
     user: process.env.EMAIL_USER,
     pass: process.env.EMAIL_PASS
-  },
+  }
 });
 
 // Send verification code
@@ -20,7 +20,7 @@ async function sendVerificationCode(email) {
 
   verificationCodes[email] = {
     code,
-    expires: Date.now() + 60000, // 1 minute
+    expires: Date.now() + 60000,
     attempts: 0
   };
 
@@ -32,41 +32,56 @@ async function sendVerificationCode(email) {
   };
 
   await transporter.sendMail(mailOptions);
-
-  return { success: true };
 }
 
 // Verify code
-function verifyCode(email, code) {
+function verifyVerificationCode(email, code) {
 
   email = email.toLowerCase();
 
   const record = verificationCodes[email];
 
   if (!record) {
-    return { success: false, message: "No verification code sent" };
+    return {
+      success: false,
+      message: "No verification code sent"
+    };
   }
 
   if (Date.now() > record.expires) {
     delete verificationCodes[email];
-    return { success: false, message: "Code expired" };
+    return {
+      success: false,
+      message: "Code expired"
+    };
   }
 
   record.attempts++;
 
   if (record.attempts > 5) {
     delete verificationCodes[email];
-    return { success: false, message: "Too many attempts" };
+    return {
+      success: false,
+      message: "Too many attempts"
+    };
   }
 
   if (record.code !== code) {
-    return { success: false, message: "Invalid verification code" };
+    return {
+      success: false,
+      message: "Invalid verification code"
+    };
   }
 
-  // success
   delete verificationCodes[email];
 
-  return { success: true, message: "Email verified" };
+  return {
+    success: true,
+    message: "Email verified"
+  };
 }
 
-module.exports = { sendVerificationCode, verifyCode };
+module.exports = {
+  sendVerificationCode,
+  verifyVerificationCode
+};
