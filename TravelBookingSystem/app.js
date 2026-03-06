@@ -1,12 +1,13 @@
-// app.js
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const path = require('path');
 require('dotenv').config();
 
-const authRoutes = require('./routes/authRoutes');
 const db = require('./config/db');
+
+const authRoutes = require('./routes/authRoutes');
+const emailVerificationRoutes = require('./routes/emailVerificationRoutes');
 
 const app = express();
 
@@ -18,9 +19,9 @@ app.use(bodyParser.json());
 // Serve frontend
 app.use(express.static(path.join(__dirname, 'frontend')));
 
-// -----------------------
 // Routes
-// -----------------------
+app.use('/api/auth', authRoutes);
+app.use('/api/email', emailVerificationRoutes);
 
 // Test route
 app.get('/test', (req, res) => {
@@ -38,9 +39,6 @@ app.get('/db_test/printdata', async (req, res) => {
     res.status(500).json({ message: 'Database query failed', error: err.message });
   }
 });
-
-// Auth routes
-app.use('/api/auth', authRoutes);
 
 // 404 handler
 app.use((req, res) => {
