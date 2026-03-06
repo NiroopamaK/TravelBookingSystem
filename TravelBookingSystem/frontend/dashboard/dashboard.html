@@ -1,23 +1,47 @@
-<head>
-  <title>Travel Booking system</title>
-  <link rel="stylesheet" href="../navigation/top-navbar.css" />
-  <link rel="stylesheet" href="dashboard.css" />
-</head>
-<body>
-  <!-- Top Navbar -->
-  <div id="navbar-container"></div>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Travel Booking System</title>
+    <link rel="stylesheet" href="dashboard.css" />
+    <link rel="stylesheet" href="../traveller/traveller.dashboard.css" />
+  </head>
+  <body>
+    <!-- ===== TOP NAVBAR ===== -->
+    <nav class="top-nav">
+      <div class="nav-left">
+        <img src="../assets/logo.jpg" alt="Logo" class="logo" />
+      </div>
 
-  <!-- Main layout -->
-  <div class="dashboard-wrapper">
-    <!-- Sidebar -->
-    <aside id="sidebar"></aside>
+      <div class="nav-right">
+        <span class="profile-name">Name</span>
+        <span class="profile-role">Role</span>
 
-    <!-- Dashboard Content -->
-    <div class="dashboard-content">
-      <!-- Content loads here -->
+        <div class="profile-dropdown-container">
+          <img
+            src="../assets/admin.png"
+            alt="Profile"
+            class="profile-pic"
+            id="profilePic"
+          />
+
+          <div class="dropdown-menu" id="dropdownMenu">
+            <a href="/frontend/edit-profile.html">Edit Profile</a>
+            <a href="#" id="signOutBtn">Sign Out</a>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- ===== MAIN DASHBOARD LAYOUT ===== -->
+    <div class="dashboard-wrapper">
+      <!-- Sidebar -->
+      <aside id="sidebar"></aside>
+
+      <!-- Main Content -->
+      <div class="dashboard-content"></div>
     </div>
-  </div>
 
-  <script src="../navigation/side-nav.js"></script>
-  <script src="dashboard.js"></script>
-</body>
+    <script src="dashboard.js"></script>
+  </body>
+</html>

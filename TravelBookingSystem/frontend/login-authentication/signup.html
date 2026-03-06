@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TripZip - Sign Up</title>
+    <link rel="stylesheet" href="signup.css" />
+  </head>
+  <body>
+    <div class="container">
+      <div class="left-half"></div>
+      <div class="right-half">
+        <div class="form-container">
+          <img src="../assets/logo.jpg" alt="Logo" class="logo" />
+
+          <div id="formContent">
+            <!-- Step 1 -->
+            <form id="signupStep1">
+              <h2>Sign Up</h2>
+              <label>Role</label>
+              <select id="signupRole" required>
+                <option value="">Select Role</option>
+                <option value="ADMIN">Admin</option>
+                <option value="TRAVELLER">Traveller</option>
+                <option value="TRAVEL_AGENT">Travel Agent</option>
+              </select>
+              <label>First Name</label>
+              <input
+                id="signupFirstName"
+                type="text"
+                placeholder="Enter First Name"
+                required
+              />
+              <label>Last Name</label>
+              <input
+                id="signupLastName"
+                type="text"
+                placeholder="Enter Last Name"
+                required
+              />
+              <label>Passport Number</label>
+              <input
+                id="signupPassport"
+                type="text"
+                placeholder="Enter Passport Number"
+                required
+              />
+              <label>Address</label>
+              <input
+                id="signupAddress"
+                type="text"
+                placeholder="Enter Address"
+                required
+              />
+              <label>Telephone Number</label>
+              <input
+                id="signupTelephone"
+                type="tel"
+                placeholder="Enter Telephone Number"
+                required
+              />
+              <button type="button" class="submit-btn" id="nextStepBtn">
+                Create Account
+              </button>
+            </form>
+
+            <!-- Step 2 -->
+            <form id="signupStep2" class="hidden">
+              <label>Email</label>
+              <input
+                id="signupEmail"
+                type="email"
+                placeholder="Enter Email"
+                required
+              />
+              <button type="button" id="sendCodeBtn">
+                Send Verification Code
+              </button>
+
+              <div id="afterCodeSent" class="hidden">
+                <label>Enter Verification Code</label>
+                <input id="emailCode" type="text" placeholder="Enter Code" />
+                <button type="button" id="validateCodeBtn">
+                  Validate Code
+                </button>
+                <p id="validationMessage"></p>
+                <p id="timerText">
+                  Code expires in <span id="timer">60</span>s
+                </p>
+                <button type="button" id="resendCodeBtn" class="hidden">
+                  Resend Code
+                </button>
+              </div>
+
+              <div id="passwordSection" class="hidden">
+                <label>Password</label>
+                <input
+                  id="signupPassword"
+                  type="password"
+                  placeholder="Enter Password"
+                />
+                <label>Re-enter Password</label>
+                <input
+                  id="signupPassword2"
+                  type="password"
+                  placeholder="Re-enter Password"
+                />
+                <button type="submit" class="submit-btn">
+                  Finish Registration
+                </button>
+              </div>
+            </form>
+
+            <button class="signup-link" onclick="window.location.href = '/'">
+              Back to Login
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="signup.js"></script>
+  </body>
+</html>
