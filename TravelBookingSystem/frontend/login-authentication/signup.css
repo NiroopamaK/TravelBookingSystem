@@ -28,6 +28,7 @@
   backdrop-filter: blur(10px);
 }
 
+/* Form container */
 .form-container {
   width: 80%;
   max-width: 400px;
@@ -38,37 +39,47 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  color: #5a381e;
+  color: #5a381e; /* brown text */
 }
 
+/* Logo */
 .logo {
   width: 120px;
   height: auto;
   margin-bottom: 25px;
 }
 
+/* Forms */
 .form-box {
   width: 100%;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 10px; /* closer labels to inputs */
 }
 
-.form-box h2 {
+/* Hide elements */
+.hidden {
+  display: none;
+}
+
+/* Headings */
+h2 {
   text-align: center;
-  color: #8b5e3c;
+  color: #8b5e3c; /* dark brown */
   margin-bottom: 15px;
 }
 
-.form-box label {
+/* Labels */
+label {
   font-weight: bold;
   font-size: 14px;
+  margin-bottom: 4px; /* closer to input */
 }
 
-.form-box input {
+/* Inputs & selects - full width */
+input, select {
   width: 100%;
   padding: 10px;
-  margin-bottom: 12px;
   border-radius: 6px;
   border: 1px solid #ccc;
   font-size: 14px;
@@ -76,7 +87,8 @@
   color: #5a381e;
 }
 
-.submit-btn {
+/* Submit / action buttons */
+.submit-btn, #sendCodeBtn, #validateCodeBtn, #resendCodeBtn {
   width: 100%;
   padding: 12px;
   border: none;
@@ -85,24 +97,32 @@
   color: white;
   font-size: 16px;
   cursor: pointer;
+  margin-top: 10px;
+  transition: background-color 0.3s, transform 0.2s;
 }
 
-.submit-btn:hover {
+.submit-btn:hover, #sendCodeBtn:hover, #validateCodeBtn:hover, #resendCodeBtn:hover {
   background-color: #70452a;
+  transform: translateY(-1px);
 }
 
-.forgot-password {
+/* Validation / error messages */
+#validationMessage {
+  color: #d93025; /* red for errors */
+  font-size: 14px;
+  margin-top: 8px;
+  text-align: center;
+}
+
+/* Timer text */
+#timerText {
   font-size: 13px;
-  color: #8b5e3c;
-  text-decoration: none;
-  align-self: flex-end;
-  margin-bottom: 10px;
+  color: #5a381e;
+  margin-top: 5px;
+  text-align: center;
 }
 
-.forgot-password:hover {
-  text-decoration: underline;
-}
-
+/* Sign Up / Back link button */
 .signup-link {
   background: none;
   border: none;
