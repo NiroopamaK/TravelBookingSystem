@@ -16,8 +16,9 @@ body {
 /* Full height layout below navbar */
 .dashboard-wrapper {
   display: flex;
-  flex: 1;                     /* take remaining height under navbar */
-  overflow: hidden;            /* prevent unwanted scrollbars */
+  flex: 1;                     
+  overflow: hidden;        
+  width: 100%;    
 }
 
 /* Sidebar */
@@ -49,7 +50,7 @@ body {
   cursor: pointer;
   text-align: center;
   width: 100%;
-  transition: background 0.2s;
+  transition: background0.2s;
 }
 
 #sidebar li:hover {
@@ -93,7 +94,8 @@ body {
 
 .logo {
     height: 40px;
-    padding-top: 15px;
+    padding-top: 0;
+    display: block;
 }
 
 .nav-right {
@@ -103,13 +105,20 @@ body {
     position: relative;
 }
 
+.nav-left {
+    display: flex;
+    align-items: center;
+}
+
 .profile-name {
     font-weight: bold;
+    font-size: 16px;
 }
 
 .profile-role {
-    font-size: 0.9rem;
+    font-size: 14px;
     color: #F5DEB3;
+    text-transform: uppercase;
 }
 
 .profile-pic {
@@ -192,4 +201,9 @@ body {
     padding: 30px;
     background: #f1f5f9;
     overflow-y: auto;
+}
+/* === CONTENT WRAPPE === */
+.dashboard-content {
+  width: 100%;
+  background: #f1f5f9;
 }
