@@ -4,10 +4,7 @@ html(lang="en")
     meta(charset="UTF-8")
     meta(name="viewport", content="width=device-width, initial-scale=1.0")
     title Traveller Dashboard
-
-    // shared layout css
     link(rel="stylesheet", href="/css/dashboard.css")
-    // your page css (optional, keep for table/stats)
     link(rel="stylesheet", href="/css/traveller_dashboard.css")
 
   body
@@ -24,29 +21,26 @@ html(lang="en")
             a(href="/frontend/edit-profile.html") Edit Profile
             a#signOutBtn(href="#") Sign Out
 
-    // ===== MAIN DASHBOARD LAYOUT (shared) =====
     .dashboard-wrapper
-      // Sidebar injected by JS into this container
+
       aside#sidebar
 
-      // Main content
       .dashboard-content
-        h1 Traveller Dashboard
-
         h2.section-title My Bookings
+
 
         .stats
           .stat
-            .stat-number 2
+            .stat-number#upcomingCount 0
             .stat-text Upcoming Trips
 
           .stat
-            .stat-number 1
-            .stat-text Active Trip
+            .stat-number#activeCount 0
+            .stat-text Active Trips
 
           .stat
-            .stat-number 1
-            .stat-text Completed Trip
+            .stat-number#completedCount 0
+            .stat-text Completed Trips
 
         .table-card
           table.table
@@ -56,27 +50,11 @@ html(lang="en")
                 th Destination
                 th Status
                 th.table-right Actions
-            tbody
-              tr
-                td Amazing Adventure Tour
-                td Vietnam
-                td
-                  span.pill.pill-active Active
-                td.table-right
-                  button.btn.btn-ghost(type="button") Cancel
-                  button.btn(type="button") View
 
-              tr
-                td Beach Getaway
-                td Hawaii
-                td
-                  span.pill.pill-completed Completed
-                td.table-right
-                  button.btn(type="button") View
+            tbody#bookingsTbody
 
         .center
           button.btn.btn-wide(type="button") Browse More Packages
 
-    // shared JS (builds sidebar + dropdown)
     script(src="/js/dashboard.js")
     script(src="/js/traveller_dashboard.js")
