@@ -1,0 +1,62 @@
+doctype html
+html(lang="en")
+  head
+    meta(charset="UTF-8")
+    meta(name="viewport" content="width=device-width, initial-scale=1.0")
+    title TripZip - Sign Up
+    link(rel="stylesheet" href="/css/signup.css")
+  body
+    .container
+      .left-half
+      .right-half
+        .form-container
+          img.logo(src="/assets/logo.jpg" alt="Logo")
+          #formContent
+            // Step 1
+            form#signupStep1
+              h2 Sign Up
+              label Role
+              select#signupRole(required)
+                option(value="") Select Role
+                option(value="ADMIN") Admin
+                option(value="TRAVELLER") Traveller
+                option(value="TRAVEL_AGENT") Travel Agent
+              label First Name
+              input#signupFirstName(type="text" placeholder="Enter First Name" required)
+              label Last Name
+              input#signupLastName(type="text" placeholder="Enter Last Name" required)
+              label Passport Number
+              input#signupPassport(type="text" placeholder="Enter Passport Number" required)
+              label Address
+              input#signupAddress(type="text" placeholder="Enter Address" required)
+              label Telephone Number
+              input#signupTelephone(type="tel" placeholder="Enter Telephone Number" required)
+              button#nextStepBtn.submit-btn(type="button") Create Account
+
+            // Step 2
+            form#signupStep2.hidden
+              label Email
+              input#signupEmail(type="email" placeholder="Enter Email" required)
+              button#sendCodeBtn(type="button") Send Verification Code
+
+              #afterCodeSent.hidden
+                label Enter Verification Code
+                input#emailCode(type="text" placeholder="Enter Code")
+                button#validateCodeBtn(type="button") Validate Code
+                p#validationMessage
+                p#timerText
+                  | Code expires in 
+                  span#timer 60
+                  | s
+                button#resendCodeBtn.hidden(type="button") Resend Code
+
+              #passwordSection.hidden
+                label Password
+                input#signupPassword(type="password" placeholder="Enter Password")
+                label Re-enter Password
+                input#signupPassword2(type="password" placeholder="Re-enter Password")
+                button.submit-btn(type="submit") Finish Registration
+
+            button.signup-link(onclick="window.location.href='/'") Back to Login
+
+    script(src="/js/signup.js")
