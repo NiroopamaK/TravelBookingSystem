@@ -4,46 +4,41 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Traveller Dashboard</title>
-    <link rel="stylesheet" href="../../public/css/traveller.dashboard.css">
+    <link rel="stylesheet" href="traveller.dashboard.css">
   </head>
   <body>
-<!--Sidebar-->
-    <div class="sidebar">
-        <div class="logo">
-            <img src="../../assets/logo.jpg" alt="TripZip Logo" class="logo-img">
+    <!--Sidebar-->
+    <body>
+  <div class="layout">
+    <aside id="sidebar"></aside>
+    <main id="content"></main>
         </div>
-        <div class="nav">
-            <a class="nav-item active" href="traveller.dashboard.html">
-                🏠 Dashboard
-            </a>
-            <a class="nav-item" href="traveller.explore.html">
-                📋 Explore
-            </a>
-        </div>
-    </div>
+
+  <script src="app.js"></script>
+</body>
 <!--Main content-->
-    <div class="main">
-        <div class="topbar">
-            <h1 class="topbar-title">Traveller Dashboard</h1>
-            <div class="profile" id="profile">
-                <button class="profile-btn" id="profileBtn" type="button">
-                    <img class="avatar" src="../../assets/avatar.png" alt="User avatar">
-                    <span class="profile-name">
-                        Emily Smith
-                        <span class="profile-role">Traveller</span>
-                    </span>
-                </button>
-                <div class="dropdown" id="profileMenu">
-                    <div class="dropdown-header">
-                        <div class="dropdown-name">Emily Smith</div>
-                        <div class="dropdown-email">emily@gmail.com</div>
-                    </div>
-                    <a class="dropdown-item" href="#">View Profile</a>
-                    <button class="dropdown-item" type="button">Log Out</button>
+<nav class="top-nav">
+  <div class="nav-left">
+    <img src="../assets/logo.jpg" alt="Logo" class="logo" />
+  </div>
+  <div class="nav-right">
+    <span class="profile-name">Name</span>
+    <span class="profile-role">Role</span>
+    <div class="profile-dropdown-container">
+      <img
+        src="../assets/admin.png"
+        alt="Profile"
+        class="profile-pic"
+        id="profilePic"
+      />
+      <div class="dropdown-menu" id="dropdownMenu">
+        <a href="/frontend/edit-profile.html">Edit Profile</a>
+        <a href="#" id="signOutBtn">Sign Out</a>
                 </div>
             </div>
         </div>
-<!-- Content -->
+</nav>
+        <!-- Content -->
         <div class="content">
             <h2 class="section-title">My Bookings</h2>
 
@@ -61,7 +56,7 @@
                     <div class="stat-text">Completed Trip</div>
                 </div>
             </div>
-<!-- Table -->
+            <!-- Table -->
             <div class="table-card">
                 <table class="table">
                     <thead>
@@ -90,14 +85,15 @@
                                 <button class="btn" type="button">View</button>
                             </td>
                         </tr>
-                </table>
+                    </table>
+                </div>
             </div>
-<!-- Browse More Packages Button-->
+            <!-- Browse More Packages Button-->
             <div class="center">
                 <button class="btn btn-wide" type="button">Browse More Packages</button>
             </div>
         </div>
     </div>
-    <script src="../../public/js/traveller.dashboard.js"></script>
+    <script src="traveller.dashboard.js"></script>
   </body>
 </html>
