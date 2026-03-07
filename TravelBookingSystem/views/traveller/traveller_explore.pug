@@ -1,0 +1,67 @@
+doctype html
+html(lang="en")
+  head
+    meta(charset="UTF-8")
+    meta(name="viewport", content="width=device-width, initial-scale=1.0")
+    title Explore
+    link(rel="stylesheet", href="/css/traveller_dashboard.css")
+    link(rel="stylesheet", href="/css/traveller_explore.css")
+
+  body
+    // Sidebar
+    .sidebar
+      .logo
+        img.logo-img(src="../../assets/logo.jpg", alt="TripZip Logo")
+
+      .nav
+        a.nav-item(href="../../views/html/traveller.dashboard.html")
+          | 🏠 Dashboard
+        a.nav-item.active(href="traveller.explore.html")
+          | 📋 Explore
+
+    // Main content
+    .main
+      .topbar
+        h1.topbar-title Explore
+
+        .profile#profile
+          button.profile-btn#profileBtn(type="button")
+            img.avatar(src="../../assets/avatar.png", alt="User avatar")
+            span.profile-name
+              | Emily Smith
+              span.profile-role Traveller
+
+          .dropdown#profileMenu
+            .dropdown-header
+              .dropdown-name Emily Smith
+              .dropdown-email emily@gmail.com
+
+            a.dropdown-item(href="#") View Profile
+            button.dropdown-item(type="button") Log Out
+
+      // Content
+      .content
+        .search-area
+          .one-field.destination-field
+            p.small-title Destination
+            input.text-input(type="text", placeholder="Search...")
+
+          .one-field.price-field
+            p.small-title Price Range
+            .price-inputs
+              input.text-input(type="number", placeholder="Min Price")
+              span.dash -
+              input.text-input(type="number", placeholder="Max Price")
+
+        .cards
+            each package in packages
+                .package-card
+                    img.card-img(src="../../assets/Hawaii.png", alt="Beach Getaway")
+                    .card-info
+                    h3= package.title
+                    p 📍 #{package.destination}
+                    p 🗓 Dates: #{package.start_date} - #{package.end_date}
+                    p £ #{package.price}
+                    button.btn(type="button") View Details
+
+    script(src="/js/traveller_dashboard.js")

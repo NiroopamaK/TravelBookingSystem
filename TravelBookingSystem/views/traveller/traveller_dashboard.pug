@@ -1,0 +1,90 @@
+doctype html
+html(lang="en")
+  head
+    meta(charset="UTF-8")
+    meta(name="viewport", content="width=device-width, initial-scale=1.0")
+    title Traveller Dashboard
+    link(rel="stylesheet", href="/css/traveller_dashboard.css")
+
+  body
+    // Sidebar
+    .sidebar
+      .logo
+        img.logo-img(src="/assets/logo.jpg", alt="TripZip Logo")
+
+      .nav
+        a.nav-item.active(href="traveller.dashboard.html")
+          | 🏠 Dashboard
+        a.nav-item(href="traveller.explore.html")
+          | 📋 Explore
+
+    // Main content
+    .main
+      .topbar
+        h1.topbar-title Traveller Dashboard
+
+        .profile#profile
+          button.profile-btn#profileBtn(type="button")
+            img.avatar(src="/assets/avatar.png", alt="User avatar")
+            span.profile-name
+              | Emily Smith
+              span.profile-role Traveller
+
+          .dropdown#profileMenu
+            .dropdown-header
+              .dropdown-name Emily Smith
+              .dropdown-email emily@gmail.com
+
+            a.dropdown-item(href="#") View Profile
+            button.dropdown-item(type="button") Log Out
+
+      // Content
+      .content
+        h2.section-title My Bookings
+
+        .stats
+          .stat
+            .stat-number 2
+            .stat-text Upcoming Trips
+
+          .stat
+            .stat-number 1
+            .stat-text Active Trip
+
+          .stat
+            .stat-number 1
+            .stat-text Completed Trip
+
+        // Table
+        .table-card
+          table.table
+            thead
+              tr
+                th Package
+                th Destination
+                th Status
+                th.table-right Actions
+
+            tbody
+              tr
+                td Amazing Adventure Tour
+                td Vietnam
+                td
+                  span.pill.pill-active Active
+                td.table-right
+                  button.btn.btn-ghost(type="button") Cancel
+                  button.btn(type="button") View
+
+              tr
+                td Beach Getaway
+                td Hawaii
+                td
+                  span.pill.pill-completed Completed
+                td.table-right
+                  button.btn(type="button") View
+
+        // Browse More Packages Button
+        .center
+          button.btn.btn-wide(type="button") Browse More Packages
+
+    script(src="/js/traveller_dashboard.js")
