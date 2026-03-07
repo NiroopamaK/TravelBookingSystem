@@ -1,0 +1,26 @@
+doctype html
+html(lang="en")
+  head
+    meta(charset="UTF-8")
+    meta(name="viewport" content="width=device-width, initial-scale=1.0")
+    title TripZip
+    link(rel="stylesheet" href="/css/login.css")
+
+  body
+    .container
+      .left-half
+      .right-half
+        .form-container
+          img.logo(src="/assets/logo.jpg" alt="Logo")
+          .form-box.login-form
+            h2 Login
+            form#loginForm
+              label Email
+              input#loginEmail(type="text" placeholder="Enter Email" required)
+              label Password
+              input#loginPassword(type="password" placeholder="Enter Password" required)
+              a.forgot-password(href="#") Forgot Password?
+              button.submit-btn(type="submit") Login
+            button.signup-link(onclick="window.location.href='/signup'") Sign Up
+
+    script(src="/js/login.js")

@@ -5,19 +5,52 @@ const path = require('path');
 require('dotenv').config();
 
 const db = require('./config/db');
-
 const authRoutes = require('./routes/authRoutes');
 const emailVerificationRoutes = require('./routes/emailVerificationRoutes');
 
 const app = express();
 
+//set up pug
+app.set('view engine', 'pug');
+app.set('views', path.join(__dirname, 'views'));
+
+// Serve frontend
+app.use(express.static(path.join(__dirname, 'public')));
+
+//login page
+app.get('/', (req, res) => {
+  res.render('index');
+});
+
+//sign up page
+app.get('/signup', (req, res) => {
+  res.render('signup');
+});
+
+//dashboard
+app.get('/dashboard', (req, res) => {
+  res.render('dashboard');
+});
+
+//Admin - analytics
+app.get('/analytics', (req, res) => {
+  res.render('admin/analytics');
+});
+
+//Admin - packages
+app.get('/packages', (req, res) => {
+  res.render('admin/packages');
+});
+
+//Admin - users
+app.get('/users', (req, res) => {
+  res.render('admin/users');
+});
+
 // Middleware
 app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-
-// Serve frontend
-app.use(express.static(path.join(__dirname, 'frontend')));
 
 // Routes
 app.use('/api/auth', authRoutes);
@@ -46,5 +79,6 @@ app.use((req, res) => {
 });
 
 // Start server
-const PORT = process.env.PORT || 5000;
+//const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 5555;
 app.listen(PORT, '0.0.0.0', () => console.log(`Server running on port ${PORT}`));
