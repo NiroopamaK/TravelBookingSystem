@@ -4,43 +4,35 @@ html(lang="en")
     meta(charset="UTF-8")
     meta(name="viewport", content="width=device-width, initial-scale=1.0")
     title Explore
-    link(rel="stylesheet", href="/css/traveller_dashboard.css")
+
+    // shared layout
+    link(rel="stylesheet", href="/css/dashboard.css")
+
+    // your explore page css
     link(rel="stylesheet", href="/css/traveller_explore.css")
 
   body
-    // Sidebar
-    .sidebar
-      .logo
-        img.logo-img(src="../../assets/logo.jpg", alt="TripZip Logo")
+    // ===== TOP NAVBAR (shared) =====
+    nav.top-nav
+      .nav-left
+        img.logo(src="/assets/logo.jpg", alt="Logo")
+      .nav-right
+        span.profile-name Tom
+        span.profile-role TRAVELLER
+        .profile-dropdown-container
+          img.profile-pic#profilePic(src="/assets/avatar.png", alt="Profile")
+          .dropdown-menu#dropdownMenu
+            a(href="/frontend/edit-profile.html") Edit Profile
+            a#signOutBtn(href="#") Sign Out
 
-      .nav
-        a.nav-item(href="../../views/html/traveller.dashboard.html")
-          | 🏠 Dashboard
-        a.nav-item.active(href="traveller.explore.html")
-          | 📋 Explore
+    // ===== MAIN DASHBOARD LAYOUT (shared) =====
+    .dashboard-wrapper
+      aside#sidebar
 
-    // Main content
-    .main
-      .topbar
-        h1.topbar-title Explore
+      .dashboard-content
+        h1 Explore
 
-        .profile#profile
-          button.profile-btn#profileBtn(type="button")
-            img.avatar(src="../../assets/avatar.png", alt="User avatar")
-            span.profile-name
-              | Emily Smith
-              span.profile-role Traveller
-
-          .dropdown#profileMenu
-            .dropdown-header
-              .dropdown-name Emily Smith
-              .dropdown-email emily@gmail.com
-
-            a.dropdown-item(href="#") View Profile
-            button.dropdown-item(type="button") Log Out
-
-      // Content
-      .content
+        // Content
         .search-area
           .one-field.destination-field
             p.small-title Destination
@@ -54,14 +46,15 @@ html(lang="en")
               input.text-input(type="number", placeholder="Max Price")
 
         .cards
-            each package in packages
-                .package-card
-                    img.card-img(src="../../assets/Hawaii.png", alt="Beach Getaway")
-                    .card-info
-                    h3= package.title
-                    p 📍 #{package.destination}
-                    p 🗓 Dates: #{package.start_date} - #{package.end_date}
-                    p £ #{package.price}
-                    button.btn(type="button") View Details
+          each package in packages
+            .package-card
+              img.card-img(src="/assets/Hawaii.png", alt="Package image")
+              .card-info
+                h3= package.title
+                p 📍 #{package.destination}
+                p 🗓 Dates: #{package.start_date} - #{package.end_date}
+                p £ #{package.price}
+                button.btn(type="button") View Details
 
-    script(src="/js/traveller_dashboard.js")
+    // shared JS (sidebar + dropdown + token name/role)
+    script(src="/js/dashboard.js")

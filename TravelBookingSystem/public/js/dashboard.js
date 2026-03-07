@@ -81,8 +81,8 @@ const menus = {
         { name: "Packages", link: "/packages" }
     ],
     TRAVELLER: [
-        { name: "Explore", link: "../traveller/traveller.explore.html" },
-        { name: "My Bookings", link: "../traveller/bookings.html" }
+        { name: "Explore", link: "/traveller/explore" },
+        { name: "My Bookings", link: "/traveller/dashboard" }
     ],
     TRAVEL_AGENT: [
         { name: "Packages", link: "../agent/my-packages.html" },
@@ -131,8 +131,7 @@ function renderSidebar() {
         li.textContent = item.name;
 
         li.addEventListener("click", () => {
-            setActive(li);
-            loadPage(item.link);
+        window.location.href = item.link;
         });
 
         ul.appendChild(li);
@@ -141,8 +140,8 @@ function renderSidebar() {
     sidebar.appendChild(ul);
 
     // Load first page automatically
-    if (menus[role].length > 0) {
-        setActive(ul.children[0]);
-        loadPage(menus[role][0].link);
-    }
+    //if (menus[role].length > 0) {
+    //  setActive(ul.children[0]);
+    //    loadPage(menus[role][0].link);
+    //}
 }

@@ -4,42 +4,35 @@ html(lang="en")
     meta(charset="UTF-8")
     meta(name="viewport", content="width=device-width, initial-scale=1.0")
     title Traveller Dashboard
+
+    // shared layout css
+    link(rel="stylesheet", href="/css/dashboard.css")
+    // your page css (optional, keep for table/stats)
     link(rel="stylesheet", href="/css/traveller_dashboard.css")
 
   body
-    // Sidebar
-    .sidebar
-      .logo
-        img.logo-img(src="/assets/logo.jpg", alt="TripZip Logo")
+    // ===== TOP NAVBAR (shared) =====
+    nav.top-nav
+      .nav-left
+        img.logo(src="/assets/logo.jpg", alt="Logo")
+      .nav-right
+        span.profile-name Tom
+        span.profile-role TRAVELLER
+        .profile-dropdown-container
+          img.profile-pic#profilePic(src="/assets/avatar.png", alt="Profile")
+          .dropdown-menu#dropdownMenu
+            a(href="/frontend/edit-profile.html") Edit Profile
+            a#signOutBtn(href="#") Sign Out
 
-      .nav
-        a.nav-item.active(href="traveller.dashboard.html")
-          | 🏠 Dashboard
-        a.nav-item(href="traveller.explore.html")
-          | 📋 Explore
+    // ===== MAIN DASHBOARD LAYOUT (shared) =====
+    .dashboard-wrapper
+      // Sidebar injected by JS into this container
+      aside#sidebar
 
-    // Main content
-    .main
-      .topbar
-        h1.topbar-title Traveller Dashboard
+      // Main content
+      .dashboard-content
+        h1 Traveller Dashboard
 
-        .profile#profile
-          button.profile-btn#profileBtn(type="button")
-            img.avatar(src="/assets/avatar.png", alt="User avatar")
-            span.profile-name
-              | Emily Smith
-              span.profile-role Traveller
-
-          .dropdown#profileMenu
-            .dropdown-header
-              .dropdown-name Emily Smith
-              .dropdown-email emily@gmail.com
-
-            a.dropdown-item(href="#") View Profile
-            button.dropdown-item(type="button") Log Out
-
-      // Content
-      .content
         h2.section-title My Bookings
 
         .stats
@@ -55,7 +48,6 @@ html(lang="en")
             .stat-number 1
             .stat-text Completed Trip
 
-        // Table
         .table-card
           table.table
             thead
@@ -64,7 +56,6 @@ html(lang="en")
                 th Destination
                 th Status
                 th.table-right Actions
-
             tbody
               tr
                 td Amazing Adventure Tour
@@ -83,8 +74,8 @@ html(lang="en")
                 td.table-right
                   button.btn(type="button") View
 
-        // Browse More Packages Button
         .center
           button.btn.btn-wide(type="button") Browse More Packages
 
-    script(src="/js/traveller_dashboard.js")
+    // shared JS (builds sidebar + dropdown)
+    script(src="/js/dashboard.js")
