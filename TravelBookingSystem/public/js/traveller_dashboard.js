@@ -1,33 +1,32 @@
-var profileBtn = document.getElementById('profileBtn');
-var profileMenu = document.getElementById('profileMenu');
+function getTokenPayload() {
+  const token = localStorage.getItem("token");
+  if (!token) return null;
 
-if (profileBtn && profileMenu) {
-    function showMenu() {
-        profileMenu.style.display = 'block';
-    }
-
-    function hideMenu() {
-        profileMenu.style.display = 'none';
-    }
-
-    profileBtn.onclick = function(event) {
-        if (event.stopPropagation) {
-            event.stopPropagation();
-        }
-        if (profileMenu.style.display === 'block') {
-            hideMenu();
-        } else {
-            showMenu();
-        }
-    };
-
-    document.onclick = function() {
-        hideMenu();
-    };
-
-    document.onkeydown = function(event) {
-        if (event.key === 'Escape') {
-            hideMenu();
-        }
-    };
+  try {
+    const base64 = token.split('.')[1].replace(/-/g, '+').replace(/_/g, '/');
+    return JSON.parse(atob(base64));
+  } catch (err) {
+    console.error("Invalid token");
+    return null;
+  }
 }
+
+async function loadBookings() {
+  const payload = getTokenPayload();
+  if (!payload) {
+    console.log("No token found");
+    return;
+  }
+
+  try {
+    const response = await fetch(`/bookings/getBookingsByUser/${payload.user_id}`);
+    const data = await response.json();
+    console.log("Bookings:", data);
+
+    // later: render into table (після цього етапу)
+  } catch (error) {
+    console.error("Error fetching bookings:", error);
+  }
+}
+
+document.addEventListener("DOMContentLoaded", loadBookings);

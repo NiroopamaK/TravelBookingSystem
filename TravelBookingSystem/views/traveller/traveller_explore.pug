@@ -54,7 +54,7 @@ html(lang="en")
                 p 📍 #{package.destination}
                 p 🗓 Dates: #{package.start_date} - #{package.end_date}
                 p £ #{package.price}
-                button.btn(type="button") View Details
+                a.btn(href=`/traveller/booking/${package.package_id}`) Request Booking
 
     // shared JS (sidebar + dropdown + token name/role)
     script(src="/js/dashboard.js")

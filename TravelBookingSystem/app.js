@@ -6,6 +6,7 @@ require('dotenv').config();
 
 const db = require('./config/db');
 const authRoutes = require('./routes/authRoutes');
+const bookingRoutes = require('./routes/bookingRoutes');
 const emailVerificationRoutes = require('./routes/emailVerificationRoutes');
 const travellerRoutes = require('./routes/travellerRoutes');
 
@@ -52,6 +53,7 @@ app.get('/users', (req, res) => {
 app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+app.use('/bookings', bookingRoutes);
 
 // Routes
 app.use('/api/auth', authRoutes);
@@ -81,6 +83,5 @@ app.use((req, res) => {
 });
 
 // Start server
-//const PORT = process.env.PORT || 5000;
 const PORT = process.env.PORT || 5555;
 app.listen(PORT, '0.0.0.0', () => console.log(`Server running on port ${PORT}`));
