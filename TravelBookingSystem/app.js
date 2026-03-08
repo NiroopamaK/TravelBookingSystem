@@ -29,9 +29,20 @@ app.use(bodyParser.json());
 app.get('/', (req, res) => res.render('index'));
 app.get('/signup', (req, res) => res.render('signup'));
 app.get('/dashboard', (req, res) => res.render('dashboard'));
-app.get('/analytics', (req, res) => res.render('admin/analytics'));
-app.get('/packages', (req, res) => res.render('admin/packages'));
-app.get('/users', (req, res) => res.render('admin/users'));
+//admin-pages
+// admin-pages
+app.get('/admin/adminDashboard', (req, res) => res.render('admin/adminDashboard'));
+app.get('/admin/packages', (req, res) => res.render('admin/packages'));
+app.get('/admin/users', (req, res) => res.render('admin/users'));
+
+// traveller-pages
+app.get('/traveller/dashboard', (req, res) => res.render('traveller/trav_dashboard'));
+app.get('/traveller/dashboard', (req, res) => res.render('traveller/traveller_dashboard'));
+app.get('/traveller/explore', (req, res) => res.render('traveller/traveller_explore'));
+app.get('/traveller/booking', (req, res) => res.render('traveller/traveller_booking'));
+
+// travel-agent-pages
+app.get('/agent/agentDashboard', (req, res) => res.render('travelAgent/agentDashboard'));
 
 // Routes
 app.use('/', profileRoutes);              
