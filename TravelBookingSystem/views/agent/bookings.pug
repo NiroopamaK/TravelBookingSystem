@@ -1,65 +1,40 @@
-doctype html
-html(lang="en")
-  head
-    meta(charset="UTF-8")
-    meta(name="viewport" content="width=device-width, initial-scale=1.0")
-    title TripZip - Manage Bookings
-    link(rel="stylesheet" href="/css/agent.css")
+h2 Manage Bookings
 
-  body
-    nav.top-nav
-      .nav-left
-        img.logo(src="/assets/logo.jpg" alt="Logo")
-      .nav-right
-        span.profile-name Agent
-        .profile-dropdown-container
-          img.profile-pic#profilePic(src="/assets/admin.png" alt="Profile")
-          .dropdown-menu#dropdownMenu
-            a#signOutBtn(href="#") Sign Out
+h3 All Bookings
+table#bookingsTable
+  thead
+    tr
+      th booking_id
+      th user_id
+      th package_id
+      th packsize
+      th additional_notes
+      th total_price
+      th status
+      th Actions
+  tbody#bookingsBody
 
-    .dashboard-wrapper
-      aside#sidebar
-        ul
-          li
-            a(href="/agent/packages") Packages
-          li.active
-            a(href="/agent/bookings") Bookings
-          li
-            a(href="/agent/customers") Customers
+//- ===== UPDATE BOOKING STATUS MODAL =====
+.modal-overlay#bookingModal
+  .modal
+    button.modal-close#closeBookingModalBtn &times;
+    h3 Update Booking Status
 
-      .dashboard-content
-        h2 Manage Bookings
+    form#updateStatusForm
+      input#modalBookingId(type="hidden" name="booking_id")
 
-        // ===== UPDATE BOOKING STATUS FORM =====
-        form#updateStatusForm
-          h3 Update Booking Status
+      label Booking ID
+      p#modalBookingIdDisplay -
 
-          label Booking ID
-          input#bookingId(type="number" name="booking_id" placeholder="Enter booking_id" required)
+      label Status
+      select#status(name="status" required)
+        option(value="") Select Status
+        option(value="PENDING") PENDING
+        option(value="CONFIRMED") CONFIRMED
+        option(value="COMPLETED") COMPLETED
+        option(value="CANCELLED") CANCELLED
 
-          label Status
-          select#status(name="status" required)
-            option(value="") Select Status
-            option(value="PENDING") PENDING
-            option(value="CONFIRMED") CONFIRMED
-            option(value="COMPLETED") COMPLETED
-            option(value="CANCELLED") CANCELLED
+      .form-actions
+        button.submit-btn(type="submit") Update Status
 
-          .form-actions
-            button.submit-btn(type="submit") Update Status
-
-        // ===== BOOKINGS TABLE =====
-        h3 All Bookings
-        table#bookingsTable
-          thead
-            tr
-              th booking_id
-              th user_id
-              th package_id
-              th packsize
-              th additional_notes
-              th total_price
-              th status
-          tbody#bookingsBody
-
-    script(src="/js/agent-bookings.js")
+script(src="/js/agent-bookings.js")

@@ -338,3 +338,73 @@ tbody td {
 .status-confirmed  { color: #276749; font-weight: bold; }
 .status-completed  { color: #2b6cb0; font-weight: bold; }
 .status-cancelled  { color: #c0392b; font-weight: bold; }
+
+/* ===== MODALS ===== */
+.modal-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 200;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-overlay.active {
+  display: flex;
+}
+
+.modal {
+  background: white;
+  border-radius: 12px;
+  padding: 32px;
+  width: 100%;
+  max-width: 600px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+  position: relative;
+}
+
+.modal h3 {
+  color: #5a381e;
+  margin-bottom: 20px;
+}
+
+.modal-close {
+  position: absolute;
+  top: 16px;
+  right: 20px;
+  background: none;
+  border: none;
+  font-size: 22px;
+  cursor: pointer;
+  color: #8b5e3c;
+  line-height: 1;
+}
+
+.modal-close:hover {
+  color: #5a381e;
+}
+
+.modal form {
+  box-shadow: none;
+  padding: 0;
+  border-radius: 0;
+}
+
+.open-modal-btn {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 6px;
+  background-color: #8b5e3c;
+  color: white;
+  font-size: 15px;
+  cursor: pointer;
+  margin-bottom: 20px;
+  transition: background-color 0.2s;
+}
+
+.open-modal-btn:hover {
+  background-color: #70452a;
+}

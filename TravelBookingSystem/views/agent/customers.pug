@@ -1,46 +1,15 @@
-doctype html
-html(lang="en")
-  head
-    meta(charset="UTF-8")
-    meta(name="viewport" content="width=device-width, initial-scale=1.0")
-    title TripZip - Customers
-    link(rel="stylesheet" href="/css/agent.css")
+h2 Customers
 
-  body
-    nav.top-nav
-      .nav-left
-        img.logo(src="/assets/logo.jpg" alt="Logo")
-      .nav-right
-        span.profile-name Agent
-        .profile-dropdown-container
-          img.profile-pic#profilePic(src="/assets/admin.png" alt="Profile")
-          .dropdown-menu#dropdownMenu
-            a#signOutBtn(href="#") Sign Out
+table#customersTable
+  thead
+    tr
+      th user_id
+      th first_name
+      th last_name
+      th email
+      th passport
+      th address
+      th telephone
+  tbody#customersBody
 
-    .dashboard-wrapper
-      aside#sidebar
-        ul
-          li
-            a(href="/agent/packages") Packages
-          li
-            a(href="/agent/bookings") Bookings
-          li.active
-            a(href="/agent/customers") Customers
-
-      .dashboard-content
-        h2 Customers
-
-        // ===== CUSTOMERS TABLE =====
-        table#customersTable
-          thead
-            tr
-              th user_id
-              th first_name
-              th last_name
-              th email
-              th passport
-              th address
-              th telephone
-          tbody#customersBody
-
-    script(src="/js/agent-customers.js")
+script(src="/js/agent-customers.js")

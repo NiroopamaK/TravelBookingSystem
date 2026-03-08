@@ -85,9 +85,9 @@ const menus = {
         { name: "My Bookings", link: "../traveller/bookings.html" }
     ],
     TRAVEL_AGENT: [
-        { name: "Packages", link: "../agent/my-packages.html" },
-        { name: "Bookings", link: "../agent/agent-bookings.html" },
-        { name: "Trips", link: "../agent/my-trips.html" }
+        { name: "Packages", link: "/agent/packages" },
+        { name: "Bookings", link: "/agent/bookings" },
+        { name: "Customers", link: "/agent/customers" }
     ]
 };
 
@@ -101,7 +101,24 @@ async function loadPage(path) {
         if (!response.ok) throw new Error("Page not found");
 
         const html = await response.text();
-        document.querySelector(".dashboard-content").innerHTML = html;
+        const content = document.querySelector(".dashboard-content");
+        content.innerHTML = html;
+
+        // Remove any previously injected page scripts
+        document.querySelectorAll("script[data-page-script]").forEach(s => s.remove());
+
+        // innerHTML doesn't execute scripts — re-create and append them so they run
+        content.querySelectorAll("script").forEach(oldScript => {
+            const newScript = document.createElement("script");
+            newScript.setAttribute("data-page-script", "true");
+            if (oldScript.src) {
+                newScript.src = oldScript.src;
+            } else {
+                newScript.textContent = oldScript.textContent;
+            }
+            document.body.appendChild(newScript);
+            oldScript.remove();
+        });
     } catch (err) {
         document.querySelector(".dashboard-content").innerHTML =
             `<p style="color:red;">${err.message}</p>`;
