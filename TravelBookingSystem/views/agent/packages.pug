@@ -1,0 +1,81 @@
+doctype html
+html(lang="en")
+  head
+    meta(charset="UTF-8")
+    meta(name="viewport" content="width=device-width, initial-scale=1.0")
+    title TripZip - Manage Packages
+    link(rel="stylesheet" href="/css/dashboard.css")
+
+  body
+    nav.top-nav
+      .nav-left
+        img.logo(src="/assets/logo.jpg" alt="Logo")
+      .nav-right
+        span.profile-name Agent
+        .profile-dropdown-container
+          img.profile-pic#profilePic(src="/assets/admin.png" alt="Profile")
+          .dropdown-menu#dropdownMenu
+            a#signOutBtn(href="#") Sign Out
+
+    .dashboard-wrapper
+      aside#sidebar
+        a(href="/agent/packages") Packages
+        a(href="/agent/bookings") Bookings
+        a(href="/agent/customers") Customers
+
+      .dashboard-content
+        h2 Manage Packages
+
+        // ===== CREATE / EDIT PACKAGE FORM =====
+        form#packageForm
+          h3#formTitle Add New Package
+
+          input#packageId(type="hidden" name="package_id")
+
+          label Title
+          input#title(type="text" name="title" placeholder="Enter package title" required)
+
+          label Destination
+          input#destination(type="text" name="destination" placeholder="Enter destination" required)
+
+          label Start Date
+          input#startDate(type="date" name="start_date" required)
+
+          label End Date
+          input#endDate(type="date" name="end_date" required)
+
+          label Description
+          textarea#description(name="description" placeholder="Enter package description" required)
+
+          label Price ($)
+          input#price(type="number" name="price" step="0.01" min="0" placeholder="Enter price" required)
+
+          // ===== ITINERARY ITEMS =====
+          h4 Itinerary Items
+          #itineraryList
+            .itinerary-item
+              input(type="text" name="itinerary_title[]" placeholder="Item title" required)
+              textarea(name="itinerary_description[]" placeholder="Item description" required)
+
+          button#addItineraryBtn(type="button") + Add Itinerary Item
+
+          .form-actions
+            button#submitPackageBtn.submit-btn(type="submit") Save Package
+            button#cancelEditBtn.cancel-btn(type="button" style="display:none") Cancel
+
+        // ===== PACKAGES TABLE =====
+        h3 All Packages
+        table#packagesTable
+          thead
+            tr
+              th package_id
+              th title
+              th destination
+              th start_date
+              th end_date
+              th description
+              th price
+              th Actions
+          tbody#packagesBody
+
+    script(src="/js/agent-packages.js")

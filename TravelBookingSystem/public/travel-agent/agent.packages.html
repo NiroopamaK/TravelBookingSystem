@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Manage Packages – Agent</title>
+    <link rel="stylesheet" href="../navigation/top-navbar.css">
+    <link rel="stylesheet" href="../navigation/side-nav.css">
+    <link rel="stylesheet" href="agent.dashboard.css">
+    <link rel="stylesheet" href="agent.packages.css">
+  </head>
+  <body>
+
+    <div id="navbar-container"></div>
+
+    <div class="layout">
+      <aside id="sidebar"></aside>
+
+      <div class="page-content">
+        <div class="content">
+          <div class="pkg-header">
+            <h2 class="section-title" style="margin:0;">All Packages</h2>
+            <a href="agent.create-package.html" class="btn">+ Create Package</a>
+          </div>
+
+          <div class="table-card" style="margin-top:16px;">
+            <table class="table" id="packagesTable">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Package Name</th>
+                  <th>Destination</th>
+                  <th>Duration</th>
+                  <th>Price</th>
+                  <th>Status</th>
+                  <th class="table-right">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="packagesTbody">
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-overlay" id="editOverlay">
+      <div class="modal">
+        <div class="modal-header">
+          <h3 class="modal-title">Edit Package</h3>
+          <button class="modal-close" id="editClose" type="button">&#10005;</button>
+        </div>
+        <form id="editForm">
+          <input type="hidden" id="editId">
+          <div class="form-grid">
+            <div class="form-group">
+              <label class="form-label" for="editName">Package Name</label>
+              <input class="form-input" id="editName" type="text" placeholder="e.g. Amazing Adventure Tour" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="editDestination">Destination</label>
+              <input class="form-input" id="editDestination" type="text" placeholder="e.g. Vietnam" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="editDuration">Duration (days)</label>
+              <input class="form-input" id="editDuration" type="number" min="1" placeholder="e.g. 7" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="editPrice">Price (USD)</label>
+              <input class="form-input" id="editPrice" type="number" min="0" step="0.01" placeholder="e.g. 1200" required>
+            </div>
+            <div class="form-group form-group-full">
+              <label class="form-label" for="editDescription">Description</label>
+              <textarea class="form-input form-textarea" id="editDescription" placeholder="Brief description of the package..."></textarea>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="editStatus">Status</label>
+              <select class="form-input" id="editStatus">
+                <option value="Active">Active</option>
+                <option value="Inactive">Inactive</option>
+              </select>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button class="btn btn-ghost" type="button" id="editCancel">Cancel</button>
+            <button class="btn" type="submit">Save Changes</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div class="modal-overlay" id="deleteOverlay">
+      <div class="modal modal-sm">
+        <div class="modal-header">
+          <h3 class="modal-title">Delete Package</h3>
+          <button class="modal-close" id="deleteClose" type="button">&#10005;</button>
+        </div>
+        <p class="delete-msg">Are you sure you want to delete <strong id="deleteName"></strong>? This action cannot be undone.</p>
+        <div class="modal-footer">
+          <button class="btn btn-ghost" type="button" id="deleteCancel">Cancel</button>
+          <button class="btn btn-danger" type="button" id="deleteConfirm">Delete</button>
+        </div>
+      </div>
+    </div>
+
+    <script src="../navigation/side-nav.js"></script>
+    <script src="agent.packages.js"></script>
+    <script>
+      fetch("../navigation/top-navbar.html")
+        .then(res => res.text())
+        .then(html => {
+          document.getElementById("navbar-container").innerHTML = html;
+          const script = document.createElement("script");
+          script.src = "../navigation/top-navbar.js";
+          document.body.appendChild(script);
+        });
+    </script>
+  </body>
+</html>

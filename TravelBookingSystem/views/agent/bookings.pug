@@ -1,0 +1,60 @@
+doctype html
+html(lang="en")
+  head
+    meta(charset="UTF-8")
+    meta(name="viewport" content="width=device-width, initial-scale=1.0")
+    title TripZip - Manage Bookings
+    link(rel="stylesheet" href="/css/dashboard.css")
+
+  body
+    nav.top-nav
+      .nav-left
+        img.logo(src="/assets/logo.jpg" alt="Logo")
+      .nav-right
+        span.profile-name Agent
+        .profile-dropdown-container
+          img.profile-pic#profilePic(src="/assets/admin.png" alt="Profile")
+          .dropdown-menu#dropdownMenu
+            a#signOutBtn(href="#") Sign Out
+
+    .dashboard-wrapper
+      aside#sidebar
+        a(href="/agent/packages") Packages
+        a(href="/agent/bookings") Bookings
+        a(href="/agent/customers") Customers
+
+      .dashboard-content
+        h2 Manage Bookings
+
+        // ===== UPDATE BOOKING STATUS FORM =====
+        form#updateStatusForm
+          h3 Update Booking Status
+
+          label Booking ID
+          input#bookingId(type="number" name="booking_id" placeholder="Enter booking_id" required)
+
+          label Status
+          select#status(name="status" required)
+            option(value="") Select Status
+            option(value="PENDING") PENDING
+            option(value="CONFIRMED") CONFIRMED
+            option(value="COMPLETED") COMPLETED
+            option(value="CANCELLED") CANCELLED
+
+          button.submit-btn(type="submit") Update Status
+
+        // ===== BOOKINGS TABLE =====
+        h3 All Bookings
+        table#bookingsTable
+          thead
+            tr
+              th booking_id
+              th user_id
+              th package_id
+              th packsize
+              th additional_notes
+              th total_price
+              th status
+          tbody#bookingsBody
+
+    script(src="/js/agent-bookings.js")
