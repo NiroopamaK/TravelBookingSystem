@@ -7,6 +7,7 @@ require('dotenv').config();
 const db = require('./config/db');
 const authRoutes = require('./routes/authRoutes');
 const emailVerificationRoutes = require('./routes/emailVerificationRoutes');
+const agentRoutes = require('./routes/agentRoutes');
 
 const app = express();
 
@@ -47,6 +48,21 @@ app.get('/users', (req, res) => {
   res.render('admin/users');
 });
 
+//Agent - packages
+app.get('/agent/packages', (req, res) => {
+  res.render('agent/packages');
+});
+
+//Agent - bookings
+app.get('/agent/bookings', (req, res) => {
+  res.render('agent/bookings');
+});
+
+//Agent - customers
+app.get('/agent/customers', (req, res) => {
+  res.render('agent/customers');
+});
+
 // Middleware
 app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -55,6 +71,7 @@ app.use(bodyParser.json());
 // Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/email', emailVerificationRoutes);
+app.use('/api/agent', agentRoutes);
 
 // Test route
 app.get('/test', (req, res) => {
