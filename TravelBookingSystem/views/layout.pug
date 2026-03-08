@@ -1,0 +1,29 @@
+doctype html
+html(lang="en")
+  head
+    meta(charset="UTF-8")
+    title #{title || "Travel Booking System"}
+    link(rel="stylesheet" href="/css/dashboard.css")
+    block head
+
+  body
+    nav.top-nav
+      .nav-left
+        img.logo(src="/assets/logo.jpg" alt="Logo")
+      .nav-right
+        span.profile-name Name
+        span.profile-role Role
+        .profile-dropdown-container
+          img.profile-pic#profilePic(src="/assets/admin.png" alt="Profile")
+          .dropdown-menu#dropdownMenu
+            a#editProfileLink(href="#") Edit Profile
+            a#signOutBtn(href="#") Sign Out
+
+    .dashboard-wrapper
+      aside#sidebar
+
+      .dashboard-content
+        block content
+
+    script(src="/js/navigation.js")
+    block scripts

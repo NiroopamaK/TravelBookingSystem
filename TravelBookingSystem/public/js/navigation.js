@@ -1,4 +1,3 @@
-/*
 document.addEventListener("DOMContentLoaded", () => {
   initNavbar();
   renderSidebar();
@@ -77,7 +76,7 @@ const menus = {
     { name: "My Bookings", link: "/traveller/dashboard" }
   ],
   TRAVEL_AGENT: [
-    { name: "Packages", link: "../agent/my-packages.html" },
+    { name: "Dashboard", link: "/agent/agentDashboard" },
     { name: "Bookings", link: "../agent/agent-bookings.html" },
     { name: "Trips", link: "../agent/my-trips.html" }
   ]
@@ -138,4 +137,3 @@ function initEditProfileLink() {
     window.location.href = "/editProfile?token=" + token;
   });
 }
-  */
