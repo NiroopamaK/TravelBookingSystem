@@ -17,10 +17,6 @@ function resetStep2Inputs() {
   document.getElementById("signupPassword2").value = "";
   document.getElementById("emailCode").value = "";
 
-  document.getElementById("signupPassword").disabled = true;
-  document.getElementById("signupPassword2").disabled = true;
-  document.getElementById("emailCode").disabled = true;
-
   document.getElementById("afterCodeSent").classList.add("hidden");
   document.getElementById("passwordSection").classList.add("hidden");
 
@@ -32,173 +28,22 @@ function resetStep2Inputs() {
   clearInterval(countdownInterval);
 }
 
-// Send verification code
-document.getElementById("sendCodeBtn").addEventListener("click", async () => {
-  const email = document.getElementById("signupEmail").value;
-  if (!email) return alert("Please enter an email first!");
+new EmailVerification({
+  emailInput: "signupEmail",
+  codeInput: "emailCode",
 
-  try {
-    const res = await fetch("/api/email/send-code", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email }),
-    });
+  sendBtn: "sendCodeBtn",
+  validateBtn: "validateCodeBtn",
+  resendBtn: "resendCodeBtn",
 
-    const data = await res.json();
+  afterCodeSection: "afterCodeSent",
+  successSection: "passwordSection",
 
-    if (res.ok && data.success) {
-      alert("Verification code sent!");
+  timerText: "timerText",
+  timerElement: "timer",
 
-      document.getElementById("afterCodeSent").classList.remove("hidden");
-      document.getElementById("emailCode").disabled = false;
-
-      document.getElementById("sendCodeBtn").style.display = "none";
-
-      document.getElementById("validateCodeBtn").style.display = "block";
-      document.getElementById("resendCodeBtn").classList.add("hidden");
-
-      document.getElementById("timerText").style.display = "block";
-      document.getElementById("timerText").textContent =
-        "Code expires in ";
-      document.getElementById("timerText").innerHTML =
-        'Code expires in <span id="timer">60</span>s';
-
-      startTimer();
-    } else {
-      alert("Failed to send code");
-    }
-  } catch (err) {
-    alert(err.message);
-  }
+  message: "validationMessage"
 });
-
-// Timer
-function startTimer() {
-  clearInterval(countdownInterval);
-
-  timeLeft = 60;
-  document.getElementById("timer").textContent = timeLeft;
-
-  countdownInterval = setInterval(() => {
-    timeLeft--;
-    document.getElementById("timer").textContent = timeLeft;
-
-    if (timeLeft <= 0) {
-      clearInterval(countdownInterval);
-
-      document.getElementById("timerText").textContent =
-        "Verification code expired";
-
-      document.getElementById("validateCodeBtn").style.display = "none";
-
-      if (!codeValidated && validationAttempts < MAX_ATTEMPTS) {
-        document.getElementById("resendCodeBtn").classList.remove("hidden");
-      }
-    }
-  }, 1000);
-}
-
-// Validate code
-document
-  .getElementById("validateCodeBtn")
-  .addEventListener("click", async () => {
-    const email = document.getElementById("signupEmail").value;
-    const code = document.getElementById("emailCode").value;
-
-    if (!code) return alert("Enter verification code");
-
-    try {
-      const res = await fetch("/api/email/verify-code", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, code }),
-      });
-
-      const data = await res.json();
-
-      if (res.ok && data.success) {
-        codeValidated = true;
-
-        clearInterval(countdownInterval);
-
-        document.getElementById("afterCodeSent").classList.add("hidden");
-        document
-          .getElementById("passwordSection")
-          .classList.remove("hidden");
-
-        document.getElementById("signupPassword").disabled = false;
-        document.getElementById("signupPassword2").disabled = false;
-
-        document.getElementById("validationMessage").textContent =
-          "Email validation successful";
-        document.getElementById("validationMessage").style.color = "green";
-      } else {
-        validationAttempts++;
-
-        if (validationAttempts >= MAX_ATTEMPTS) {
-          clearInterval(countdownInterval);
-
-          document.getElementById("validationMessage").textContent =
-            "Invalid code and maximum attempts to validate have been reached";
-          document.getElementById("validationMessage").style.color = "red";
-
-          document.getElementById("validateCodeBtn").style.display = "none";
-          document.getElementById("emailCode").disabled = true;
-          document.getElementById("resendCodeBtn").style.display = "none";
-          document.getElementById("timerText").style.display = "none";
-
-          return;
-        }
-
-        clearInterval(countdownInterval);
-
-        document.getElementById("validationMessage").textContent =
-          "Invalid verification code";
-        document.getElementById("validationMessage").style.color = "red";
-
-        document.getElementById("validateCodeBtn").style.display = "none";
-        document.getElementById("resendCodeBtn").classList.remove("hidden");
-        document.getElementById("timerText").style.display = "none";
-      }
-    } catch (err) {
-      alert(err.message);
-    }
-  });
-
-// Resend code
-document
-  .getElementById("resendCodeBtn")
-  .addEventListener("click", async () => {
-    const email = document.getElementById("signupEmail").value;
-
-    try {
-      const res = await fetch("/api/email/send-code", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email }),
-      });
-
-      const data = await res.json();
-
-      if (res.ok && data.success) {
-        alert("New verification code sent");
-
-        document.getElementById("validationMessage").textContent = "";
-        document.getElementById("emailCode").value = "";
-
-        document.getElementById("validateCodeBtn").style.display = "block";
-        document.getElementById("resendCodeBtn").classList.add("hidden");
-
-        document.getElementById("timerText").style.display = "block";
-        document.getElementById("timerText").innerHTML =
-          'Code expires in <span id="timer">60</span>s';
-
-        startTimer();
-      }
-    } catch (err) {
-      alert(err.message);
-    }
-  });
 
   // Finish registration
 document.getElementById('signupStep2').addEventListener('submit', async (e)=>{
@@ -257,3 +102,4 @@ document.getElementById('signupStep2').addEventListener('submit', async (e)=>{
     alert('Registration request failed: ' + err.message);
   }
 });
+
