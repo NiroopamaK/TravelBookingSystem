@@ -93,6 +93,7 @@ body {
 
 .logo {
     height: 40px;
+    padding-top: 15px;
 }
 
 .nav-right {
@@ -176,12 +177,12 @@ body {
 }
 
 #sidebar li:hover {
-    background: #334155;
+    background: #6E260E;
     color: white;
 }
 
 #sidebar li.active {
-    background: #3b82f6;
+    background: #5C4033;
     color: white;
 }
 

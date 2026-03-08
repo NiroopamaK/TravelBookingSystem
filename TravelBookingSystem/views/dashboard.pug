@@ -1,0 +1,28 @@
+doctype html
+html(lang="en")
+  head
+    meta(charset="UTF-8")
+    title Travel Booking System
+    link(rel="stylesheet" href="/css/dashboard.css")
+  body
+    // ===== TOP NAVBAR =====
+    nav.top-nav
+      .nav-left
+        img.logo(src="/assets/logo.jpg" alt="Logo")
+      .nav-right
+        span.profile-name Name
+        span.profile-role Role
+        .profile-dropdown-container
+          img.profile-pic#profilePic(src="/assets/admin.png" alt="Profile")
+          .dropdown-menu#dropdownMenu
+            a(href="/frontend/edit-profile.html") Edit Profile
+            a#signOutBtn(href="#") Sign Out
+
+    // ===== MAIN DASHBOARD LAYOUT =====
+    .dashboard-wrapper
+      // Sidebar
+      aside#sidebar
+      // Main Content
+      .dashboard-content
+
+    script(src="/js/dashboard.js")

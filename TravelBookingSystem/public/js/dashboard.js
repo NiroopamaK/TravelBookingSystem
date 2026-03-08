@@ -1,14 +1,3 @@
-// admin.js
-fetch("../navigation/top-navbar.html")
-  .then(res => res.text())
-  .then(html => {
-    document.getElementById("navbar-container").innerHTML = html;
-
-    const script = document.createElement("script");
-    script.src = "../navigation/top-navbar.js";
-    document.body.appendChild(script);
-  });
-
 //render sidebar
 document.addEventListener("DOMContentLoaded", () => {
     initNavbar();
@@ -87,10 +76,9 @@ function initNavbar() {
 
 const menus = {
     ADMIN: [
-        { name: "Analytics", link: "../admin/analytics.html" },
-        { name: "Agents", link: "../admin/agents.html" },
-        { name: "Travellers", link: "../admin/travellers.html" },
-        { name: "Packages", link: "../admin/packages.html" }
+        { name: "Analytics", link: "/analytics" },
+        { name: "Users", link: "/users" },
+        { name: "Packages", link: "/packages" }
     ],
     TRAVELLER: [
         { name: "Explore", link: "../traveller/traveller.explore.html" },
