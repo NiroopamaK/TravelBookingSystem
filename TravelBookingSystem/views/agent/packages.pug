@@ -4,7 +4,7 @@ html(lang="en")
     meta(charset="UTF-8")
     meta(name="viewport" content="width=device-width, initial-scale=1.0")
     title TripZip - Manage Packages
-    link(rel="stylesheet" href="/css/dashboard.css")
+    link(rel="stylesheet" href="/css/agent.css")
 
   body
     nav.top-nav
@@ -19,14 +19,18 @@ html(lang="en")
 
     .dashboard-wrapper
       aside#sidebar
-        a(href="/agent/packages") Packages
-        a(href="/agent/bookings") Bookings
-        a(href="/agent/customers") Customers
+        ul
+          li.active
+            a(href="/agent/packages") Packages
+          li
+            a(href="/agent/bookings") Bookings
+          li
+            a(href="/agent/customers") Customers
 
       .dashboard-content
         h2 Manage Packages
 
-        // ===== CREATE / EDIT PACKAGE FORM =====
+        
         form#packageForm
           h3#formTitle Add New Package
 
@@ -50,7 +54,6 @@ html(lang="en")
           label Price ($)
           input#price(type="number" name="price" step="0.01" min="0" placeholder="Enter price" required)
 
-          // ===== ITINERARY ITEMS =====
           h4 Itinerary Items
           #itineraryList
             .itinerary-item
@@ -63,7 +66,7 @@ html(lang="en")
             button#submitPackageBtn.submit-btn(type="submit") Save Package
             button#cancelEditBtn.cancel-btn(type="button" style="display:none") Cancel
 
-        // ===== PACKAGES TABLE =====
+        
         h3 All Packages
         table#packagesTable
           thead

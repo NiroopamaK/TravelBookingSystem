@@ -4,7 +4,7 @@ html(lang="en")
     meta(charset="UTF-8")
     meta(name="viewport" content="width=device-width, initial-scale=1.0")
     title TripZip - Manage Bookings
-    link(rel="stylesheet" href="/css/dashboard.css")
+    link(rel="stylesheet" href="/css/agent.css")
 
   body
     nav.top-nav
@@ -19,9 +19,13 @@ html(lang="en")
 
     .dashboard-wrapper
       aside#sidebar
-        a(href="/agent/packages") Packages
-        a(href="/agent/bookings") Bookings
-        a(href="/agent/customers") Customers
+        ul
+          li
+            a(href="/agent/packages") Packages
+          li.active
+            a(href="/agent/bookings") Bookings
+          li
+            a(href="/agent/customers") Customers
 
       .dashboard-content
         h2 Manage Bookings
@@ -41,7 +45,8 @@ html(lang="en")
             option(value="COMPLETED") COMPLETED
             option(value="CANCELLED") CANCELLED
 
-          button.submit-btn(type="submit") Update Status
+          .form-actions
+            button.submit-btn(type="submit") Update Status
 
         // ===== BOOKINGS TABLE =====
         h3 All Bookings

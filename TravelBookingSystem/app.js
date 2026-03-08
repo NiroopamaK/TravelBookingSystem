@@ -15,6 +15,11 @@ const app = express();
 app.set('view engine', 'pug');
 app.set('views', path.join(__dirname, 'views'));
 
+// Middleware
+app.use(cors());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
+
 // Serve frontend
 app.use(express.static(path.join(__dirname, 'public')));
 
@@ -62,11 +67,6 @@ app.get('/agent/bookings', (req, res) => {
 app.get('/agent/customers', (req, res) => {
   res.render('agent/customers');
 });
-
-// Middleware
-app.use(cors());
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
 
 // Routes
 app.use('/api/auth', authRoutes);
