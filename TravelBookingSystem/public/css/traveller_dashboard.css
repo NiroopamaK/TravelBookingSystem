@@ -1,0 +1,131 @@
+
+
+/* Titles */
+.dashboard-content h1 {
+  margin: 0 0 8px 0;
+  font-size: 40px;
+  color: #2b1b14;
+}
+
+.dashboard-content .section-title {
+  margin: 10px 0 14px;
+  font-size: 32px;
+  color: #2b1b14;
+}
+
+/* Stats */
+.dashboard-content .stats {
+  display: flex;
+  gap: 16px;
+  margin: 18px 0 24px;
+  flex-wrap: wrap;
+}
+
+.dashboard-content .stat {
+  flex: 1;
+  min-width: 220px;
+  background: white;
+  border-radius: 12px;
+  padding: 18px;
+  border: 1px solid #e6d8cf;
+  box-sizing: border-box;
+}
+
+.dashboard-content .stat-number {
+  font-size: 30px;
+  font-weight: 700;
+  color: #2b1b14;
+}
+
+.dashboard-content .stat-text {
+  margin-top: 6px;
+  font-size: 14px;
+  color: #6a3e2b;
+}
+
+/* Table card */
+.dashboard-content .table-card {
+  background: white;
+  border-radius: 12px;
+  border: 1px solid #e6d8cf;
+  overflow: hidden;
+}
+
+.dashboard-content .table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.dashboard-content .table th,
+.dashboard-content .table td {
+  padding: 14px 16px;
+  border-bottom: 1px solid #eee;
+  vertical-align: middle;
+}
+
+.dashboard-content .table th {
+  background: #f7f2ee;
+  text-align: left;
+  font-weight: 700;
+  color: #2b1b14;
+}
+
+.dashboard-content .table th:last-child,
+.dashboard-content .table td:last-child {
+  width: 220px;
+}
+
+.dashboard-content .table-right {
+  text-align: right;
+  white-space: nowrap;
+}
+
+.dashboard-content .table-right .btn {
+  margin-left: 8px;
+}
+
+/* Pills */
+.dashboard-content .pill {
+  display: inline-block;
+  padding: 6px 12px;
+  border-radius: 999px;
+  color: white;
+  font-size: 13px;
+  line-height: 1;
+}
+
+.dashboard-content .pill-active {
+  background: #6a3e2b;
+}
+
+.dashboard-content .pill-completed {
+  background: #2e7d32;
+}
+
+/* Buttons */
+.dashboard-content .btn {
+  padding: 8px 14px;
+  border-radius: 10px;
+  border: 1px solid #6a3e2b;
+  background: #6a3e2b;
+  color: white;
+  cursor: pointer;
+}
+
+.dashboard-content .btn:hover {
+  opacity: 0.9;
+}
+
+.dashboard-content .btn-ghost {
+  background: transparent;
+  color: #6a3e2b;
+}
+
+.dashboard-content .btn-wide {
+  padding: 12px 18px;
+}
+
+.dashboard-content .center {
+  margin-top: 20px;
+  text-align: center;
+}

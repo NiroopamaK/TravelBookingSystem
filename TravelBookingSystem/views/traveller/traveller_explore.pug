@@ -1,0 +1,60 @@
+doctype html
+html(lang="en")
+  head
+    meta(charset="UTF-8")
+    meta(name="viewport", content="width=device-width, initial-scale=1.0")
+    title Explore
+
+    // shared layout
+    link(rel="stylesheet", href="/css/dashboard.css")
+
+    // your explore page css
+    link(rel="stylesheet", href="/css/traveller_explore.css")
+
+  body
+    // ===== TOP NAVBAR (shared) =====
+    nav.top-nav
+      .nav-left
+        img.logo(src="/assets/logo.jpg", alt="Logo")
+      .nav-right
+        span.profile-name Tom
+        span.profile-role TRAVELLER
+        .profile-dropdown-container
+          img.profile-pic#profilePic(src="/assets/avatar.png", alt="Profile")
+          .dropdown-menu#dropdownMenu
+            a(href="/frontend/edit-profile.html") Edit Profile
+            a#signOutBtn(href="#") Sign Out
+
+    // ===== MAIN DASHBOARD LAYOUT (shared) =====
+    .dashboard-wrapper
+      aside#sidebar
+
+      .dashboard-content
+        h1 Explore
+
+        // Content
+        .search-area
+          .one-field.destination-field
+            p.small-title Destination
+            input.text-input(type="text", placeholder="Search...")
+
+          .one-field.price-field
+            p.small-title Price Range
+            .price-inputs
+              input.text-input(type="number", placeholder="Min Price")
+              span.dash -
+              input.text-input(type="number", placeholder="Max Price")
+
+        .cards
+          each package in packages
+            .package-card
+              img.card-img(src="/assets/Hawaii.png", alt="Package image")
+              .card-info
+                h3= package.title
+                p 📍 #{package.destination}
+                p 🗓 Dates: #{package.start_date} - #{package.end_date}
+                p £ #{package.price}
+                a.btn(href=`/traveller/booking/${package.package_id}`) Request Booking
+
+    // shared JS (sidebar + dropdown + token name/role)
+    script(src="/js/dashboard.js")

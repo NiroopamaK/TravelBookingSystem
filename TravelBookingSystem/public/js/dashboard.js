@@ -1,152 +1,143 @@
-//render sidebar
+
 document.addEventListener("DOMContentLoaded", () => {
-    initNavbar();
-    renderSidebar();
+  initNavbar();
+  renderSidebar();
+  initEditProfileLink();
 });
 
-//   JWT ROLE + USER
 function getTokenPayload() {
-    const token = localStorage.getItem("token");
-    if (!token) return null;
+  const token = localStorage.getItem("token");
+  if (!token) return null;
 
-    try {
-        const base64 = token.split('.')[1]
-            .replace(/-/g, '+')
-            .replace(/_/g, '/');
+  try {
+    const base64 = token.split(".")[1]
+      .replace(/-/g, "+")
+      .replace(/_/g, "/");
 
-        return JSON.parse(atob(base64));
-    } catch (err) {
-        console.error("Invalid token");
-        return null;
-    }
+    return JSON.parse(atob(base64));
+  } catch (err) {
+    console.error("Invalid token");
+    return null;
+  }
 }
 
 function getUserRole() {
-    const payload = getTokenPayload();
-    return payload ? payload.role : null;
+  const payload = getTokenPayload();
+  return payload ? payload.role : null;
 }
 
-//   NAVBAR LOGIC
+/* ================================
+   NAVBAR LOGIC
+================================ */
 function initNavbar() {
+  const profilePic = document.getElementById("profilePic");
+  const dropdownMenu = document.getElementById("dropdownMenu");
+  const signOutBtn = document.getElementById("signOutBtn");
 
-    const profilePic = document.getElementById("profilePic");
-    const dropdownMenu = document.getElementById("dropdownMenu");
-    const signOutBtn = document.getElementById("signOutBtn");
+  if (!profilePic || !dropdownMenu || !signOutBtn) return;
 
-    // Toggle dropdown
-    profilePic.addEventListener("click", () => {
-        dropdownMenu.style.display =
-            dropdownMenu.style.display === "block" ? "none" : "block";
-    });
+  // Toggle dropdown
+  profilePic.addEventListener("click", () => {
+    dropdownMenu.style.display =
+      dropdownMenu.style.display === "block" ? "none" : "block";
+  });
 
-    // Close on outside click
-    document.addEventListener("click", (e) => {
-        if (!profilePic.contains(e.target) &&
-            !dropdownMenu.contains(e.target)) {
-            dropdownMenu.style.display = "none";
-        }
-    });
-
-    // Sign out
-    signOutBtn.addEventListener("click", () => {
-        localStorage.removeItem("token");
-        window.location.href = "/";
-    });
-
-    // Load user info
-    const payload = getTokenPayload();
-    if (payload) {
-        document.querySelector(".profile-name").textContent =
-            payload.first_name || "User";
-
-        document.querySelector(".profile-role").textContent =
-            payload.role;
+  // Close on outside click
+  document.addEventListener("click", (e) => {
+    if (!profilePic.contains(e.target) && !dropdownMenu.contains(e.target)) {
+      dropdownMenu.style.display = "none";
     }
+  });
+
+  // Sign out
+  signOutBtn.addEventListener("click", () => {
+    localStorage.removeItem("token");
+    window.location.href = "/";
+  });
+
+  // Load user info
+  const payload = getTokenPayload();
+  if (payload) {
+    const nameEl = document.querySelector(".profile-name");
+    const roleEl = document.querySelector(".profile-role");
+
+    if (nameEl) nameEl.textContent = payload.first_name || "User";
+    if (roleEl) roleEl.textContent = payload.role || "";
+  }
 }
 
- //  SIDEBAR MENUS
+/* ================================
+   SIDEBAR MENUS
+================================ */
 const menus = {
-    ADMIN: [
-        { name: "Analytics", link: "/analytics" },
-        { name: "Users", link: "/users" },
-        { name: "Packages", link: "/packages" }
-    ],
-    TRAVELLER: [
-        { name: "Explore", link: "../traveller/traveller.explore.html" },
-        { name: "My Bookings", link: "../traveller/bookings.html" }
-    ],
-    TRAVEL_AGENT: [
-        { name: "Packages", link: "../agent/my-packages.html" },
-        { name: "Bookings", link: "../agent/agent-bookings.html" },
-        { name: "Trips", link: "../agent/my-trips.html" }
-    ]
+  ADMIN: [
+    { name: "Analytics", link: "/analytics" },
+    { name: "Users", link: "/users" },
+    { name: "Packages", link: "/packages" }
+  ],
+  TRAVELLER: [
+    { name: "Explore", link: "/traveller/explore" },
+    { name: "My Bookings", link: "/traveller/dashboard" }
+  ],
+  TRAVEL_AGENT: [
+    { name: "Packages", link: "../agent/my-packages.html" },
+    { name: "Bookings", link: "../agent/agent-bookings.html" },
+    { name: "Trips", link: "../agent/my-trips.html" }
+  ]
 };
 
-// LOAD CONTENT (SPA)
-async function loadPage(path) {
-    try {
-        const response = await fetch(path);
-        if (!response.ok) throw new Error("Page not found");
-
-        const html = await response.text();
-        document.querySelector(".dashboard-content").innerHTML = html;
-    } catch (err) {
-        document.querySelector(".dashboard-content").innerHTML =
-            `<p style="color:red;">${err.message}</p>`;
-    }
-}
-
 function setActive(selectedLi) {
-    document.querySelectorAll("#sidebar li")
-        .forEach(li => li.classList.remove("active"));
-
-    selectedLi.classList.add("active");
+  document.querySelectorAll("#sidebar li").forEach(li => li.classList.remove("active"));
+  selectedLi.classList.add("active");
 }
 
 function renderSidebar() {
-    const role = getUserRole();
-    const sidebar = document.getElementById("sidebar");
+  const role = getUserRole();
+  const sidebar = document.getElementById("sidebar");
+  if (!sidebar) return;
 
-    if (!role || !menus[role]) {
-        sidebar.innerHTML = "<p style='padding:20px'>No Access</p>";
-        return;
-    }
+  if (!role || !menus[role]) {
+    sidebar.innerHTML = "<p style='padding:20px'>No Access</p>";
+    return;
+  }
 
-    const ul = document.createElement("ul");
+  sidebar.innerHTML = "";
+  const ul = document.createElement("ul");
 
-    menus[role].forEach(item => {
-        const li = document.createElement("li");
-        li.textContent = item.name;
+  menus[role].forEach(item => {
+    const li = document.createElement("li");
+    li.textContent = item.name;
 
-        li.addEventListener("click", () => {
-            setActive(li);
-            loadPage(item.link);
-        });
-
-        ul.appendChild(li);
+    li.addEventListener("click", () => {
+      window.location.href = item.link;
     });
 
-    sidebar.appendChild(ul);
+    ul.appendChild(li);
+  });
 
-    // Load first page automatically
-    if (menus[role].length > 0) {
-        setActive(ul.children[0]);
-        loadPage(menus[role][0].link);
-    }
+  sidebar.appendChild(ul);
+
+  const currentPath = window.location.pathname;
+  const idx = menus[role].findIndex(m => m.link === currentPath);
+  if (idx >= 0 && ul.children[idx]) {
+    setActive(ul.children[idx]);
+  }
 }
 
-document.getElementById("editProfileLink").addEventListener("click", function(e){
+function initEditProfileLink() {
+  const editLink = document.getElementById("editProfileLink");
+  if (!editLink) return;
 
-    e.preventDefault()
+  editLink.addEventListener("click", function (e) {
+    e.preventDefault();
 
-    const token = localStorage.getItem("token")
-
-    if(!token){
-        alert("Not logged in")
-        window.location = "/"
-        return
+    const token = localStorage.getItem("token");
+    if (!token) {
+      alert("Not logged in");
+      window.location.href = "/";
+      return;
     }
 
-    window.location = "/editProfile?token=" + token
-
-})
+    window.location.href = "/editProfile?token=" + token;
+  });
+}
