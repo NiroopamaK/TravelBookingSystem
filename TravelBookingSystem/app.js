@@ -7,6 +7,7 @@ require('dotenv').config();
 const db = require('./config/db');
 const authRoutes = require('./routes/authRoutes');
 const emailVerificationRoutes = require('./routes/emailVerificationRoutes');
+const profileRoutes = require('./routes/profileRoutes');
 
 const app = express();
 
@@ -53,6 +54,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 // Routes
+app.use('/', profileRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/email', emailVerificationRoutes);
 

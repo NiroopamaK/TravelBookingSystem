@@ -4,10 +4,7 @@ document.addEventListener("DOMContentLoaded", () => {
     renderSidebar();
 });
 
-/* ================================
-   JWT ROLE + USER
-================================ */
-
+//   JWT ROLE + USER
 function getTokenPayload() {
     const token = localStorage.getItem("token");
     if (!token) return null;
@@ -29,10 +26,7 @@ function getUserRole() {
     return payload ? payload.role : null;
 }
 
-/* ================================
-   NAVBAR LOGIC
-================================ */
-
+//   NAVBAR LOGIC
 function initNavbar() {
 
     const profilePic = document.getElementById("profilePic");
@@ -70,10 +64,7 @@ function initNavbar() {
     }
 }
 
-/* ================================
-   SIDEBAR MENUS
-================================ */
-
+ //  SIDEBAR MENUS
 const menus = {
     ADMIN: [
         { name: "Analytics", link: "/analytics" },
@@ -91,10 +82,7 @@ const menus = {
     ]
 };
 
-/* ================================
-   LOAD CONTENT (SPA)
-================================ */
-
+// LOAD CONTENT (SPA)
 async function loadPage(path) {
     try {
         const response = await fetch(path);
@@ -146,3 +134,19 @@ function renderSidebar() {
         loadPage(menus[role][0].link);
     }
 }
+
+document.getElementById("editProfileLink").addEventListener("click", function(e){
+
+    e.preventDefault()
+
+    const token = localStorage.getItem("token")
+
+    if(!token){
+        alert("Not logged in")
+        window.location = "/"
+        return
+    }
+
+    window.location = "/editProfile?token=" + token
+
+})
