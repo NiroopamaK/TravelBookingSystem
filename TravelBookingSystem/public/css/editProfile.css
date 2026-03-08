@@ -1,0 +1,274 @@
+/* Full page layout */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Segoe UI', Arial, sans-serif;
+}
+
+.profile-container {
+    display: flex;
+    height: 100vh;
+    width: 100vw;
+    margin: 0;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+/* ===== Left Sidebar ===== */
+.left-sidebar {
+    width: 340px;
+    background: #8B5E3C;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 30px 20px;
+}
+
+.sidebar-top {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.sidebar-bottom {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.sidebar-picture {
+    position: relative;
+    margin-bottom: 20px;
+}
+
+#sidebarProfilePic {
+    width: 170px;
+    height: 170px;
+    border-radius: 50%;
+    border: 3px solid #fff;
+    object-fit: cover;
+}
+
+.camera-icon {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    background: #2d89ef;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: white;
+}
+
+.sidebar-name {
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 5px;
+    text-align: center;
+}
+
+.sidebar-role,
+.sidebar-email,
+.sidebar-passport {
+    font-size: 14px;
+    margin: 3px 0;
+    text-align: center;
+}
+
+/* Buttons in sidebar */
+.sidebar-btn,
+.dashboard-btn {
+    padding: 10px 15px;
+    background: #fff;
+    color: #8B5E3C;
+    border: none;
+    border-radius: 6px;
+    text-decoration: none;
+    text-align: center;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.sidebar-btn:hover,
+.dashboard-btn:hover {
+    background: #f3f3f3;
+}
+
+/* ===== Right Container ===== */
+.right-main {
+    flex: 1;
+    background: #f9f9f9;
+    display: flex;
+    justify-content: center;
+    align-items: center; /* vertically center */
+    padding: 30px;
+    overflow-y: auto;
+}
+
+.form-container {
+    width: 100%;
+    max-width: 750px; /* wider */
+    padding: 40px;
+    background-color: rgba(255, 255, 255, 0.95);
+    border-radius: 16px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+}
+
+/* Titles */
+#profileTitle,
+#passwordTitle {
+    text-align: left;
+    color: #5a381e;
+}
+
+/* Editable Fields */
+.info-section {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.info-section label {
+    font-weight: bold;
+    font-size: 14px;
+}
+
+.info-section input,
+.info-section textarea {
+    padding: 10px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+    width: 100%;
+}
+
+textarea {
+    resize: vertical;
+    min-height: 80px;
+}
+
+.input-edit {
+    position: relative;
+}
+
+.edit-icon {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    color: #777;
+}
+
+.edit-icon:hover {
+    color: #2d89ef;
+}
+
+/* Save buttons brown */
+.save-btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 6px;
+    font-weight: bold;
+    cursor: pointer;
+    align-self: flex-start;
+    background: #8B5E3C; /* brown */
+    color: white;
+}
+
+.save-btn:hover {
+    background: #70452a;
+}
+
+/* Sections */
+.profile-section,
+.password-section {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.password-section {
+    display: none;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+    .profile-container {
+        flex-direction: column;
+    }
+    .left-sidebar {
+        width: 100%;
+        flex-direction: row;
+        justify-content: flex-start;
+        padding: 20px;
+    }
+    .form-container {
+        max-width: 95%;
+        padding: 20px;
+    }
+}
+
+/* ===== Right Container ===== */
+.right-main {
+    flex: 1;
+    background: #f9f9f9;
+    display: flex;
+    justify-content: center;
+    align-items: center; /* vertically center */
+    padding: 30px;
+    overflow-y: auto;
+    position: relative; /* needed for logo positioning */
+}
+
+/* Form container bigger */
+.form-container {
+    width: 100%;
+    max-width: 800px; /* increased from 750px */
+    padding: 50px 40px 70px 40px; /* more padding for bigger container */
+    background-color: rgba(255, 255, 255, 0.95);
+    border-radius: 16px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+    position: relative;
+}
+
+/* Top-right logo */
+.form-container .logo {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    width: 160px; /* small logo */
+    height: auto;
+}
+
+/* Save buttons bottom-right */
+.form-footer {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: auto;
+}
+
+.save-btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 6px;
+    font-weight: bold;
+    cursor: pointer;
+    background: #8B5E3C; /* brown */
+    color: white;
+}
+
+.save-btn:hover {
+    background: #70452a;
+}

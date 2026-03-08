@@ -1,0 +1,78 @@
+.profile-container
+    // Left Sidebar
+    .left-sidebar
+        .sidebar-top
+            .sidebar-picture
+                img#sidebarProfilePic(src=(user.profile_picture ? user.profile_picture : "/assets/admin.png"))
+                label.camera-icon(for="profileUpload")
+                    i.fa.fa-camera
+                input#profileUpload(type="file" name="profile_picture" accept="image/*" hidden)
+            h3.sidebar-name= user.first_name
+            p.sidebar-role= user.role
+            p.sidebar-email= user.email
+            p.sidebar-passport Passport: #{user.passport}
+
+        .sidebar-bottom
+            button#changePasswordBtn.sidebar-btn Change Password
+            a.dashboard-btn(href="/dashboard") Go to Dashboard
+            button#logoutBtn.sidebar-btn Log Out
+
+    // Right Container
+    .right-main
+        .form-container
+            // Top-right logo
+            img.logo(src="/assets/logo.jpg" alt="Logo")
+
+            // Profile Section
+            .profile-section#profileSection
+                h2#profileTitle Profile Details
+
+                .info-section.editable
+                    label First Name
+                    .input-edit
+                        input(type="text" name="first_name" value=user.first_name disabled)
+                        i.edit-icon.fa.fa-pen
+
+                .info-section.editable
+                    label Last Name
+                    .input-edit
+                        input(type="text" name="last_name" value=user.last_name disabled)
+                        i.edit-icon.fa.fa-pen
+
+                .info-section.editable
+                    label Telephone
+                    .input-edit
+                        input(type="number" name="telephone" value=user.telephone disabled)
+                        i.edit-icon.fa.fa-pen
+
+                .info-section.editable
+                    label Address
+                    .input-edit
+                        textarea(name="address" disabled)= user.address
+                        i.edit-icon.fa.fa-pen
+
+                // Save button bottom-right
+                .form-footer
+                    button#saveProfileBtn.save-btn(type="submit") Save Changes
+
+            // Password Section
+            .password-section#passwordSection
+                span#backToProfileBtn.back-arrow ← Back
+
+                h2#passwordTitle Change Password
+
+                .info-section
+                    label New Password
+                    input(type="password" name="password" id="password")
+
+                .info-section
+                    label Confirm Password
+                    input(type="password" id="confirmPassword")
+
+                // Save password button bottom-right
+                .form-footer
+                    button#savePasswordBtn.save-btn(type="submit") Save Password
+
+link(rel="stylesheet" href="/css/editProfile.css")
+script(src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/js/all.min.js")
+script(src="/js/editProfile.js")
