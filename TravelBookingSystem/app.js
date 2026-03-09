@@ -86,10 +86,10 @@ app.get('/admin/packages', (req, res) => res.render('admin/packages'));
 app.get('/admin/users', (req, res) => res.render('admin/users'));
 
 // traveller-pages
-app.get('/traveller/dashboard', (req, res) => res.render('traveller/trav_dashboard'));
-app.get('/traveller/dashboard', (req, res) => res.render('traveller/traveller_dashboard'));
-app.get('/traveller/explore', (req, res) => res.render('traveller/traveller_explore'));
-app.get('/traveller/booking', (req, res) => res.render('traveller/traveller_booking'));
+// app.get('/traveller/dashboard', (req, res) => res.render('traveller/trav_dashboard'));
+// app.get('/traveller/dashboard', (req, res) => res.render('traveller/traveller_dashboard'));
+// app.get('/traveller/explore', (req, res) => res.render('traveller/traveller_explore'));
+// app.get('/traveller/booking', (req, res) => res.render('traveller/traveller_booking'));
 
 // travel-agent-pages
 app.get('/agent/agentDashboard', (req, res) => res.render('travelAgent/agentDashboard'));
