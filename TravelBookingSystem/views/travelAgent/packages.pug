@@ -10,39 +10,21 @@ block content
   .packages-controls
     input#searchInput.search-input(type="text" placeholder="Enter search terms")
     select#filterDropdown.filter-dropdown
-      option(value="") Dropdown text
-      option(value="CONFIRMED") Confirmed
-      option(value="COMPLETED") Completed
-      option(value="CANCELLED") Cancelled
+      option(value="") All Destinations
+
     button.create-btn#openPackageModalBtn Create package
 
   table#packagesTable
     thead
       tr
-        th Trip ID
-        th Package
-        th Traveller
-        th Dates
-        th Status
+        th Package ID
+        th Title
+        th Destination
+        th Start Date
+        th End Date
+        th Price
         th Actions
     tbody#packagesBody
-
-  .modal-overlay#tripModal
-    .modal
-      button.modal-close#closeTripModalBtn &times;
-      h3#tripTitle Trip: -
-      p#tripPackageName -
-      span.trip-status-badge#tripStatus Status
-      .trip-info-cards
-        .trip-info-card
-          span.info-label Start Date
-          span.info-value#tripStartDate -
-        .trip-info-card
-          span.info-label End Date
-          span.info-value#tripEndDate -
-        .trip-info-card
-          span.info-label Cost
-          span.info-value#tripCost -
 
 
   .modal-overlay#packageModal
