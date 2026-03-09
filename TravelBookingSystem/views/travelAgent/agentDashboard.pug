@@ -1,5 +1,31 @@
 extends ../layout
 
+block head
+  link(rel="stylesheet" href="/css/agent.css")
+
 block content
-  h1 AgentDashboard
-  p Dashboard data will appear here.
+  .stats-container
+    .stat-card
+      span.stat-number#totalPackages 0
+      span.stat-label My Packages
+    .stat-card
+      span.stat-number#totalTrips 0
+      span.stat-label Total Trips
+    .stat-card
+      span.stat-number#confirmedBookings 0
+      span.stat-label Confirmed Bookings
+
+  h2 Trips
+  table#tripsTable
+    thead
+      tr
+        th Trip ID
+        th Package
+        th Traveller
+        th Dates
+        th Status
+        th Actions
+    tbody#tripsBody
+
+block scripts
+  script(src="/js/agent-dashboard.js")

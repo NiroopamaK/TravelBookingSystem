@@ -67,21 +67,55 @@ function initNavbar() {
 
 //   SIDEBAR MENUS
 const menus = {
-  ADMIN: [
-    { name: "Dashboard", link: "/admin/adminDashboard" },
-    { name: "Users", link: "/admin/users" },
-    { name: "Packages", link: "/admin/packages" }
-  ],
-  TRAVELLER: [
-    { name: "Explore", link: "/traveller/explore" },
-    { name: "My Bookings", link: "/traveller/dashboard" }
-  ],
-  TRAVEL_AGENT: [
-    { name: "Packages", link: "../agent/my-packages.html" },
-    { name: "Bookings", link: "../agent/agent-bookings.html" },
-    { name: "Trips", link: "../agent/my-trips.html" }
-  ]
+    ADMIN: [
+        { name: "Analytics", link: "/analytics" },
+        { name: "Users", link: "/users" },
+        { name: "Packages", link: "/packages" }
+    ],
+    TRAVELLER: [
+        { name: "Explore", link: "../traveller/traveller.explore.html" },
+        { name: "My Bookings", link: "../traveller/bookings.html" }
+    ],
+    TRAVEL_AGENT: [
+        { name: "Packages", link: "/agent/packages" },
+        { name: "Bookings", link: "/agent/bookings" },
+        { name: "Customers", link: "/agent/customers" }
+    ]
 };
+
+/* ================================
+   LOAD CONTENT (SPA)
+================================ */
+
+async function loadPage(path) {
+    try {
+        const response = await fetch(path);
+        if (!response.ok) throw new Error("Page not found");
+
+        const html = await response.text();
+        const content = document.querySelector(".dashboard-content");
+        content.innerHTML = html;
+
+        // Remove any previously injected page scripts
+        document.querySelectorAll("script[data-page-script]").forEach(s => s.remove());
+
+        // innerHTML doesn't execute scripts — re-create and append them so they run
+        content.querySelectorAll("script").forEach(oldScript => {
+            const newScript = document.createElement("script");
+            newScript.setAttribute("data-page-script", "true");
+            if (oldScript.src) {
+                newScript.src = oldScript.src;
+            } else {
+                newScript.textContent = oldScript.textContent;
+            }
+            document.body.appendChild(newScript);
+            oldScript.remove();
+        });
+    } catch (err) {
+        document.querySelector(".dashboard-content").innerHTML =
+            `<p style="color:red;">${err.message}</p>`;
+    }
+}
 
 function setActive(selectedLi) {
   document.querySelectorAll("#sidebar li").forEach(li => li.classList.remove("active"));

@@ -1,0 +1,45 @@
+extends ../layout
+
+block head
+  link(rel="stylesheet" href="/css/agent.css")
+
+block content
+  h2 Manage Bookings
+
+  h3 All Bookings
+  table#bookingsTable
+    thead
+      tr
+        th Trip ID
+        th Package
+        th Traveller
+        th Dates
+        th Status
+        th Actions
+    tbody#bookingsBody
+
+
+  .modal-overlay#bookingModal
+    .modal
+      button.modal-close#closeBookingModalBtn &times;
+      h3 Update Booking Status
+
+      form#updateStatusForm
+        input#modalBookingId(type="hidden" name="booking_id")
+
+        label Booking ID
+        p#modalBookingIdDisplay -
+
+        label Status
+        select#status(name="status" required)
+          option(value="") Select Status
+          option(value="PENDING") PENDING
+          option(value="CONFIRMED") CONFIRMED
+          option(value="COMPLETED") COMPLETED
+          option(value="CANCELLED") CANCELLED
+
+        .form-actions
+          button.submit-btn(type="submit") Update Status
+
+block scripts
+  script(src="/js/agent-bookings.js")

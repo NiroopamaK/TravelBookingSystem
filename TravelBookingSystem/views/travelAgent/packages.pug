@@ -1,0 +1,69 @@
+extends ../layout
+
+block head
+  link(rel="stylesheet" href="/css/agent.css")
+
+block content
+  .packages-header
+    h2 My Packages
+    
+  .packages-controls
+    input#searchInput.search-input(type="text" placeholder="Enter search terms")
+    select#filterDropdown.filter-dropdown
+      option(value="") All Destinations
+
+    button.create-btn#openPackageModalBtn Create package
+
+  table#packagesTable
+    thead
+      tr
+        th Package ID
+        th Title
+        th Destination
+        th Start Date
+        th End Date
+        th Price
+        th Actions
+    tbody#packagesBody
+
+
+  .modal-overlay#packageModal
+    .modal
+      button.modal-close#closePackageModalBtn &times;
+      h3#packageFormTitle Add New Package
+
+      form#packageForm
+        input#packageId(type="hidden" name="package_id")
+
+        label Title
+        input#title(type="text" name="title" placeholder="Enter package title" required)
+
+        label Destination
+        input#destination(type="text" name="destination" placeholder="Enter destination" required)
+
+        label Start Date
+        input#startDate(type="date" name="start_date" required)
+
+        label End Date
+        input#endDate(type="date" name="end_date" required)
+
+        label Description
+        textarea#description(name="description" placeholder="Enter package description" required)
+
+        label Price ($)
+        input#price(type="number" name="price" step="0.01" min="0" placeholder="Enter price" required)
+
+        h4 Itinerary Items
+        #itineraryList
+          .itinerary-item
+            input(type="text" name="itinerary_title[]" placeholder="Item title" required)
+            textarea(name="itinerary_description[]" placeholder="Item description" required)
+
+        button#addItineraryBtn(type="button") + Add Itinerary Item
+
+        .form-actions
+          button#submitPackageBtn.submit-btn(type="submit") Save Package
+          button#cancelEditBtn.cancel-btn(type="button" style="display:none") Cancel
+
+block scripts
+  script(src="/js/agent-packages.js")

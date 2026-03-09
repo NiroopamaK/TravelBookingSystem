@@ -1,0 +1,22 @@
+extends ../layout
+
+block head
+  link(rel="stylesheet" href="/css/agent.css")
+
+block content
+  h2 Customers
+
+  table#customersTable
+    thead
+      tr
+        th user_id
+        th first_name
+        th last_name
+        th email
+        th passport
+        th address
+        th telephone
+    tbody#customersBody
+
+block scripts
+  script(src="/js/agent-customers.js")

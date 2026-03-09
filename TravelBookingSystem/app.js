@@ -8,6 +8,7 @@ const db = require('./config/db');
 const authRoutes = require('./routes/authRoutes');
 const bookingRoutes = require('./routes/bookingRoutes');
 const emailVerificationRoutes = require('./routes/emailVerificationRoutes');
+const agentRoutes = require('./routes/agentRoutes');
 const travellerRoutes = require('./routes/travellerRoutes');
 const profileRoutes = require('./routes/profileRoutes');
 
@@ -17,9 +18,58 @@ const app = express();
 app.set('view engine', 'pug');
 app.set('views', path.join(__dirname, 'views'));
 
+// Middleware
+app.use(cors());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
+
 // Serve frontend
 app.use(express.static(path.join(__dirname, 'public')));
 
+//login page
+app.get('/', (req, res) => {
+  res.render('index');
+});
+
+//sign up page
+app.get('/signup', (req, res) => {
+  res.render('signup');
+});
+
+//dashboard
+app.get('/dashboard', (req, res) => {
+  res.render('dashboard');
+});
+
+//Admin - analytics
+app.get('/analytics', (req, res) => {
+  res.render('admin/analytics');
+});
+
+//Admin - packages
+app.get('/packages', (req, res) => {
+  res.render('admin/packages');
+});
+
+//Admin - users
+app.get('/users', (req, res) => {
+  res.render('admin/users');
+});
+
+//Agent - packages
+app.get('/agent/packages', (req, res) => {
+  res.render('travelAgent/packages');
+});
+
+//Agent - bookings
+app.get('/agent/bookings', (req, res) => {
+  res.render('travelAgent/bookings');
+});
+
+//Agent - customers
+app.get('/agent/customers', (req, res) => {
+  res.render('travelAgent/customers');
+});
 // Middleware
 app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -48,6 +98,7 @@ app.get('/agent/agentDashboard', (req, res) => res.render('travelAgent/agentDash
 app.use('/', profileRoutes);              
 app.use('/api/auth', authRoutes);
 app.use('/api/email', emailVerificationRoutes);
+app.use('/api/agent', agentRoutes);
 app.use('/traveller', travellerRoutes);   
 app.use('/bookings', bookingRoutes);      
 
