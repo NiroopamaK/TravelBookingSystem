@@ -6,12 +6,15 @@ require('dotenv').config();
 
 const db = require('./config/db');
 const authRoutes = require('./routes/authRoutes');
+const bookingRoutes = require('./routes/bookingRoutes');
 const emailVerificationRoutes = require('./routes/emailVerificationRoutes');
 const agentRoutes = require('./routes/agentRoutes');
+const travellerRoutes = require('./routes/travellerRoutes');
+const profileRoutes = require('./routes/profileRoutes');
 
 const app = express();
 
-//set up pug
+// set up pug
 app.set('view engine', 'pug');
 app.set('views', path.join(__dirname, 'views'));
 
@@ -55,23 +58,49 @@ app.get('/users', (req, res) => {
 
 //Agent - packages
 app.get('/agent/packages', (req, res) => {
-  res.render('agent/packages');
+  res.render('travelAgent/packages');
 });
 
 //Agent - bookings
 app.get('/agent/bookings', (req, res) => {
-  res.render('agent/bookings');
+  res.render('travelAgent/bookings');
 });
 
 //Agent - customers
 app.get('/agent/customers', (req, res) => {
-  res.render('agent/customers');
+  res.render('travelAgent/customers');
 });
+// Middleware
+app.use(cors());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
+
+// Pages
+app.get('/', (req, res) => res.render('index'));
+app.get('/signup', (req, res) => res.render('signup'));
+app.get('/dashboard', (req, res) => res.render('dashboard'));
+//admin-pages
+// admin-pages
+app.get('/admin/adminDashboard', (req, res) => res.render('admin/adminDashboard'));
+app.get('/admin/packages', (req, res) => res.render('admin/packages'));
+app.get('/admin/users', (req, res) => res.render('admin/users'));
+
+// traveller-pages
+app.get('/traveller/dashboard', (req, res) => res.render('traveller/trav_dashboard'));
+app.get('/traveller/dashboard', (req, res) => res.render('traveller/traveller_dashboard'));
+app.get('/traveller/explore', (req, res) => res.render('traveller/traveller_explore'));
+app.get('/traveller/booking', (req, res) => res.render('traveller/traveller_booking'));
+
+// travel-agent-pages
+app.get('/agent/agentDashboard', (req, res) => res.render('travelAgent/agentDashboard'));
 
 // Routes
+app.use('/', profileRoutes);              
 app.use('/api/auth', authRoutes);
 app.use('/api/email', emailVerificationRoutes);
 app.use('/api/agent', agentRoutes);
+app.use('/traveller', travellerRoutes);   
+app.use('/bookings', bookingRoutes);      
 
 // Test route
 app.get('/test', (req, res) => {
@@ -96,6 +125,5 @@ app.use((req, res) => {
 });
 
 // Start server
-//const PORT = process.env.PORT || 5000;
 const PORT = process.env.PORT || 5555;
 app.listen(PORT, '0.0.0.0', () => console.log(`Server running on port ${PORT}`));

@@ -2,11 +2,11 @@ doctype html
 html(lang="en")
   head
     meta(charset="UTF-8")
-    title Travel Booking System
+    title #{title || "Travel Booking System"}
     link(rel="stylesheet" href="/css/dashboard.css")
-    link(rel="stylesheet" href="/css/agent.css")
+    block head
+
   body
-    // ===== TOP NAVBAR =====
     nav.top-nav
       .nav-left
         img.logo(src="/assets/logo.jpg" alt="Logo")
@@ -19,11 +19,11 @@ html(lang="en")
             a#editProfileLink(href="#") Edit Profile
             a#signOutBtn(href="#") Sign Out
 
-    // ===== MAIN DASHBOARD LAYOUT =====
     .dashboard-wrapper
-      // Sidebar
       aside#sidebar
-      // Main Content
-      .dashboard-content
 
-    script(src="/js/dashboard.js")
+      .dashboard-content
+        block content
+
+    script(src="/js/navigation.js")
+    block scripts

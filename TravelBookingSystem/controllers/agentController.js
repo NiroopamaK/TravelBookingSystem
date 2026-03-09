@@ -90,7 +90,19 @@ const deletePackage = async (req, res) => {
 
 const getAllBookings = async (req, res) => {
     try {
-        const [rows] = await db.query('SELECT * FROM bookings');
+        const [rows] = await db.query(`
+            SELECT
+                CONCAT('TRP-', LPAD(b.booking_id, 4, '0')) AS trip_id,
+                b.booking_id,
+                p.title AS package_name,
+                CONCAT(u.first_name, ' ', u.last_name) AS traveller,
+                p.start_date,
+                p.end_date,
+                b.status
+            FROM bookings b
+            JOIN users u ON b.user_id = u.user_id
+            JOIN packages p ON b.package_id = p.package_id
+        `);
         res.json(rows);
     } catch (error) {
         res.status(500).json({ message: error.message });
@@ -113,6 +125,41 @@ const updateBookingStatus = async (req, res) => {
         if (result.affectedRows === 0) return res.status(404).json({ message: 'Booking not found' });
 
         res.json({ message: 'Booking status updated successfully' });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+// ===== TRIPS (bookings joined with packages + users) =====
+
+const getTrips = async (req, res) => {
+    try {
+        const [rows] = await db.query(`
+            SELECT
+                CONCAT('TRP-', LPAD(b.booking_id, 4, '0')) AS trip_id,
+                b.booking_id,
+                p.title AS package_name,
+                CONCAT(u.first_name, ' ', u.last_name) AS traveller,
+                p.start_date,
+                p.end_date,
+                b.total_price AS cost,
+                b.status
+            FROM bookings b
+            JOIN packages p ON b.package_id = p.package_id
+            JOIN users u ON b.user_id = u.user_id
+        `);
+        res.json(rows);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+const getDashboardStats = async (req, res) => {
+    try {
+        const [[{ totalPackages }]] = await db.query('SELECT COUNT(*) AS totalPackages FROM packages');
+        const [[{ totalTrips }]] = await db.query('SELECT COUNT(*) AS totalTrips FROM bookings');
+        const [[{ confirmedBookings }]] = await db.query("SELECT COUNT(*) AS confirmedBookings FROM bookings WHERE status = 'CONFIRMED'");
+        res.json({ totalPackages, totalTrips, confirmedBookings });
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
@@ -141,4 +188,6 @@ module.exports = {
     getAllBookings,
     updateBookingStatus,
     getAllCustomers,
+    getTrips,
+    getDashboardStats,
 };

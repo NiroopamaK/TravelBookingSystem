@@ -33,13 +33,13 @@ async function loadBookings() {
     bookingsBody.innerHTML = '';
     bookings.forEach(b => {
         const tr = document.createElement('tr');
+        const startDate = b.start_date ? new Date(b.start_date).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }) : '';
+        const endDate   = b.end_date   ? new Date(b.end_date).toLocaleDateString('en-GB',   { day: 'numeric', month: 'short', year: 'numeric' }) : '';
         tr.innerHTML = `
-            <td>${b.booking_id}</td>
-            <td>${b.user_id}</td>
-            <td>${b.package_id}</td>
-            <td>${b.packsize}</td>
-            <td>${b.additional_notes || ''}</td>
-            <td>${b.total_price}</td>
+            <td>${b.trip_id}</td>
+            <td>${b.package_name}</td>
+            <td>${b.traveller}</td>
+            <td>${startDate} - ${endDate}</td>
             <td class="status-${b.status ? b.status.toLowerCase() : ''}">${b.status}</td>
             <td>
                 <button class="btn-edit" onclick="openBookingModal(${b.booking_id})">Update Status</button>

@@ -12,15 +12,63 @@ html(lang="en")
       .right-half
         .form-container
           img.logo(src="/assets/logo.jpg" alt="Logo")
-          .form-box.login-form
-            h2 Login
-            form#loginForm
-              label Email
-              input#loginEmail(type="text" placeholder="Enter Email" required)
-              label Password
-              input#loginPassword(type="password" placeholder="Enter Password" required)
-              a.forgot-password(href="#") Forgot Password?
-              button.submit-btn(type="submit") Login
-            button.signup-link(onclick="window.location.href='/signup'") Sign Up
 
+          #formContent
+
+            // LOGIN FORM
+            .form-box.login-form#loginSection
+              h2 Login
+              form#loginForm
+                label Email
+                input#loginEmail(type="text" placeholder="Enter Email" required)
+
+                label Password
+                input#loginPassword(type="password" placeholder="Enter Password" required)
+
+                a.forgot-password(href="#" onclick="showForgotPassword()") Forgot Password?
+
+                button.submit-btn(type="submit") Login
+
+              button.signup-link(onclick="window.location.href='/signup'") Sign Up
+
+
+            // FORGOT PASSWORD (SAME STRUCTURE AS SIGNUP STEP2)
+            form#forgotPasswordForm.hidden
+
+              label Email
+              input#email(type="resetEmail" placeholder="Enter Email" required)
+
+              button#sendCodeBtn(type="button") Send Verification Code
+
+
+              #afterCodeSent.hidden
+                label Enter Verification Code
+                input#emailCode(type="text" placeholder="Enter Code")
+
+                button#validateCodeBtn(type="button") Validate Code
+
+                p#validationMessage
+
+                p#timerText
+                  | Code expires in 
+                  span#timer 60
+                  | s
+
+                button#resendCodeBtn.hidden(type="button") Resend Code
+
+
+              #passwordSection.hidden
+                label New Password
+                input#password(type="password" placeholder="Enter New Password")
+
+                label Re-enter Password
+                input#password2(type="password" placeholder="Re-enter Password")
+
+                button.submit-btn(type="submit") Reset Password
+
+
+              button.signup-link(type="button" onclick="showLogin()") Back to Login
+
+
+    script(src="/js/emailVerification.js")
     script(src="/js/login.js")

@@ -408,3 +408,169 @@ tbody td {
 .open-modal-btn:hover {
   background-color: #70452a;
 }
+
+/* ===== STATS CARDS ===== */
+.stats-container {
+  display: flex;
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+.stat-card {
+  flex: 1;
+  background: white;
+  border-radius: 10px;
+  padding: 20px 24px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.stat-number {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #5a381e;
+}
+
+.stat-label {
+  font-size: 0.9rem;
+  color: #8b5e3c;
+}
+
+/* ===== PACKAGES PAGE HEADER ===== */
+.packages-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.agent-profile {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.agent-info {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.agent-name {
+  font-weight: bold;
+  color: #5a381e;
+  font-size: 1rem;
+}
+
+.agent-role {
+  font-size: 0.85rem;
+  color: #8b5e3c;
+}
+
+.agent-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 2px solid #EADDCA;
+}
+
+/* ===== PACKAGES CONTROLS ===== */
+.packages-controls {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.search-input {
+  flex: 1;
+  padding: 10px 14px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+}
+
+.filter-dropdown {
+  padding: 10px 14px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+  background: white;
+  color: #5a381e;
+  cursor: pointer;
+}
+
+.create-btn {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 6px;
+  background-color: #5a381e;
+  color: white;
+  font-size: 14px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background-color 0.2s;
+}
+
+.create-btn:hover {
+  background-color: #3d2510;
+}
+
+/* ===== VIEW BUTTON ===== */
+.btn-view {
+  padding: 5px 14px;
+  border: none;
+  border-radius: 4px;
+  background-color: transparent;
+  color: #8b5e3c;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: bold;
+  text-decoration: underline;
+}
+
+.btn-view:hover {
+  color: #5a381e;
+}
+
+/* ===== TRIP DETAIL MODAL ===== */
+.trip-status-badge {
+  display: inline-block;
+  background-color: #5a381e;
+  color: white;
+  padding: 4px 14px;
+  border-radius: 20px;
+  font-size: 13px;
+  margin: 8px 0 20px;
+}
+
+.trip-info-cards {
+  display: flex;
+  gap: 16px;
+  margin-top: 16px;
+}
+
+.trip-info-card {
+  flex: 1;
+  background: #f1f5f9;
+  border-radius: 8px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.info-label {
+  font-size: 0.8rem;
+  color: #8b5e3c;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.info-value {
+  font-size: 1rem;
+  font-weight: bold;
+  color: #5a381e;
+}

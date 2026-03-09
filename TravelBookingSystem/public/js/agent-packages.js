@@ -1,45 +1,125 @@
 const API = '/api/agent/packages';
+const API_TRIPS = '/api/agent/trips';
 
-const packageModal       = document.getElementById('packageModal');
+// ===== ELEMENTS =====
+const packageModal        = document.getElementById('packageModal');
 const openPackageModalBtn = document.getElementById('openPackageModalBtn');
 const closePackageModalBtn = document.getElementById('closePackageModalBtn');
-const packageForm        = document.getElementById('packageForm');
-const packageFormTitle   = document.getElementById('packageFormTitle');
-const packageIdInput     = document.getElementById('packageId');
-const titleInput         = document.getElementById('title');
-const destinationInput   = document.getElementById('destination');
-const startDateInput     = document.getElementById('startDate');
-const endDateInput       = document.getElementById('endDate');
-const descriptionInput   = document.getElementById('description');
-const priceInput         = document.getElementById('price');
-const itineraryList      = document.getElementById('itineraryList');
-const addItineraryBtn    = document.getElementById('addItineraryBtn');
-const cancelEditBtn      = document.getElementById('cancelEditBtn');
-const packagesBody       = document.getElementById('packagesBody');
+const packageForm         = document.getElementById('packageForm');
+const packageFormTitle    = document.getElementById('packageFormTitle');
+const packageIdInput      = document.getElementById('packageId');
+const titleInput          = document.getElementById('title');
+const destinationInput    = document.getElementById('destination');
+const startDateInput      = document.getElementById('startDate');
+const endDateInput        = document.getElementById('endDate');
+const descriptionInput    = document.getElementById('description');
+const priceInput          = document.getElementById('price');
+const itineraryList       = document.getElementById('itineraryList');
+const addItineraryBtn     = document.getElementById('addItineraryBtn');
+const cancelEditBtn       = document.getElementById('cancelEditBtn');
+const packagesBody        = document.getElementById('packagesBody');
+const searchInput         = document.getElementById('searchInput');
+const filterDropdown      = document.getElementById('filterDropdown');
 
-/* ===== MODAL ===== */
-function openModal() {
-    packageModal.classList.add('active');
+// Trip detail modal
+const tripModal        = document.getElementById('tripModal');
+const closeTripModalBtn = document.getElementById('closeTripModalBtn');
+
+// Agent name from token
+const payload = getTokenPayload();
+if (payload) {
+    const nameEl = document.getElementById('agentName');
+    if (nameEl) nameEl.textContent = payload.first_name || 'Agent';
 }
 
-function closeModal() {
-    packageModal.classList.remove('active');
-    resetForm();
+function getTokenPayload() {
+    const token = localStorage.getItem('token');
+    if (!token) return null;
+    try {
+        const base64 = token.split('.')[1].replace(/-/g, '+').replace(/_/g, '/');
+        return JSON.parse(atob(base64));
+    } catch { return null; }
 }
+
+// ===== ALL TRIPS DATA =====
+let allTrips = [];
+
+// ===== LOAD TRIPS =====
+async function loadTrips() {
+    const res = await fetch(API_TRIPS);
+    allTrips = await res.json();
+    renderTrips(allTrips);
+}
+
+function renderTrips(trips) {
+    packagesBody.innerHTML = '';
+    trips.forEach(t => {
+        const tr = document.createElement('tr');
+        const startDate = t.start_date ? new Date(t.start_date).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }) : '';
+        const endDate   = t.end_date   ? new Date(t.end_date).toLocaleDateString('en-GB',   { day: 'numeric', month: 'short', year: 'numeric' }) : '';
+        const statusClass = t.status ? t.status.toLowerCase() : '';
+        tr.innerHTML = `
+            <td>${t.trip_id}</td>
+            <td>${t.package_name}</td>
+            <td>${t.traveller}</td>
+            <td>${startDate} - ${endDate}</td>
+            <td class="status-${statusClass}">${t.status}</td>
+            <td><button class="btn-view" data-id="${t.booking_id}">View</button></td>
+        `;
+        tr.querySelector('.btn-view').addEventListener('click', () => openTripDetail(t));
+        packagesBody.appendChild(tr);
+    });
+}
+
+// ===== SEARCH & FILTER =====
+function applyFilters() {
+    const query  = searchInput.value.toLowerCase();
+    const status = filterDropdown.value;
+    const filtered = allTrips.filter(t => {
+        const matchesSearch = !query ||
+            t.trip_id.toLowerCase().includes(query) ||
+            t.package_name.toLowerCase().includes(query) ||
+            t.traveller.toLowerCase().includes(query);
+        const matchesStatus = !status || t.status === status;
+        return matchesSearch && matchesStatus;
+    });
+    renderTrips(filtered);
+}
+
+searchInput.addEventListener('input', applyFilters);
+filterDropdown.addEventListener('change', applyFilters);
+
+// ===== TRIP DETAIL MODAL =====
+function openTripDetail(trip) {
+    const startDate = trip.start_date ? new Date(trip.start_date).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' }).toUpperCase() : '-';
+    const endDate   = trip.end_date   ? new Date(trip.end_date).toLocaleDateString('en-GB',   { day: 'numeric', month: 'long', year: 'numeric' }).toUpperCase() : '-';
+
+    document.getElementById('tripTitle').textContent       = `Trip: ${trip.trip_id}`;
+    document.getElementById('tripPackageName').textContent = trip.package_name;
+    document.getElementById('tripStatus').textContent      = trip.status;
+    document.getElementById('tripStartDate').textContent   = startDate;
+    document.getElementById('tripEndDate').textContent     = endDate;
+    document.getElementById('tripCost').textContent        = trip.cost ? `£${Number(trip.cost).toLocaleString()}` : '-';
+
+    tripModal.classList.add('active');
+}
+
+closeTripModalBtn.addEventListener('click', () => tripModal.classList.remove('active'));
+tripModal.addEventListener('click', (e) => { if (e.target === tripModal) tripModal.classList.remove('active'); });
+
+// ===== PACKAGE CREATE MODAL =====
+function openPackageModal() { packageModal.classList.add('active'); }
+function closePackageModal() { packageModal.classList.remove('active'); resetForm(); }
 
 openPackageModalBtn.addEventListener('click', () => {
     packageFormTitle.textContent = 'Add New Package';
     cancelEditBtn.style.display = 'none';
-    openModal();
+    openPackageModal();
 });
+closePackageModalBtn.addEventListener('click', closePackageModal);
+packageModal.addEventListener('click', (e) => { if (e.target === packageModal) closePackageModal(); });
 
-closePackageModalBtn.addEventListener('click', closeModal);
-
-packageModal.addEventListener('click', (e) => {
-    if (e.target === packageModal) closeModal();
-});
-
-/* ===== ITINERARY ===== */
+// ===== ITINERARY =====
 function addItineraryItem(title = '', desc = '') {
     const div = document.createElement('div');
     div.className = 'itinerary-item';
@@ -53,63 +133,7 @@ function addItineraryItem(title = '', desc = '') {
 
 addItineraryBtn.addEventListener('click', () => addItineraryItem());
 
-/* ===== LOAD PACKAGES ===== */
-async function loadPackages() {
-    const res = await fetch(API);
-    const packages = await res.json();
-    packagesBody.innerHTML = '';
-    packages.forEach(pkg => {
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
-            <td>${pkg.package_id}</td>
-            <td>${pkg.title}</td>
-            <td>${pkg.destination}</td>
-            <td>${pkg.start_date ? pkg.start_date.slice(0, 10) : ''}</td>
-            <td>${pkg.end_date ? pkg.end_date.slice(0, 10) : ''}</td>
-            <td>${pkg.description}</td>
-            <td>${pkg.price}</td>
-            <td>
-                <button class="btn-edit" onclick="editPackage(${pkg.package_id})">Edit</button>
-                <button class="btn-delete" onclick="deletePackage(${pkg.package_id})">Delete</button>
-            </td>
-        `;
-        packagesBody.appendChild(tr);
-    });
-}
-
-/* ===== EDIT ===== */
-async function editPackage(id) {
-    const res = await fetch(`${API}/${id}`);
-    const pkg = await res.json();
-
-    packageFormTitle.textContent = 'Edit Package';
-    packageIdInput.value = pkg.package_id;
-    titleInput.value = pkg.title;
-    destinationInput.value = pkg.destination;
-    startDateInput.value = pkg.start_date ? pkg.start_date.slice(0, 10) : '';
-    endDateInput.value = pkg.end_date ? pkg.end_date.slice(0, 10) : '';
-    descriptionInput.value = pkg.description;
-    priceInput.value = pkg.price;
-
-    itineraryList.innerHTML = '';
-    if (pkg.itinerary_items && pkg.itinerary_items.length > 0) {
-        pkg.itinerary_items.forEach(item => addItineraryItem(item.title, item.description));
-    } else {
-        addItineraryItem();
-    }
-
-    cancelEditBtn.style.display = 'inline-block';
-    openModal();
-}
-
-/* ===== DELETE ===== */
-async function deletePackage(id) {
-    if (!confirm('Delete this package?')) return;
-    await fetch(`${API}/${id}`, { method: 'DELETE' });
-    loadPackages();
-}
-
-/* ===== RESET ===== */
+// ===== RESET FORM =====
 function resetForm() {
     packageForm.reset();
     packageIdInput.value = '';
@@ -121,7 +145,7 @@ function resetForm() {
 
 cancelEditBtn.addEventListener('click', resetForm);
 
-/* ===== SUBMIT ===== */
+// ===== SUBMIT =====
 packageForm.addEventListener('submit', async (e) => {
     e.preventDefault();
 
@@ -139,21 +163,16 @@ packageForm.addEventListener('submit', async (e) => {
         itinerary_items
     };
 
-    const id = packageIdInput.value;
+    const id     = packageIdInput.value;
     const method = id ? 'PUT' : 'POST';
     const url    = id ? `${API}/${id}` : API;
 
-    const res  = await fetch(url, {
-        method,
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(body)
-    });
-
+    const res  = await fetch(url, { method, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
     const data = await res.json();
     alert(data.message);
-    closeModal();
-    loadPackages();
+    closePackageModal();
+    loadTrips();
 });
 
-loadPackages();
+loadTrips();
 addItineraryItem();
