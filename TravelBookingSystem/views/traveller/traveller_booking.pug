@@ -1,32 +1,13 @@
-doctype html
-html(lang="en")
-  head
-    meta(charset="UTF-8")
-    meta(name="viewport", content="width=device-width, initial-scale=1.0")
+extends ../layout
+
+block append head
     title Request Booking
 
     // shared layout
     link(rel="stylesheet", href="/css/dashboard.css")
     // booking page css
     link(rel="stylesheet", href="/css/traveller_booking.css")
-
-  body
-    // ===== TOP NAVBAR (shared) =====
-    nav.top-nav
-      .nav-left
-        img.logo(src="/assets/logo.jpg", alt="Logo")
-      .nav-right
-        span.profile-name Tom
-        span.profile-role TRAVELLER
-        .profile-dropdown-container
-          img.profile-pic#profilePic(src="/assets/avatar.png", alt="Profile")
-          .dropdown-menu#dropdownMenu
-            a(href="/frontend/edit-profile.html") Edit Profile
-            a#signOutBtn(href="#") Sign Out
-
-    // ===== MAIN DASHBOARD LAYOUT (shared) =====
-    .dashboard-wrapper
-      aside#sidebar
+block content 
 
       .dashboard-content
         h1 Request Booking
@@ -97,5 +78,5 @@ html(lang="en")
               a.btn(href="/traveller/dashboard") View My Bookings
               a.btn(href="/traveller/explore") Explore More Packages
 
-    script(src="/js/dashboard.js")
-    script(src="/js/traveller_booking.js")
+        script(src="/js/dashboard.js")
+        script(src="/js/traveller_booking.js")

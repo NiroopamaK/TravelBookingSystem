@@ -1,8 +1,6 @@
-doctype html
-html(lang="en")
-  head
-    meta(charset="UTF-8")
-    meta(name="viewport", content="width=device-width, initial-scale=1.0")
+extends ../layout
+
+block append head 
     title Explore
 
     // shared layout
@@ -11,27 +9,7 @@ html(lang="en")
     // your explore page css
     link(rel="stylesheet", href="/css/traveller_explore.css")
 
-  body
-    // ===== TOP NAVBAR (shared) =====
-    nav.top-nav
-      .nav-left
-        img.logo(src="/assets/logo.jpg", alt="Logo")
-      .nav-right
-        span.profile-name Tom
-        span.profile-role TRAVELLER
-        .profile-dropdown-container
-          img.profile-pic#profilePic(src="/assets/avatar.png", alt="Profile")
-          .dropdown-menu#dropdownMenu
-            a(href="/frontend/edit-profile.html") Edit Profile
-            a#signOutBtn(href="#") Sign Out
-
-    // ===== MAIN DASHBOARD LAYOUT (shared) =====
-    .dashboard-wrapper
-      aside#sidebar
-
-      .dashboard-content
-        h1 Explore
-
+block content 
         // Content
         .search-area
           .one-field.destination-field
@@ -56,5 +34,5 @@ html(lang="en")
                 p £ #{package.price}
                 a.btn(href=`/traveller/booking/${package.package_id}`) Request Booking
 
-    // shared JS (sidebar + dropdown + token name/role)
-    script(src="/js/dashboard.js")
+        // shared JS (sidebar + dropdown + token name/role)
+        script(src="/js/dashboard.js")

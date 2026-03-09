@@ -11,7 +11,7 @@ async function explore(req, res) {
     pkg.end_date = `${monthNameEnd} ${pkg.end_date.getDate()} ${pkg.end_date.getFullYear()}`;
     return pkg;
   });
-
+    console.log (packages)
   res.render('traveller/traveller_explore', { packages });
 }
 

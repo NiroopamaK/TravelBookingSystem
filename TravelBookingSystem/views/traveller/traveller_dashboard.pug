@@ -1,60 +1,38 @@
-doctype html
-html(lang="en")
-  head
-    meta(charset="UTF-8")
-    meta(name="viewport", content="width=device-width, initial-scale=1.0")
-    title Traveller Dashboard
-    link(rel="stylesheet", href="/css/dashboard.css")
-    link(rel="stylesheet", href="/css/traveller_dashboard.css")
+extends ../layout
 
-  body
-    // ===== TOP NAVBAR (shared) =====
-    nav.top-nav
-      .nav-left
-        img.logo(src="/assets/logo.jpg", alt="Logo")
-      .nav-right
-        span.profile-name Tom
-        span.profile-role TRAVELLER
-        .profile-dropdown-container
-          img.profile-pic#profilePic(src="/assets/avatar.png", alt="Profile")
-          .dropdown-menu#dropdownMenu
-            a(href="/frontend/edit-profile.html") Edit Profile
-            a#signOutBtn(href="#") Sign Out
+block append head
+  meta(name="viewport", content="width=device-width, initial-scale=1.0")
+  link(rel="stylesheet", href="/css/traveller_dashboard.css")
 
-    .dashboard-wrapper
+block content
+  h2.section-title My Bookings
 
-      aside#sidebar
+  .stats
+    .stat
+      .stat-number#upcomingCount 0
+      .stat-text Upcoming Trips
 
-      .dashboard-content
-        h2.section-title My Bookings
+    .stat
+      .stat-number#activeCount 0
+      .stat-text Active Trips
 
+    .stat
+      .stat-number#completedCount 0
+      .stat-text Completed Trips
 
-        .stats
-          .stat
-            .stat-number#upcomingCount 0
-            .stat-text Upcoming Trips
+  .table-card
+    table.table
+      thead
+        tr
+          th Package
+          th Destination
+          th Status
+          th.table-right Actions
 
-          .stat
-            .stat-number#activeCount 0
-            .stat-text Active Trips
+      tbody#bookingsTbody
 
-          .stat
-            .stat-number#completedCount 0
-            .stat-text Completed Trips
+  .center
+    button.btn.btn-wide(type="button") Browse More Packages
 
-        .table-card
-          table.table
-            thead
-              tr
-                th Package
-                th Destination
-                th Status
-                th.table-right Actions
-
-            tbody#bookingsTbody
-
-        .center
-          button.btn.btn-wide(type="button") Browse More Packages
-
-    script(src="/js/dashboard.js")
-    script(src="/js/traveller_dashboard.js")
+block append scripts
+  script(src="/js/traveller_dashboard.js")
