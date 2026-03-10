@@ -165,19 +165,7 @@ const getDashboardStats = async (req, res) => {
     }
 };
 
-// ===== CUSTOMERS =====
 
-const getAllCustomers = async (req, res) => {
-    try {
-        const [rows] = await db.query(
-            'SELECT user_id, first_name, last_name, email, passport, address, telephone FROM users WHERE role = ?',
-            ['TRAVELLER']
-        );
-        res.json(rows);
-    } catch (error) {
-        res.status(500).json({ message: error.message });
-    }
-};
 
 module.exports = {
     getAllPackages,
@@ -187,7 +175,7 @@ module.exports = {
     deletePackage,
     getAllBookings,
     updateBookingStatus,
-    getAllCustomers,
+    
     getTrips,
     getDashboardStats,
 };
