@@ -27,7 +27,7 @@ html(lang="en")
 
                 a.forgot-password(href="#" onclick="showForgotPassword()") Forgot Password?
 
-                button.submit-btn(type="submit") Login
+                button.submit-btn#loginBtn(type="submit" disabled) Login
 
               button.signup-link(onclick="window.location.href='/signup'") Sign Up
 
@@ -39,7 +39,6 @@ html(lang="en")
               input#email(type="resetEmail" placeholder="Enter Email" required)
 
               button#sendCodeBtn(type="button") Send Verification Code
-
 
               #afterCodeSent.hidden
                 label Enter Verification Code
@@ -61,13 +60,17 @@ html(lang="en")
                 label New Password
                 input#password(type="password" placeholder="Enter New Password")
 
+                ul.password-rules
+                  li#ruleLength Minimum 8 characters
+                  li#ruleUpper One uppercase letter
+                  li#ruleLower One lowercase letter
+                  li#ruleNumber One number
+                  li#ruleSpecial One special character
+
                 label Re-enter Password
                 input#password2(type="password" placeholder="Re-enter Password")
 
-                button.submit-btn(type="submit") Reset Password
-
-
-              button.signup-link(type="button" onclick="showLogin()") Back to Login
+                button.submit-btn#resetBtn(type="submit" disabled) Reset Password
 
 
     script(src="/js/emailVerification.js")

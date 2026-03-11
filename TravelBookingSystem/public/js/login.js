@@ -21,7 +21,6 @@ new EmailVerification({
   message: "validationMessage"
 });
 
-
 /* ================================
    LOGIN
 ================================ */
@@ -136,5 +135,106 @@ document
     } catch (err) {
       alert("Request failed: " + err.message);
     }
+
+});
+
+//validate login button
+document.addEventListener("DOMContentLoaded", function () {
+
+  const emailInput = document.getElementById("loginEmail");
+  const passwordInput = document.getElementById("loginPassword");
+  const loginBtn = document.getElementById("loginBtn");
+
+  function checkLoginFields() {
+
+    if (!emailInput || !passwordInput || !loginBtn) return;
+
+    const email = emailInput.value.trim();
+    const password = passwordInput.value.trim();
+
+    loginBtn.disabled = !(email && password);
+  }
+
+  emailInput.addEventListener("input", checkLoginFields);
+  passwordInput.addEventListener("input", checkLoginFields);
+
+  checkLoginFields(); // run once on page load
+
+});
+
+//validate reset password
+document.addEventListener("DOMContentLoaded", function () {
+
+  const password = document.getElementById("password");
+  const confirmPassword = document.getElementById("password2");
+  const resetBtn = document.getElementById("resetBtn");
+
+  const ruleLength = document.getElementById("ruleLength");
+  const ruleUpper = document.getElementById("ruleUpper");
+  const ruleLower = document.getElementById("ruleLower");
+  const ruleNumber = document.getElementById("ruleNumber");
+  const ruleSpecial = document.getElementById("ruleSpecial");
+
+  if (!password || !confirmPassword || !resetBtn) return;
+
+  function validatePassword() {
+
+    const pass = password.value;
+    const confirm = confirmPassword.value;
+
+    const lengthValid = pass.length >= 8;
+    const upperValid = /[A-Z]/.test(pass);
+    const lowerValid = /[a-z]/.test(pass);
+    const numberValid = /\d/.test(pass);
+    const specialValid = /[\W_]/.test(pass);
+
+    toggleRule(ruleLength, lengthValid);
+    toggleRule(ruleUpper, upperValid);
+    toggleRule(ruleLower, lowerValid);
+    toggleRule(ruleNumber, numberValid);
+    toggleRule(ruleSpecial, specialValid);
+
+    const strongPassword =
+      lengthValid &&
+      upperValid &&
+      lowerValid &&
+      numberValid &&
+      specialValid;
+
+    if (strongPassword && pass === confirm) {
+      resetBtn.disabled = false;
+    } else {
+      resetBtn.disabled = true;
+    }
+
+  }
+
+  function toggleRule(element, valid) {
+    if (valid) {
+      element.classList.add("valid");
+    } else {
+      element.classList.remove("valid");
+    }
+  }
+
+  password.addEventListener("input", validatePassword);
+  confirmPassword.addEventListener("input", validatePassword);
+
+});
+
+//clear fields when reload
+window.addEventListener("load", function () {
+
+  const loginForm = document.getElementById("loginForm");
+  const forgotForm = document.getElementById("forgotPasswordForm");
+
+  if (loginForm) loginForm.reset();
+  if (forgotForm) forgotForm.reset();
+
+  const loginBtn = document.getElementById("loginBtn");
+  const resetBtn = document.getElementById("resetBtn");
+
+  if (loginBtn) loginBtn.disabled = true;
+  if (resetBtn) resetBtn.disabled = true;
 
 });

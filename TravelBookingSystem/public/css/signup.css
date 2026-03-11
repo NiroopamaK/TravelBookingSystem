@@ -138,3 +138,85 @@ input, select {
   transform: translateY(-2px);
   text-decoration: underline;
 }
+
+/* Country code + number side by side */
+.phone-group {
+  display: flex;
+  gap: 10px;
+}
+
+.phone-group select {
+  width: 100px;
+  padding: 10px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+  background-color: white;
+  color: #5a381e;
+  cursor: pointer;
+}
+
+/* Inputs */
+.phone-group input {
+  flex: 1;
+}
+
+/* Buttons hover effect disabled when button is disabled */
+button:disabled {
+  background-color: #ccc !important;
+  cursor: not-allowed !important;
+  transform: none !important;
+}
+
+/* Only enable hover effect when button is not disabled */
+.submit-btn:not(:disabled):hover,
+#sendCodeBtn:not(:disabled):hover,
+#validateCodeBtn:not(:disabled):hover,
+#resendCodeBtn:not(:disabled):hover {
+  background-color: #70452a;
+  transform: translateY(-1px);
+}
+
+/* Password rules list */
+#passwordRules {
+  font-size: 13px;
+  color: #666;
+  margin-bottom: 10px;
+}
+#passwordRules li {
+  margin-bottom: 4px;
+}
+
+/* Flag in dropdown: use font-size to make it visible */
+.phone-group select option {
+  font-size: 14px;
+}
+
+/* -----------------------------
+Field validation rules
+----------------------------- */
+/* Field validation rules */
+.rules {
+  list-style: none;
+  font-size: 13px;
+  color: #666;
+  margin-top: 5px;
+  padding-left: 15px;
+  display: block;   /* show normally */
+}
+
+.rules li {
+  margin-bottom: 3px;
+  color: red;
+}
+
+/* Hidden class for rules */
+.hidden {
+  display: none !important;
+}
+
+/* Step 2 password rules already have ✔ / ❌ updated by JS */
+
+.rules li.valid {
+  color: green;
+}
