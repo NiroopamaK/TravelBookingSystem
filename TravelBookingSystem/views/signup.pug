@@ -12,31 +12,57 @@ html(lang="en")
         .form-container
           img.logo(src="/assets/logo.jpg" alt="Logo")
           #formContent
+
             // Step 1
             form#signupStep1
               h2 Sign Up
+
               label Role
               select#signupRole(required)
                 option(value="") Select Role
                 option(value="ADMIN") Admin
                 option(value="TRAVELLER") Traveller
                 option(value="TRAVEL_AGENT") Travel Agent
+
               label First Name
-              input#signupFirstName(type="text" placeholder="Enter First Name" required)
+              input#signupFirstName(type="text" placeholder="Enter First Name" required minlength="2")
+              ul#signupFirstNameRules.rules.hidden
+                li Cannot leave empty
+
               label Last Name
-              input#signupLastName(type="text" placeholder="Enter Last Name" required)
+              input#signupLastName(type="text" placeholder="Enter Last Name" required minlength="2")
+              ul#signupLastNameRules.rules.hidden
+                li Cannot leave empty
+
               label Passport Number
-              input#signupPassport(type="text" placeholder="Enter Passport Number" required)
+              input#signupPassport(type="text" placeholder="Enter Passport Number" required minlength="8")
+              ul#signupPassportRules.rules.hidden
+                li Minimum 8 characters required
+
               label Address
-              input#signupAddress(type="text" placeholder="Enter Address" required)
+              input#signupAddress(type="text" placeholder="Enter Address" required minlength="5")
+              ul#signupAddressRules.rules.hidden
+                li Cannot leave empty
+
               label Telephone Number
-              input#signupTelephone(type="tel" placeholder="Enter Telephone Number" required)
-              button#nextStepBtn.submit-btn(type="button") Create Account
+              .phone-group
+                select#countryCode(required)
+                  option(value="+1") 🇺🇸 +1
+                  option(value="+44") 🇬🇧 +44
+                  option(value="+91") 🇮🇳 +91
+                  option(value="+94") 🇱🇰 +94
+                input#signupTelephone(type="tel" placeholder="Enter Number" required pattern="[0-9]{7,12}")
+              ul#signupTelephoneRules.rules.hidden
+                li Enter 10 digits
+
+              button#nextStepBtn.submit-btn(type="button" disabled) Create Account
 
             // Step 2
             form#signupStep2.hidden
               label Email
               input#signupEmail(type="email" placeholder="Enter Email" required)
+              ul#emailRules.rules.hidden
+                li Must be a valid email
               button#sendCodeBtn(type="button") Send Verification Code
 
               #afterCodeSent.hidden
@@ -53,9 +79,19 @@ html(lang="en")
               #passwordSection.hidden
                 label Password
                 input#signupPassword(type="password" placeholder="Enter Password")
+                ul#passwordRules.rules
+                  li#ruleLength Minimum 8 characters
+                  li#ruleUpper At least 1 uppercase letter
+                  li#ruleLower At least 1 lowercase letter
+                  li#ruleNumber At least 1 number
+                  li#ruleSpecial At least 1 special character
+
                 label Re-enter Password
                 input#signupPassword2(type="password" placeholder="Re-enter Password")
-                button.submit-btn(type="submit") Finish Registration
+                ul#password2Rules.rules.hidden
+                  li Passwords must match
+
+                button.submit-btn(type="submit" disabled id="finishBtn") Finish Registration
 
             button.signup-link(onclick="window.location.href='/'") Back to Login
 

@@ -181,3 +181,29 @@ h2 {
   color: #8b5e3c;
   margin-bottom: 15px;
 }
+
+.submit-btn:disabled {
+  cursor: not-allowed;
+}
+
+.password-rules {
+  list-style: none;
+  padding: 0;
+  margin: 8px 0 15px;
+  font-size: 13px;
+}
+
+.password-rules li {
+  color: #999;
+  margin-bottom: 4px;
+}
+
+.password-rules li.valid {
+  color: green;
+  font-weight: 600;
+}
+
+.submit-btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
