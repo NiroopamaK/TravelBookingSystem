@@ -18,13 +18,18 @@ CREATE TABLE users (
 -- PACKAGE TABLE
 CREATE TABLE packages (
     package_id INT(10) NOT NULL AUTO_INCREMENT,
+    user_id INT(10) NOT NULL,
     title VARCHAR(100) NOT NULL,
     destination VARCHAR(100) NOT NULL,
     start_date DATE NOT NULL,
     end_date DATE NOT NULL,
     description VARCHAR(250) NOT NULL,
     price DECIMAL(10,2) NOT NULL,
-    PRIMARY KEY (package_id)
+    PRIMARY KEY (package_id),
+    FOREIGN KEY (user_id) 
+        REFERENCES users(user_id)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE
 ) ENGINE=InnoDB;
 
 
@@ -62,20 +67,27 @@ CREATE TABLE bookings (
         ON UPDATE CASCADE
 ) ENGINE=InnoDB;
 
--- Insert Data
--- USERS 
+
+-- USERS
 INSERT INTO users (email, role, first_name, last_name, passport, address, telephone, password) VALUES
 ('admin@test.com', 'ADMIN', 'Alice', 'Admin', 'A1234567', '10 Admin Street, London', 447900000001, '$2b$10$WlSpnbLMhWJgJvGqWiPOyOWkRVremYqKu5/IisUabdMg8/6mxHW/W'),
 ('traveller@test.com', 'TRAVELLER', 'Tom', 'Walker', 'B2345678', '22 Baker Street, London', 447900000002, '$2b$10$WlSpnbLMhWJgJvGqWiPOyOWkRVremYqKu5/IisUabdMg8/6mxHW/W'),
-('agent@test.com', 'TRAVEL_AGENT', 'Sarah', 'Connor', 'C3456789', '45 Agency Road, Manchester', 447900000003, '$2b$10$WlSpnbLMhWJgJvGqWiPOyOWkRVremYqKu5/IisUabdMg8/6mxHW/W');
+('agent@test.com', 'TRAVEL_AGENT', 'Sarah', 'Connor', 'C3456789', '45 Agency Road, Manchester', 447900000003, '$2b$10$WlSpnbLMhWJgJvGqWiPOyOWkRVremYqKu5/IisUabdMg8/6mxHW/W'),
+('traveller2@test.com', 'TRAVELLER', 'Emma', 'Stone', 'D4567890', '55 Oxford Street, London', 447900000004, '$2b$10$WlSpnbLMhWJgJvGqWiPOyOWkRVremYqKu5/IisUabdMg8/6mxHW/W'),
+('agent2@test.com', 'TRAVEL_AGENT', 'Michael', 'Brown', 'E5678901', '88 Market Road, Birmingham', 447900000005, '$2b$10$WlSpnbLMhWJgJvGqWiPOyOWkRVremYqKu5/IisUabdMg8/6mxHW/W');
 
--- PACKAGES (5 rows)
-INSERT INTO packages (title, destination, start_date, end_date, description, price) VALUES
-('Paris City Escape', 'Paris, France', '2026-06-01', '2026-06-05', 'Explore Paris landmarks and culture', 899.99),
-('Rome Historical Tour', 'Rome, Italy', '2026-07-10', '2026-07-15', 'Discover ancient Roman history', 1099.50),
-('Tokyo Adventure', 'Tokyo, Japan', '2026-09-01', '2026-09-10', 'Experience modern and traditional Japan', 1999.99),
-('New York Highlights', 'New York, USA', '2026-08-05', '2026-08-09', 'Visit famous attractions in NYC', 1299.00),
-('Dubai Luxury Trip', 'Dubai, UAE', '2026-11-12', '2026-11-18', 'Luxury travel and desert safari', 1799.75);
+
+-- PACKAGES (8 rows)
+INSERT INTO packages (user_id, title, destination, start_date, end_date, description, price) VALUES
+(3, 'Paris City Escape', 'Paris, France', '2026-06-01', '2026-06-05', 'Explore Paris landmarks and culture', 899.99),
+(3, 'Rome Historical Tour', 'Rome, Italy', '2026-07-10', '2026-07-15', 'Discover ancient Roman history', 1099.50),
+(3, 'Tokyo Adventure', 'Tokyo, Japan', '2026-09-01', '2026-09-10', 'Experience modern and traditional Japan', 1999.99),
+(3, 'New York Highlights', 'New York, USA', '2026-08-05', '2026-08-09', 'Visit famous attractions in NYC', 1299.00),
+(5, 'Dubai Luxury Trip', 'Dubai, UAE', '2026-11-12', '2026-11-18', 'Luxury travel and desert safari', 1799.75),
+(5, 'Sydney Explorer', 'Sydney, Australia', '2026-10-02', '2026-10-08', 'Opera House, beaches and city tours', 2100.00),
+(5, 'Barcelona Beach Holiday', 'Barcelona, Spain', '2026-07-20', '2026-07-25', 'Relax on beaches and explore culture', 950.00),
+(3, 'Swiss Alps Adventure', 'Zurich, Switzerland', '2026-12-05', '2026-12-12', 'Skiing and alpine sightseeing', 2200.00);
+
 
 -- ITINERARY ITEMS
 INSERT INTO itinerary_items (title, description, package_id) VALUES
@@ -83,12 +95,21 @@ INSERT INTO itinerary_items (title, description, package_id) VALUES
 ('Colosseum Tour', 'Visit the Colosseum and Roman Forum', 2),
 ('Shibuya Crossing', 'Explore the famous Shibuya district', 3),
 ('Statue of Liberty', 'Boat trip to Statue of Liberty', 4),
-('Desert Safari', 'Evening desert safari with dinner', 5);
+('Desert Safari', 'Evening desert safari with dinner', 5),
+('Sydney Opera House', 'Guided Opera House visit', 6),
+('La Sagrada Familia', 'Tour of Gaudi’s famous basilica', 7),
+('Swiss Ski Resort', 'Ski experience in the Swiss Alps', 8);
 
--- BOOKINGS
+
+-- BOOKINGS (10 rows)
 INSERT INTO bookings (user_id, package_id, packsize, additional_notes, total_price, status) VALUES
 (2, 1, 2, 'Honeymoon trip', 1799.98, 'CONFIRMED'),
 (2, 3, 1, 'Solo travel', 1999.99, 'PENDING'),
-(3, 2, 3, 'Family vacation', 3298.50, 'CONFIRMED'),
-(3, 4, 2, 'Anniversary celebration', 2598.00, 'COMPLETED'),
-(2, 5, 4, 'Group booking', 7199.00, 'PENDING');
+(2, 5, 4, 'Group booking', 7199.00, 'PENDING'),
+(2, 2, 2, 'Friends trip', 2199.00, 'CONFIRMED'),
+(4, 4, 2, 'Anniversary celebration', 2598.00, 'COMPLETED'),
+(4, 6, 1, 'Solo adventure', 2100.00, 'CONFIRMED'),
+(4, 7, 3, 'Family beach holiday', 2850.00, 'PENDING'),
+(4, 8, 2, 'Winter ski holiday', 4400.00, 'CONFIRMED'),
+(2, 6, 2, 'Couple travel', 4200.00, 'PENDING'),
+(4, 1, 1, 'Short getaway', 899.99, 'CONFIRMED');
