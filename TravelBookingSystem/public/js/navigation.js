@@ -79,7 +79,7 @@ const menus = {
     { name: "Dashboard", link: "/agent/agentDashboard" },
     { name: "My Packages", link: "/agent/packages" },
     { name: "Bookings", link: "/agent/bookings" },
-
+    // { name: "My Profile", link: "/agent/profile" }
   ]
 };
 

@@ -1,0 +1,33 @@
+extends ../layout
+
+block head
+  link(rel="stylesheet" href="/css/agent.css")
+
+block content
+  h2 My Profile
+
+  .profile-card#profileCard
+    .profile-field
+      span.field-label Agent ID
+      span.field-value#agentId
+    .profile-field
+      span.field-label First Name
+      span.field-value#firstName
+    .profile-field
+      span.field-label Last Name
+      span.field-value#lastName
+    .profile-field
+      span.field-label Email
+      span.field-value#email
+    .profile-field
+      span.field-label Passport
+      span.field-value#passport
+    .profile-field
+      span.field-label Address
+      span.field-value#address
+    .profile-field
+      span.field-label Telephone
+      span.field-value#telephone
+
+block scripts
+  script(src="/js/agent-profile.js")

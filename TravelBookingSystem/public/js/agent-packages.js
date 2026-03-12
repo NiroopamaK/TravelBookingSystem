@@ -1,4 +1,6 @@
 const API = '/api/agent/packages';
+const token = localStorage.getItem('token');
+const authHeaders = { Authorization: 'Bearer ' + token };
 
 // ===== ELEMENTS =====
 const packageModal         = document.getElementById('packageModal');
@@ -20,14 +22,21 @@ const packagesBody         = document.getElementById('packagesBody');
 const searchInput          = document.getElementById('searchInput');
 const filterDropdown       = document.getElementById('filterDropdown');
 
-let allPackages = [];
+let allPackages  = [];
+let currentPage  = 1;
+let currentLimit = 5;
+let totalPages   = 1;
 
 // ===== LOAD PACKAGES =====
-async function loadPackages() {
-    const res = await fetch(API);
-    allPackages = await res.json();
+async function loadPackages(page = 1) {
+    currentPage = page;
+    const res = await fetch(`${API}?page=${currentPage}&limit=${currentLimit}`, { headers: authHeaders });
+    const result = await res.json();
+    allPackages = result.data;
+    totalPages  = result.totalPages;
     populateDestinationFilter(allPackages);
     renderPackages(allPackages);
+    renderPagination();
 }
 
 function populateDestinationFilter(packages) {
@@ -80,6 +89,31 @@ function applyFilters() {
 searchInput.addEventListener('input', applyFilters);
 filterDropdown.addEventListener('change', applyFilters);
 
+// ===== PAGINATION =====
+function renderPagination() {
+    const container = document.getElementById('packagesPagination');
+    if (!container) return;
+    container.innerHTML = `
+        <div class="pagination-controls">
+            <button class="page-btn" onclick="loadPackages(${currentPage - 1})" ${currentPage <= 1 ? 'disabled' : ''}>&laquo; Prev</button>
+            <span class="page-info">Page ${currentPage} of ${totalPages}</span>
+            <button class="page-btn" onclick="loadPackages(${currentPage + 1})" ${currentPage >= totalPages ? 'disabled' : ''}>Next &raquo;</button>
+        </div>
+        <div class="pagination-limit">
+            <span>Show</span>
+            <select class="limit-select" onchange="changePackageLimit(this.value)">
+                ${[5, 10, 25, 50].map(n => `<option value="${n}" ${n === currentLimit ? 'selected' : ''}>${n}</option>`).join('')}
+            </select>
+            <span>per page</span>
+        </div>
+    `;
+}
+
+function changePackageLimit(val) {
+    currentLimit = parseInt(val);
+    loadPackages(1);
+}
+
 // ===== MODAL =====
 function openPackageModal() { packageModal.classList.add('active'); }
 function closePackageModal() { packageModal.classList.remove('active'); resetForm(); }
@@ -108,7 +142,7 @@ addItineraryBtn.addEventListener('click', () => addItineraryItem());
 
 // ===== EDIT =====
 async function editPackage(id) {
-    const res = await fetch(`${API}/${id}`);
+    const res = await fetch(`${API}/${id}`, { headers: authHeaders });
     const pkg = await res.json();
 
     packageFormTitle.textContent = 'Edit Package';
@@ -134,8 +168,8 @@ async function editPackage(id) {
 // ===== DELETE =====
 async function deletePackage(id) {
     if (!confirm('Delete this package?')) return;
-    await fetch(`${API}/${id}`, { method: 'DELETE' });
-    loadPackages();
+    await fetch(`${API}/${id}`, { method: 'DELETE', headers: authHeaders });
+    loadPackages(currentPage);
 }
 
 // ===== RESET =====
@@ -172,11 +206,11 @@ packageForm.addEventListener('submit', async (e) => {
     const method = id ? 'PUT' : 'POST';
     const url    = id ? `${API}/${id}` : API;
 
-    const res  = await fetch(url, { method, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
+    const res  = await fetch(url, { method, headers: { 'Content-Type': 'application/json', ...authHeaders }, body: JSON.stringify(body) });
     const data = await res.json();
     alert(data.message);
     closePackageModal();
-    loadPackages();
+    loadPackages(currentPage);
 });
 
 loadPackages();
