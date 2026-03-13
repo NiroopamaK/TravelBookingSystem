@@ -78,8 +78,7 @@ const menus = {
   TRAVEL_AGENT: [
     { name: "Dashboard", link: "/agent/agentDashboard" },
     { name: "My Packages", link: "/agent/packages" },
-    { name: "Bookings", link: "/agent/bookings" },
-
+    { name: "Bookings", link: "/agent/bookings" }
   ]
 };
 

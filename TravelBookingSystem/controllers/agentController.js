@@ -1,11 +1,54 @@
 const db = require('../config/db');
 
+// ===== AGENT PROFILE =====
+
+const jwt = require('jsonwebtoken');
+
+const getAgentProfile = async (req, res) => {
+    try {
+        const authHeader = req.headers.authorization;
+        if (!authHeader) return res.status(401).json({ message: 'Unauthorized' });
+
+        const token = authHeader.split(' ')[1];
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+        const [rows] = await db.query(
+            'SELECT user_id, first_name, last_name, email, passport, address, telephone FROM users WHERE user_id = ?',
+            [decoded.user_id]
+        );
+
+        if (rows.length === 0) return res.status(404).json({ message: 'Agent not found' });
+
+        res.json(rows[0]);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
 // ===== PACKAGES =====
 
 const getAllPackages = async (req, res) => {
     try {
-        const [rows] = await db.query('SELECT * FROM packages');
-        res.json(rows);
+        const authHeader = req.headers.authorization;
+        if (!authHeader) return res.status(401).json({ message: 'Unauthorized' });
+
+        const token = authHeader.split(' ')[1];
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+        const page  = Math.max(1, parseInt(req.query.page)  || 1);
+        const limit = Math.max(1, parseInt(req.query.limit) || 10);
+        const offset = (page - 1) * limit;
+
+        const [[{ total }]] = await db.query(
+            'SELECT COUNT(*) AS total FROM packages WHERE user_id = ?',
+            [decoded.user_id]
+        );
+        const [rows] = await db.query(
+            'SELECT * FROM packages WHERE user_id = ? LIMIT ? OFFSET ?',
+            [decoded.user_id, limit, offset]
+        );
+
+        res.json({ data: rows, total, page, limit, totalPages: Math.ceil(total / limit) });
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
@@ -25,11 +68,17 @@ const getPackageById = async (req, res) => {
 
 const createPackage = async (req, res) => {
     try {
+        const authHeader = req.headers.authorization;
+        if (!authHeader) return res.status(401).json({ message: 'Unauthorized' });
+
+        const token = authHeader.split(' ')[1];
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
         const { title, destination, start_date, end_date, description, price, itinerary_items } = req.body;
 
         const [result] = await db.query(
-            'INSERT INTO packages (title, destination, start_date, end_date, description, price) VALUES (?, ?, ?, ?, ?, ?)',
-            [title, destination, start_date, end_date, description, price]
+            'INSERT INTO packages (user_id, title, destination, start_date, end_date, description, price) VALUES (?, ?, ?, ?, ?, ?, ?)',
+            [decoded.user_id, title, destination, start_date, end_date, description, price]
         );
 
         const package_id = result.insertId;
@@ -90,6 +139,23 @@ const deletePackage = async (req, res) => {
 
 const getAllBookings = async (req, res) => {
     try {
+        const authHeader = req.headers.authorization;
+        if (!authHeader) return res.status(401).json({ message: 'Unauthorized' });
+
+        const token = authHeader.split(' ')[1];
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+        const page  = Math.max(1, parseInt(req.query.page)  || 1);
+        const limit = Math.max(1, parseInt(req.query.limit) || 10);
+        const offset = (page - 1) * limit;
+
+        const [[{ total }]] = await db.query(`
+            SELECT COUNT(*) AS total
+            FROM bookings b
+            JOIN packages p ON b.package_id = p.package_id
+            WHERE p.user_id = ?
+        `, [decoded.user_id]);
+
         const [rows] = await db.query(`
             SELECT
                 CONCAT('TRP-', LPAD(b.booking_id, 4, '0')) AS trip_id,
@@ -102,8 +168,11 @@ const getAllBookings = async (req, res) => {
             FROM bookings b
             JOIN users u ON b.user_id = u.user_id
             JOIN packages p ON b.package_id = p.package_id
-        `);
-        res.json(rows);
+            WHERE p.user_id = ?
+            LIMIT ? OFFSET ?
+        `, [decoded.user_id, limit, offset]);
+
+        res.json({ data: rows, total, page, limit, totalPages: Math.ceil(total / limit) });
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
@@ -134,6 +203,23 @@ const updateBookingStatus = async (req, res) => {
 
 const getTrips = async (req, res) => {
     try {
+        const authHeader = req.headers.authorization;
+        if (!authHeader) return res.status(401).json({ message: 'Unauthorized' });
+
+        const token = authHeader.split(' ')[1];
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+        const page  = Math.max(1, parseInt(req.query.page)  || 1);
+        const limit = Math.max(1, parseInt(req.query.limit) || 10);
+        const offset = (page - 1) * limit;
+
+        const [[{ total }]] = await db.query(`
+            SELECT COUNT(*) AS total
+            FROM bookings b
+            JOIN packages p ON b.package_id = p.package_id
+            WHERE p.user_id = ?
+        `, [decoded.user_id]);
+
         const [rows] = await db.query(`
             SELECT
                 CONCAT('TRP-', LPAD(b.booking_id, 4, '0')) AS trip_id,
@@ -147,8 +233,11 @@ const getTrips = async (req, res) => {
             FROM bookings b
             JOIN packages p ON b.package_id = p.package_id
             JOIN users u ON b.user_id = u.user_id
-        `);
-        res.json(rows);
+            WHERE p.user_id = ?
+            LIMIT ? OFFSET ?
+        `, [decoded.user_id, limit, offset]);
+
+        res.json({ data: rows, total, page, limit, totalPages: Math.ceil(total / limit) });
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
@@ -156,30 +245,39 @@ const getTrips = async (req, res) => {
 
 const getDashboardStats = async (req, res) => {
     try {
-        const [[{ totalPackages }]] = await db.query('SELECT COUNT(*) AS totalPackages FROM packages');
-        const [[{ totalTrips }]] = await db.query('SELECT COUNT(*) AS totalTrips FROM bookings');
-        const [[{ confirmedBookings }]] = await db.query("SELECT COUNT(*) AS confirmedBookings FROM bookings WHERE status = 'CONFIRMED'");
+        const authHeader = req.headers.authorization;
+        if (!authHeader) return res.status(401).json({ message: 'Unauthorized' });
+
+        const token = authHeader.split(' ')[1];
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+        const [[{ totalPackages }]] = await db.query(
+            'SELECT COUNT(*) AS totalPackages FROM packages WHERE user_id = ?',
+            [decoded.user_id]
+        );
+        const [[{ totalTrips }]] = await db.query(`
+            SELECT COUNT(*) AS totalTrips
+            FROM bookings b
+            JOIN packages p ON b.package_id = p.package_id
+            WHERE p.user_id = ?
+        `, [decoded.user_id]);
+        const [[{ confirmedBookings }]] = await db.query(`
+            SELECT COUNT(*) AS confirmedBookings
+            FROM bookings b
+            JOIN packages p ON b.package_id = p.package_id
+            WHERE p.user_id = ? AND b.status = 'CONFIRMED'
+        `, [decoded.user_id]);
+
         res.json({ totalPackages, totalTrips, confirmedBookings });
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
 };
 
-// ===== CUSTOMERS =====
 
-const getAllCustomers = async (req, res) => {
-    try {
-        const [rows] = await db.query(
-            'SELECT user_id, first_name, last_name, email, passport, address, telephone FROM users WHERE role = ?',
-            ['TRAVELLER']
-        );
-        res.json(rows);
-    } catch (error) {
-        res.status(500).json({ message: error.message });
-    }
-};
 
 module.exports = {
+    getAgentProfile,
     getAllPackages,
     getPackageById,
     createPackage,
@@ -187,7 +285,7 @@ module.exports = {
     deletePackage,
     getAllBookings,
     updateBookingStatus,
-    getAllCustomers,
+    
     getTrips,
     getDashboardStats,
 };
