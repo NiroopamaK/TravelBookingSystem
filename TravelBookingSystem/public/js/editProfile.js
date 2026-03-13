@@ -1,8 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
 
-    // ============================
     // PROFILE ELEMENTS
-    // ============================
     const firstName = document.getElementById("editFirstName")
     const lastName = document.getElementById("editLastName")
     const telephone = document.getElementById("editTelephone")
@@ -22,9 +20,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if(saveProfileBtn) saveProfileBtn.disabled = true
     if(savePasswordBtn) savePasswordBtn.disabled = true
 
-    // ============================
     // ENABLE EDITING & SHOW RULES
-    // ============================
     document.querySelectorAll(".input-edit").forEach(section => {
         section.addEventListener("click", (e) => {
             if (!e.target.closest(".edit-icon")) return
@@ -43,9 +39,7 @@ document.addEventListener("DOMContentLoaded", () => {
         })
     })
 
-    // ============================
     // PROFILE VALIDATION
-    // ============================
     function validateProfile(){
         if(!firstName || !lastName || !telephone || !address) return
 
@@ -87,9 +81,7 @@ document.addEventListener("DOMContentLoaded", () => {
         document.querySelectorAll("#profileForm input, #profileForm textarea").forEach(f => f.disabled = false)
     })
 
-    // ============================
     // PASSWORD TOGGLE
-    // ============================
     const profileSection = document.getElementById("profileSection")
     const passwordSection = document.getElementById("passwordSection")
 
@@ -110,9 +102,7 @@ document.addEventListener("DOMContentLoaded", () => {
         if(profileSection) profileSection.style.display = "block"
     })
 
-// ============================
 // PASSWORD VALIDATION
-// ============================
 const password = document.getElementById("password")
 const confirmPassword = document.getElementById("confirmPassword")
 const passwordRules = document.getElementById("passwordRules")
@@ -184,9 +174,7 @@ function togglePasswordRule(id, valid){
     el.classList.remove("hidden") // always show when typing
 }
 
-    // ============================
     // PROFILE IMAGE PREVIEW
-    // ============================
     document.getElementById("profileUpload")?.addEventListener("change", function(){
         const file = this.files[0]
         if(!file) return
@@ -195,17 +183,13 @@ function togglePasswordRule(id, valid){
         reader.readAsDataURL(file)
     })
 
-    // ============================
     // LOGOUT
-    // ============================
     document.getElementById("logoutBtn")?.addEventListener("click", () => {
         localStorage.removeItem("token")
         window.location.href = "/"
     })
 
-    // ============================
 // DASHBOARD NAVIGATION
-// ============================
 const dashboardBtn = document.getElementById("dashboardBtn");
 
 dashboardBtn?.addEventListener("click", () => {

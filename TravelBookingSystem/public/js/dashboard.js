@@ -172,4 +172,3 @@ function initEditProfileLink() {
     window.location.href = "/editProfile?token=" + token;
   });
 }
-  */

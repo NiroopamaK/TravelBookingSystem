@@ -1,5 +1,31 @@
 extends ../layout
 
 block content
+  link(rel="stylesheet", href="/css/users.css")
   h1 Users
-  p User data will appear here.
+
+  .filters
+    label Filter by Role:
+    select#roleFilter
+      option(value="ALL") All
+      option(value="ADMIN") Admin
+      option(value="TRAVELLER") Traveller
+      option(value="TRAVEL_AGENT") Travel Agent
+
+  table
+    thead
+      tr
+        th Name
+        th Email
+        th Role
+        th View Details
+
+    tbody#usersTable
+
+  .pagination
+    button#prev Prev
+    span Page 
+      span#pageNumber 1
+    button#next Next
+
+  script(src="/js/users.js")

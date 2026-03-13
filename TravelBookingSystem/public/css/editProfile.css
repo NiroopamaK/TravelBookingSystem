@@ -14,7 +14,7 @@
     font-family: 'Segoe UI', sans-serif;
 }
 
-/* ===== Left Sidebar ===== */
+/* Left Sidebar */
 .left-sidebar {
     width: 340px;
     background: #8B5E3C;
@@ -99,7 +99,7 @@
     background: #f3f3f3;
 }
 
-/* ===== Right Container ===== */
+/*  Right Container */
 .right-main {
     flex: 1;
     background: #f9f9f9;
@@ -217,7 +217,7 @@ textarea {
     }
 }
 
-/* ===== Right Container ===== */
+/*  Right Container */
 .right-main {
     flex: 1;
     background: #f9f9f9;

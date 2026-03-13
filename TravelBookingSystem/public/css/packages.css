@@ -1,0 +1,147 @@
+/* Page Layout */
+
+body {
+    font-family: "Segoe UI", Arial, sans-serif;
+    background-color: #f5f1eb;
+    color: #3e2c23;
+}
+
+h1 {
+    margin-bottom: 25px;
+    color: #4b2e2e;
+}
+
+/* Filters container */
+.filters {
+    background: #ffffff;
+    padding: 15px 20px;
+    border-radius: 8px;
+    margin-bottom: 25px;
+    border: 1px solid #e0d6cf;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+
+    display: flex;
+    gap: 15px;        /* space between filter items */
+    flex-wrap: nowrap; /* keep in one row */
+    align-items: center; /* align label + input + button */
+    overflow-x: auto;
+}
+
+/* Each filter item inline */
+.filter-item {
+    display: flex;
+    flex-direction: row;  /* label beside input */
+    align-items: center;
+    gap: 5px;             /* space between label and input */
+}
+
+/* Default inputs */
+.filter-item input[type="text"] {
+    padding: 6px 10px;
+    border-radius: 6px;
+    border: 1px solid #c7b7aa;
+    background: #faf7f4;
+    color: #3e2c23;
+    min-width: 120px;
+}
+
+/* Small inputs for price */
+.filter-item input[type="number"] {
+    padding: 6px 8px;
+    border-radius: 6px;
+    border: 1px solid #c7b7aa;
+    background: #faf7f4;
+    color: #3e2c23;
+    width: 80px;   /* smaller width */
+}
+
+/* Labels */
+.filter-item label {
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+/* Filter button */
+.filters button {
+    background-color: #8b5e3c;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    height: 35px;
+}
+
+.filters button:hover {
+    background-color: #6f472d;
+}
+
+/* Table */
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 3px 8px rgba(0,0,0,0.08);
+}
+
+thead {
+    background: #7b4f37;
+    color: white;
+}
+
+thead th {
+    padding: 12px;
+    text-align: left;
+    font-weight: 600;
+}
+
+tbody td {
+    padding: 12px;
+    border-bottom: 1px solid #eee;
+}
+
+tbody tr:hover {
+    background-color: #f4ede7;
+}
+
+/* Buttons */
+
+button {
+    background-color: #8b5e3c;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+button:hover {
+    background-color: #6f472d;
+}
+
+/* Pagination */
+
+.pagination {
+    margin-top: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+#pageNumber {
+    font-weight: bold;
+    color: #5a3a29;
+}
+
+/* Collapsible Details */
+
+tr[id^="details-"] td {
+    background-color: #fbf8f5;
+    font-size: 14px;
+    color: #5b463b;
+}
