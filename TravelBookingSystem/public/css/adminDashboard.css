@@ -1,0 +1,66 @@
+/* General page styling */
+body {
+    font-family: "Segoe UI", Arial, sans-serif;
+    background-color: #f5f1eb;
+    color: #3e2c23;
+}
+
+h1 {
+    margin-bottom: 30px;
+    color: #4b2e2e;
+    text-align: center;
+}
+
+/* Cards container */
+.cards {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center; /* center the cards */
+}
+
+/* Individual card */
+.card {
+    background-color: #ffffff;
+    border-radius: 12px;
+    padding: 25px 20px;
+    min-width: 180px;
+    max-width: 220px;
+    text-align: center;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    transition: transform 0.2s, box-shadow 0.2s;
+    cursor: default;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+}
+
+/* Card title */
+.card h2 {
+    font-size: 18px;
+    margin-bottom: 12px;
+    color: #7b4f37;
+}
+
+/* Card number/stat */
+.card p {
+    font-size: 28px;
+    font-weight: bold;
+    color: #5a3a29;
+    margin: 0;
+}
+
+/* Responsive adjustments */
+@media screen and (max-width: 768px) {
+    .cards {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .card {
+        width: 80%;
+        max-width: 300px;
+    }
+}

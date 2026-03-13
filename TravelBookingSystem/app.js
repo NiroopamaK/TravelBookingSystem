@@ -11,6 +11,7 @@ const emailVerificationRoutes = require('./routes/emailVerificationRoutes');
 const agentRoutes = require('./routes/agentRoutes');
 const travellerRoutes = require('./routes/travellerRoutes');
 const profileRoutes = require('./routes/profileRoutes');
+const adminRoutes = require("./routes/adminRoutes");
 
 const app = express();
 
@@ -101,7 +102,8 @@ app.use('/api/auth', authRoutes);
 app.use('/api/email', emailVerificationRoutes);
 app.use('/api/agent', agentRoutes);
 app.use('/traveller', travellerRoutes);   
-app.use('/bookings', bookingRoutes);      
+app.use('/bookings', bookingRoutes); 
+app.use("/api/admin", adminRoutes);     
 
 // Test route
 app.get('/test', (req, res) => {

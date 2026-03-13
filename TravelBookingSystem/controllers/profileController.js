@@ -2,11 +2,7 @@ const db = require('../config/db');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 
-
-// ============================
 // GET USER PROFILE
-// ============================
-
 exports.getProfile = async (req, res) => {
 
     try {
@@ -44,12 +40,7 @@ exports.getProfile = async (req, res) => {
 
 };
 
-
-
-// ============================
 // UPDATE PROFILE / PASSWORD
-// ============================
-
 exports.updateProfile = async (req, res) => {
 
     try {
@@ -65,11 +56,7 @@ exports.updateProfile = async (req, res) => {
 
         const { first_name, last_name, address, telephone, password } = req.body;
 
-
-        // ============================
         // CHANGE PASSWORD
-        // ============================
-
         if (password && password.trim().length > 0) {
 
             const hashedPassword = await bcrypt.hash(password, 10);
@@ -82,11 +69,7 @@ exports.updateProfile = async (req, res) => {
 
         }
 
-
-        // ============================
         // UPDATE PROFILE
-        // ============================
-
         else if (first_name || last_name || address || telephone) {
 
             await db.query(`

@@ -21,10 +21,8 @@ new EmailVerification({
   message: "validationMessage"
 });
 
-/* ================================
-   LOGIN
-================================ */
 
+//   LOGIN
 function decodeToken(token) {
   try {
     const base64 = token.split(".")[1]
@@ -92,10 +90,7 @@ document.getElementById("loginForm").addEventListener("submit", async (e) => {
 });
 
 
-/* ================================
-   RESET PASSWORD
-================================ */
-
+//   RESET PASSWORD
 document
   .getElementById("forgotPasswordForm")
   .addEventListener("submit", async (e) => {

@@ -1,5 +1,44 @@
 extends ../layout
 
 block content
-  h1 Packages 
-  p Package data will appear here.
+  link(rel="stylesheet", href="/css/packages.css")
+
+  h1 Packages
+
+  .filters
+    .filter-item
+      label Destination:
+      input#destFilter(type="text")
+
+    .filter-item
+      label Created By:
+      input#agentFilter(type="text")
+
+    .filter-item
+      label Min Price:
+      input#minPrice(type="number")
+
+    .filter-item
+      label Max Price:
+      input#maxPrice(type="number")
+
+    button#applyFilter Apply
+
+  table
+    thead
+      tr
+        th Package Name
+        th Destination
+        th Created By
+        th Price
+        th View Details
+
+    tbody#packagesTable
+
+  .pagination
+    button#prev Prev
+    span Page 
+      span#pageNumber 1
+    button#next Next
+
+  script(src="/js/packages.js")

@@ -1,0 +1,111 @@
+const db = require("../config/db");
+
+// DASHBOARD STATS
+exports.getDashboardStats = async (req, res) => {
+
+    try {
+
+        const [rows] = await db.query(`
+            SELECT
+            (SELECT COUNT(*) FROM packages) AS packages,
+            (SELECT COUNT(*) FROM bookings) AS bookings,
+            (SELECT COUNT(*) FROM users WHERE role='TRAVEL_AGENT') AS travel_agents,
+            (SELECT COUNT(*) FROM users WHERE role='TRAVELLER') AS travellers
+        `);
+
+        res.json(rows[0]);
+
+    } catch (err) {
+
+        console.error(err);
+        res.status(500).json({error:"Database error"});
+
+    }
+};
+
+
+
+// GET ALL USERS
+exports.getAllUsers = async (req,res)=>{
+
+    try{
+
+        const [rows] = await db.query(`
+            SELECT user_id,email,role,first_name,last_name,
+                   passport,address,telephone
+            FROM users
+        `);
+
+        res.json(rows);
+
+    }catch(err){
+
+        console.error(err);
+        res.status(500).json({error:"Database error"});
+
+    }
+
+};
+
+
+
+// GET ALL BOOKINGS
+exports.getAllBookings = async (req,res)=>{
+
+    try{
+
+        const [rows] = await db.query(`
+            SELECT 
+                b.booking_id,
+                u.first_name,
+                u.last_name,
+                p.title AS package_title,
+                b.packsize,
+                b.total_price,
+                b.status
+            FROM bookings b
+            JOIN users u ON b.user_id = u.user_id
+            JOIN packages p ON b.package_id = p.package_id
+        `);
+
+        res.json(rows);
+
+    }catch(err){
+
+        console.error(err);
+        res.status(500).json({error:"Database error"});
+
+    }
+
+};
+
+
+
+// GET ALL PACKAGES
+exports.getAllPackages = async (req,res)=>{
+
+    try{
+
+        const [rows] = await db.query(`
+            SELECT 
+                p.package_id,
+                p.title,
+                p.destination,
+                p.description,
+                p.price,
+                u.first_name AS agent_first_name,
+                u.last_name AS agent_last_name
+            FROM packages p
+            JOIN users u ON p.user_id = u.user_id
+        `);
+
+        res.json(rows);
+
+    }catch(err){
+
+        console.error(err);
+        res.status(500).json({error:"Database error"});
+
+    }
+
+};

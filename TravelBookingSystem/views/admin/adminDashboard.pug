@@ -1,5 +1,24 @@
 extends ../layout
 
 block content
-  h1 Analytics
-  p Dashboard data will appear here.
+  link(rel="stylesheet", href="/css/adminDashboard.css")
+  h1 Admin Dashboard
+
+  .cards
+    .card
+      h2 Packages
+      p#packages 0
+
+    .card
+      h2 Bookings
+      p#bookings 0
+
+    .card
+      h2 Travel Agents
+      p#agents 0
+
+    .card
+      h2 Travellers
+      p#travellers 0
+
+  script(src="/js/adminDashboard.js")
