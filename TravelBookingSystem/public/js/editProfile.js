@@ -1,96 +1,229 @@
-// ============================
-// Enable editing of profile fields when clicking pen icon
-// ============================
+document.addEventListener("DOMContentLoaded", () => {
 
-document.querySelectorAll(".edit-icon").forEach(icon => {
-    icon.addEventListener("click", () => {
-        const container = icon.closest(".input-edit") // find parent .input-edit
-        const input = container.querySelector("input, textarea") // get input/textarea inside
-        if (input) {
-            input.removeAttribute("disabled")  // enable editing
-            input.focus()                      // focus for convenience
-            input.style.borderColor = "#2d89ef" // optional highlight
+    // ============================
+    // PROFILE ELEMENTS
+    // ============================
+    const firstName = document.getElementById("editFirstName")
+    const lastName = document.getElementById("editLastName")
+    const telephone = document.getElementById("editTelephone")
+    const address = document.getElementById("editAddress")
+    const saveProfileBtn = document.getElementById("saveProfileBtn")
+    const savePasswordBtn = document.getElementById("savePasswordBtn")
+
+    // Store initial values
+    const initialValues = {
+        firstName: firstName?.value || "",
+        lastName: lastName?.value || "",
+        telephone: telephone?.value || "",
+        address: address?.value || ""
+    }
+
+    // Disable buttons initially
+    if(saveProfileBtn) saveProfileBtn.disabled = true
+    if(savePasswordBtn) savePasswordBtn.disabled = true
+
+    // ============================
+    // ENABLE EDITING & SHOW RULES
+    // ============================
+    document.querySelectorAll(".input-edit").forEach(section => {
+        section.addEventListener("click", (e) => {
+            if (!e.target.closest(".edit-icon")) return
+
+            const field = section.querySelector("input, textarea")
+            if(!field) return
+
+            field.disabled = false
+            field.focus()
+            field.style.border = "1px solid #2d89ef"
+            field.style.background = "#fff"
+
+            // Show rules only if invalid
+            const rules = section.querySelector(".rules")
+            if(rules) rules.classList.add("hidden")
+        })
+    })
+
+    // ============================
+    // PROFILE VALIDATION
+    // ============================
+    function validateProfile(){
+        if(!firstName || !lastName || !telephone || !address) return
+
+        const phoneRegex = /^[0-9]{7,12}$/
+
+        const firstValid = firstName.value.trim().length >= 1
+        const lastValid = lastName.value.trim().length >= 1
+        const phoneValid = phoneRegex.test(telephone.value.trim())
+        const addressValid = address.value.trim().length >= 5
+
+        toggleRule("editFirstNameRules", firstValid, firstName)
+        toggleRule("editLastNameRules", lastValid, lastName)
+        toggleRule("editTelephoneRules", phoneValid, telephone)
+        toggleRule("editAddressRules", addressValid, address)
+
+        const changed = firstName.value !== initialValues.firstName ||
+                        lastName.value !== initialValues.lastName ||
+                        telephone.value !== initialValues.telephone ||
+                        address.value !== initialValues.address
+
+        if(saveProfileBtn)
+            saveProfileBtn.disabled = !(firstValid && lastValid && phoneValid && addressValid && changed)
+    }
+
+    function toggleRule(id, valid, field){
+        const el = document.getElementById(id)
+        if(!el) return
+        if(field.disabled){
+            el.classList.add("hidden")
+        } else {
+            el.classList.toggle("hidden", valid)
         }
+    }
+
+    ;[firstName,lastName,telephone,address].forEach(f => f?.addEventListener("input", validateProfile))
+
+    // Enable all inputs before submit
+    document.getElementById("profileForm")?.addEventListener("submit", () => {
+        document.querySelectorAll("#profileForm input, #profileForm textarea").forEach(f => f.disabled = false)
     })
-})
+
+    // ============================
+    // PASSWORD TOGGLE
+    // ============================
+    const profileSection = document.getElementById("profileSection")
+    const passwordSection = document.getElementById("passwordSection")
+
+    document.getElementById("changePasswordBtn")?.addEventListener("click", () => {
+        if(profileSection) profileSection.style.display = "none"
+        if(passwordSection) passwordSection.style.display = "block"
+
+        // Reset password inputs and hide rules
+        if(document.getElementById("password")) document.getElementById("password").value = ""
+        if(document.getElementById("confirmPassword")) document.getElementById("confirmPassword").value = ""
+        passwordRules?.classList.add("hidden")
+        confirmRules?.classList.add("hidden")
+        if(savePasswordBtn) savePasswordBtn.disabled = true
+    })
+
+    document.getElementById("backToProfileBtn")?.addEventListener("click", () => {
+        if(passwordSection) passwordSection.style.display = "none"
+        if(profileSection) profileSection.style.display = "block"
+    })
 
 // ============================
-// Section toggle: Profile <-> Password
+// PASSWORD VALIDATION
 // ============================
+const password = document.getElementById("password")
+const confirmPassword = document.getElementById("confirmPassword")
+const passwordRules = document.getElementById("passwordRules")
+const confirmRules = document.getElementById("password2Rules")
 
-const profileSection = document.getElementById("profileSection")
-const passwordSection = document.getElementById("passwordSection")
-const profileTitle = document.getElementById("profileTitle")
-const passwordTitle = document.getElementById("passwordTitle")
+let passwordValid = false
+let confirmValid = false
 
-// Show password section
-document.getElementById("changePasswordBtn").addEventListener("click", () => {
-    profileSection.style.display = "none"
-    passwordSection.style.display = "flex"
-    profileTitle.style.display = "none"
-    passwordTitle.style.display = "block"
+// Show new password rules when typing
+password?.addEventListener("input", () => {
+    if(passwordRules?.classList.contains("hidden")){
+        passwordRules.classList.remove("hidden")
+    }
+    validatePassword()
 })
 
-// Back arrow in password section
-document.getElementById("backToProfileBtn").addEventListener("click", () => {
-    showProfileSection()
+// Show confirm password rules only when typing in confirm password
+confirmPassword?.addEventListener("input", () => {
+    if(confirmRules?.classList.contains("hidden")){
+        confirmRules.classList.remove("hidden")
+    }
+    validateConfirmPassword()
 })
 
-// Function to show profile section
-function showProfileSection() {
-    profileSection.style.display = "flex"
-    passwordSection.style.display = "none"
-    profileTitle.style.display = "block"
-    passwordTitle.style.display = "none"
+function validatePassword() {
+    if(!password) return
+    const pass = password.value
 
-    // Optional: re-disable inputs when going back
-    document.querySelectorAll(".profile-section input, .profile-section textarea").forEach(el => {
-        el.setAttribute("disabled", "true")
-        el.style.borderColor = "#ccc"
-    })
+    const lengthValid = pass.length >= 8
+    const upperValid = /[A-Z]/.test(pass)
+    const lowerValid = /[a-z]/.test(pass)
+    const numberValid = /\d/.test(pass)
+    const specialValid = /[\W_]/.test(pass)
+
+    togglePasswordRule("ruleLength", lengthValid)
+    togglePasswordRule("ruleUpper", upperValid)
+    togglePasswordRule("ruleLower", lowerValid)
+    togglePasswordRule("ruleNumber", numberValid)
+    togglePasswordRule("ruleSpecial", specialValid)
+
+    // password is valid only if all rules are met
+    passwordValid = lengthValid && upperValid && lowerValid && numberValid && specialValid
+
+    // If user typed in confirm password, re-validate it
+    if(confirmPassword.value.length > 0) validateConfirmPassword()
+
+    updateSavePasswordBtn()
 }
 
-// ============================
-// Save buttons
-// ============================
+function validateConfirmPassword() {
+    if(!password || !confirmPassword) return
 
-// Save profile changes
-document.getElementById("saveProfileBtn").addEventListener("click", () => {
-    showProfileSection()
-})
+    confirmValid = password.value === confirmPassword.value && confirmPassword.value !== ""
+    if(confirmRules) confirmRules.classList.toggle("hidden", confirmValid)
 
-// Save password changes with validation
-document.getElementById("savePasswordBtn").addEventListener("click", (e) => {
-    const password = document.getElementById("password").value
-    const confirmPassword = document.getElementById("confirmPassword").value
+    updateSavePasswordBtn()
+}
 
-    if(password.length > 0 && password !== confirmPassword){
-        e.preventDefault()
-        alert("Passwords do not match")
-    } else {
-        showProfileSection()
-        // Clear password fields
-        document.getElementById("password").value = ""
-        document.getElementById("confirmPassword").value = ""
-    }
-})
+function updateSavePasswordBtn() {
+    if(!savePasswordBtn) return
+    savePasswordBtn.disabled = !(passwordValid && confirmValid)
+}
 
-// ============================
-// Profile picture preview
-// ============================
+function togglePasswordRule(id, valid){
+    const el = document.getElementById(id)
+    if(!el) return
+    el.classList.toggle("valid", valid)
+    el.classList.toggle("invalid", !valid)
+    el.classList.remove("hidden") // always show when typing
+}
 
-document.getElementById("profileUpload").addEventListener("change", function(){
-    const file = this.files[0]
-    if(file){
+    // ============================
+    // PROFILE IMAGE PREVIEW
+    // ============================
+    document.getElementById("profileUpload")?.addEventListener("change", function(){
+        const file = this.files[0]
+        if(!file) return
         const reader = new FileReader()
-        reader.onload = function(e){
-            document.getElementById("sidebarProfilePic").src = e.target.result
-        }
+        reader.onload = e => document.getElementById("sidebarProfilePic").src = e.target.result
         reader.readAsDataURL(file)
-    }
-})
+    })
 
-document.getElementById("logoutBtn").addEventListener("click", () => {
-    localStorage.removeItem("token"); // remove token
-    window.location.href = "/";        // redirect to login page
+    // ============================
+    // LOGOUT
+    // ============================
+    document.getElementById("logoutBtn")?.addEventListener("click", () => {
+        localStorage.removeItem("token")
+        window.location.href = "/"
+    })
+
+    // ============================
+// DASHBOARD NAVIGATION
+// ============================
+const dashboardBtn = document.getElementById("dashboardBtn");
+
+dashboardBtn?.addEventListener("click", () => {
+    const role = dashboardBtn.dataset.role;
+
+    switch (role) {
+        case "ADMIN":
+            window.location.href = "/admin/adminDashboard";
+            break;
+        case "TRAVELLER":
+            window.location.href = "/traveller/dashboard";
+            break;
+        case "TRAVEL_AGENT":
+            window.location.href = "/agent/agentDashboard";
+            break;
+        default:
+            window.location.href = "/";
+    }
 });
+
+})

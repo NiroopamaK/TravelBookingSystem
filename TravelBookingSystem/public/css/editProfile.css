@@ -259,16 +259,36 @@ textarea {
     margin-top: auto;
 }
 
-.save-btn {
-    padding: 10px 20px;
-    border: none;
-    border-radius: 6px;
-    font-weight: bold;
-    cursor: pointer;
-    background: #8B5E3C; /* brown */
-    color: white;
+/* Hide rules by default */
+.rules.hidden {
+    display: none;
 }
 
-.save-btn:hover {
-    background: #70452a;
+ul.rules {
+    list-style-type: none;
+    padding-left: 0;
+    margin-left: 0.2em;
+}
+
+/* Rule text red when invalid */
+.rules li {
+    color: red;
+    font-size: 0.875rem;
+    margin-top: 2px;
+}
+
+/* Rule green when valid */
+.rules li.valid {
+    color: green;
+}
+
+/* Disabled buttons styling */
+button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* Highlight invalid input fields */
+input:invalid, textarea:invalid {
+    border: 1px solid red;
 }

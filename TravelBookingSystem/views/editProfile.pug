@@ -1,5 +1,6 @@
 .profile-container
-    // Left Sidebar
+
+    // LEFT SIDEBAR
     .left-sidebar
         .sidebar-top
             .sidebar-picture
@@ -7,71 +8,96 @@
                 label.camera-icon(for="profileUpload")
                     i.fa.fa-camera
                 input#profileUpload(type="file" name="profile_picture" accept="image/*" hidden)
-            h3.sidebar-name= user.first_name
+
+            h3.sidebar-name #{user.first_name} #{user.last_name}
             p.sidebar-role= user.role
             p.sidebar-email= user.email
             p.sidebar-passport Passport: #{user.passport}
 
         .sidebar-bottom
             button#changePasswordBtn.sidebar-btn Change Password
-            a.dashboard-btn(href="/dashboard") Go to Dashboard
+            button#dashboardBtn.sidebar-btn(type="button" data-role=user.role) Go to Dashboard
             button#logoutBtn.sidebar-btn Log Out
 
-    // Right Container
+    // RIGHT SIDE
     .right-main
         .form-container
-            // Top-right logo
             img.logo(src="/assets/logo.jpg" alt="Logo")
 
-            // Profile Section
+            // ==========================
+            // PROFILE SECTION
+            // ==========================
             .profile-section#profileSection
-                h2#profileTitle Profile Details
+                h2 Profile Details
 
-                .info-section.editable
-                    label First Name
-                    .input-edit
-                        input(type="text" name="first_name" value=user.first_name disabled)
-                        i.edit-icon.fa.fa-pen
+                form#profileForm(method="POST" action=`/profile/update?token=${token}`)
 
-                .info-section.editable
-                    label Last Name
-                    .input-edit
-                        input(type="text" name="last_name" value=user.last_name disabled)
-                        i.edit-icon.fa.fa-pen
+                    // FIRST NAME
+                    .info-section.editable
+                        label First Name
+                        .input-edit
+                            input#editFirstName(type="text" name="first_name" value=user.first_name minlength="2" disabled)
+                            i.edit-icon.fa.fa-pen
+                        ul#editFirstNameRules.rules.hidden
+                            li Cannot leave empty
 
-                .info-section.editable
-                    label Telephone
-                    .input-edit
-                        input(type="number" name="telephone" value=user.telephone disabled)
-                        i.edit-icon.fa.fa-pen
+                    // LAST NAME
+                    .info-section.editable
+                        label Last Name
+                        .input-edit
+                            input#editLastName(type="text" name="last_name" value=user.last_name minlength="2" disabled)
+                            i.edit-icon.fa.fa-pen
+                        ul#editLastNameRules.rules.hidden
+                            li Cannot leave empty
 
-                .info-section.editable
-                    label Address
-                    .input-edit
-                        textarea(name="address" disabled)= user.address
-                        i.edit-icon.fa.fa-pen
+                    // TELEPHONE
+                    .info-section.editable
+                        label Telephone
+                        .input-edit
+                            input#editTelephone(type="tel" name="telephone" value=user.telephone pattern="[0-9]{7,12}" disabled)
+                            i.edit-icon.fa.fa-pen
+                        ul#editTelephoneRules.rules.hidden
+                            li Enter 7–12 digits
 
-                // Save button bottom-right
-                .form-footer
-                    button#saveProfileBtn.save-btn(type="submit") Save Changes
+                    // ADDRESS
+                    .info-section.editable
+                        label Address
+                        .input-edit
+                            textarea#editAddress(name="address" minlength="5" disabled)= user.address
+                            i.edit-icon.fa.fa-pen
+                        ul#editAddressRules.rules.hidden
+                            li Cannot leave empty
 
-            // Password Section
-            .password-section#passwordSection
+                    .form-footer
+                        button#saveProfileBtn.save-btn(type="submit" disabled) Save Changes
+
+            // ==========================
+            // PASSWORD SECTION
+            // ==========================
+            .password-section#passwordSection(style="display:none")
                 span#backToProfileBtn.back-arrow ← Back
+                h2 Change Password
 
-                h2#passwordTitle Change Password
+                form#passwordForm(method="POST" action=`/profile/update?token=${token}`)
 
-                .info-section
-                    label New Password
-                    input(type="password" name="password" id="password")
+                    .info-section
+                        label New Password
+                        input#password(type="password" name="password" )
+                        ul#passwordRules.rules.hidden
+                            li#ruleLength Minimum 8 characters
+                            li#ruleUpper At least 1 uppercase letter
+                            li#ruleLower At least 1 lowercase letter
+                            li#ruleNumber At least 1 number
+                            li#ruleSpecial At least 1 special character
 
-                .info-section
-                    label Confirm Password
-                    input(type="password" id="confirmPassword")
+                    .info-section
+                        label Confirm Password
+                        input#confirmPassword(type="password")
+                        ul#password2Rules.rules.hidden
+                            li Passwords must match
 
-                // Save password button bottom-right
-                .form-footer
-                    button#savePasswordBtn.save-btn(type="submit") Save Password
+                    .form-footer
+                        button#savePasswordBtn.save-btn(type="submit" disabled) Save Password
 
 link(rel="stylesheet" href="/css/editProfile.css")
 script(src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/js/all.min.js")
