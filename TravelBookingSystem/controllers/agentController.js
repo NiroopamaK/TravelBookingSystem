@@ -74,11 +74,11 @@ const createPackage = async (req, res) => {
         const token = authHeader.split(' ')[1];
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-        const { title, destination, start_date, end_date, description, price, itinerary_items } = req.body;
+        const { title, destination, start_date, end_date, description, created_on, price, itinerary_items } = req.body;
 
         const [result] = await db.query(
-            'INSERT INTO packages (user_id, title, destination, start_date, end_date, description, price) VALUES (?, ?, ?, ?, ?, ?, ?)',
-            [decoded.user_id, title, destination, start_date, end_date, description, price]
+            'INSERT INTO packages (user_id, title, destination, start_date, end_date, description,created_on, price) VALUES (?,?, ?, ?, ?, ?, ?, ?)',
+            [decoded.user_id, title, destination, start_date, end_date, description, created_on,price]
         );
 
         const package_id = result.insertId;
