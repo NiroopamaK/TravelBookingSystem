@@ -62,11 +62,18 @@ document.addEventListener("DOMContentLoaded", () => {
     const pricePerPerson = getPricePerPerson();
     const total = people * pricePerPerson;
 
+    const now = new Date();
+  const year = now.getFullYear();
+  const month = String(now.getMonth() + 1).padStart(2, "0"); // months are 0-indexed
+  const day = String(now.getDate()).padStart(2, "0");
+  const createdOn = `${year}-${month}-${day}`;
+
     const booking = {
       user_id: payload.user_id,
       package_id: Number(packageId),
       packsize: people,
       additional_notes: notes,
+      created_on: createdOn,
       total_price: total,
       status: "PENDING"
     };

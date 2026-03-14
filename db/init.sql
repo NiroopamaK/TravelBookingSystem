@@ -21,6 +21,7 @@ CREATE TABLE packages (
     user_id INT(10) NOT NULL,
     title VARCHAR(100) NOT NULL,
     destination VARCHAR(100) NOT NULL,
+    created_on DATE NOT NULL,
     start_date DATE NOT NULL,
     end_date DATE NOT NULL,
     description VARCHAR(250) NOT NULL,
@@ -54,6 +55,7 @@ CREATE TABLE bookings (
     package_id INT(10) NOT NULL,
     packsize INT(4) NOT NULL,
     additional_notes VARCHAR(250),
+    created_on DATE NOT NULL,
     total_price DECIMAL(10,2) NOT NULL,
     status ENUM('PENDING', 'CONFIRMED', 'COMPLETED', 'CANCELLED') NOT NULL,
     PRIMARY KEY (booking_id),
@@ -77,16 +79,16 @@ INSERT INTO users (email, role, first_name, last_name, passport, address, teleph
 ('agent2@test.com', 'TRAVEL_AGENT', 'Michael', 'Brown', 'E5678901', '88 Market Road, Birmingham', 447900000005, '$2b$10$WlSpnbLMhWJgJvGqWiPOyOWkRVremYqKu5/IisUabdMg8/6mxHW/W');
 
 
--- PACKAGES (8 rows)
-INSERT INTO packages (user_id, title, destination, start_date, end_date, description, price) VALUES
-(3, 'Paris City Escape', 'Paris, France', '2026-06-01', '2026-06-05', 'Explore Paris landmarks and culture', 899.99),
-(3, 'Rome Historical Tour', 'Rome, Italy', '2026-07-10', '2026-07-15', 'Discover ancient Roman history', 1099.50),
-(3, 'Tokyo Adventure', 'Tokyo, Japan', '2026-09-01', '2026-09-10', 'Experience modern and traditional Japan', 1999.99),
-(3, 'New York Highlights', 'New York, USA', '2026-08-05', '2026-08-09', 'Visit famous attractions in NYC', 1299.00),
-(5, 'Dubai Luxury Trip', 'Dubai, UAE', '2026-11-12', '2026-11-18', 'Luxury travel and desert safari', 1799.75),
-(5, 'Sydney Explorer', 'Sydney, Australia', '2026-10-02', '2026-10-08', 'Opera House, beaches and city tours', 2100.00),
-(5, 'Barcelona Beach Holiday', 'Barcelona, Spain', '2026-07-20', '2026-07-25', 'Relax on beaches and explore culture', 950.00),
-(3, 'Swiss Alps Adventure', 'Zurich, Switzerland', '2026-12-05', '2026-12-12', 'Skiing and alpine sightseeing', 2200.00);
+-- PACKAGES (8 rows) with created_on **after description**
+INSERT INTO packages (user_id, title, destination, start_date, end_date, description, created_on, price) VALUES
+(3, 'Paris City Escape', 'Paris, France', '2026-06-01', '2026-06-05', 'Explore Paris landmarks and culture', '2026-03-01', 899.99),
+(3, 'Rome Historical Tour', 'Rome, Italy', '2026-07-10', '2026-07-15', 'Discover ancient Roman history', '2026-03-05', 1099.50),
+(3, 'Tokyo Adventure', 'Tokyo, Japan', '2026-09-01', '2026-09-10', 'Experience modern and traditional Japan', '2026-03-08', 1999.99),
+(3, 'New York Highlights', 'New York, USA', '2026-08-05', '2026-08-09', 'Visit famous attractions in NYC', '2026-03-10', 1299.00),
+(5, 'Dubai Luxury Trip', 'Dubai, UAE', '2026-11-12', '2026-11-18', 'Luxury travel and desert safari', '2026-03-12', 1799.75),
+(5, 'Sydney Explorer', 'Sydney, Australia', '2026-10-02', '2026-10-08', 'Opera House, beaches and city tours', '2026-03-15', 2100.00),
+(5, 'Barcelona Beach Holiday', 'Barcelona, Spain', '2026-07-20', '2026-07-25', 'Relax on beaches and explore culture', '2026-03-18', 950.00),
+(3, 'Swiss Alps Adventure', 'Zurich, Switzerland', '2026-12-05', '2026-12-12', 'Skiing and alpine sightseeing', '2026-03-20', 2200.00);
 
 
 -- ITINERARY ITEMS
@@ -102,14 +104,14 @@ INSERT INTO itinerary_items (title, description, package_id) VALUES
 
 
 -- BOOKINGS (10 rows)
-INSERT INTO bookings (user_id, package_id, packsize, additional_notes, total_price, status) VALUES
-(2, 1, 2, 'Honeymoon trip', 1799.98, 'CONFIRMED'),
-(2, 3, 1, 'Solo travel', 1999.99, 'PENDING'),
-(2, 5, 4, 'Group booking', 7199.00, 'PENDING'),
-(2, 2, 2, 'Friends trip', 2199.00, 'CONFIRMED'),
-(4, 4, 2, 'Anniversary celebration', 2598.00, 'COMPLETED'),
-(4, 6, 1, 'Solo adventure', 2100.00, 'CONFIRMED'),
-(4, 7, 3, 'Family beach holiday', 2850.00, 'PENDING'),
-(4, 8, 2, 'Winter ski holiday', 4400.00, 'CONFIRMED'),
-(2, 6, 2, 'Couple travel', 4200.00, 'PENDING'),
-(4, 1, 1, 'Short getaway', 899.99, 'CONFIRMED');
+INSERT INTO bookings (user_id, package_id, packsize, additional_notes, created_on, total_price, status) VALUES
+(2, 1, 2, 'Honeymoon trip', '2026-03-05', 1799.98, 'CONFIRMED'),
+(2, 3, 1, 'Solo travel', '2026-03-10', 1999.99, 'PENDING'),
+(2, 5, 4, 'Group booking', '2026-02-18', 7199.00, 'PENDING'),
+(2, 2, 2, 'Friends trip', '2026-03-12', 2199.00, 'CONFIRMED'),
+(4, 4, 2, 'Anniversary celebration', '2026-02-25', 2598.00, 'COMPLETED'),
+(4, 6, 1, 'Solo adventure', '2026-03-02', 2100.00, 'CONFIRMED'),
+(4, 7, 3, 'Family beach holiday', '2026-02-15', 2850.00, 'PENDING'),
+(4, 8, 2, 'Winter ski holiday', '2026-03-08', 4400.00, 'CONFIRMED'),
+(2, 6, 2, 'Couple travel', '2026-02-28', 4200.00, 'PENDING'),
+(4, 1, 1, 'Short getaway', '2026-03-14', 899.99, 'CONFIRMED');

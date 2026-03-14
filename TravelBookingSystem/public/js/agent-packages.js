@@ -191,6 +191,11 @@ packageForm.addEventListener('submit', async (e) => {
     const titles = [...document.querySelectorAll('input[name="itinerary_title[]"]')].map(i => i.value);
     const descs  = [...document.querySelectorAll('textarea[name="itinerary_description[]"]')].map(t => t.value);
     const itinerary_items = titles.map((t, i) => ({ title: t, description: descs[i] }));
+    const now = new Date();
+  const year = now.getFullYear();
+  const month = String(now.getMonth() + 1).padStart(2, "0"); // months are 0-indexed
+  const day = String(now.getDate()).padStart(2, "0");
+  const createdOn = `${year}-${month}-${day}`;
 
     const body = {
         title: titleInput.value,
@@ -198,6 +203,7 @@ packageForm.addEventListener('submit', async (e) => {
         start_date: startDateInput.value,
         end_date: endDateInput.value,
         description: descriptionInput.value,
+        created_on: createdOn,
         price: priceInput.value,
         itinerary_items
     };
