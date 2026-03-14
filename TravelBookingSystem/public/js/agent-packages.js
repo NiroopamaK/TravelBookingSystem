@@ -119,6 +119,7 @@ function openPackageModal() { packageModal.classList.add('active'); }
 function closePackageModal() { packageModal.classList.remove('active'); resetForm(); }
 
 openPackageModalBtn.addEventListener('click', () => {
+    resetForm();
     packageFormTitle.textContent = 'Add New Package';
     cancelEditBtn.style.display = 'none';
     openPackageModal();
@@ -220,4 +221,3 @@ packageForm.addEventListener('submit', async (e) => {
 });
 
 loadPackages();
-addItineraryItem();
