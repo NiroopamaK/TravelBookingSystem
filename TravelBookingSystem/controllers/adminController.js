@@ -109,3 +109,55 @@ exports.getAllPackages = async (req,res)=>{
     }
 
 };
+
+// PACKAGE SUMMARY BY DAY
+exports.getPackageSummary = async (req, res) => {
+
+    const {month, year} = req.query;
+
+    try {
+
+        const [rows] = await db.query(`
+            SELECT DAY(created_on) as day, COUNT(*) as count
+            FROM packages
+            WHERE MONTH(created_on)=? AND YEAR(created_on)=?
+            GROUP BY DAY(created_on)
+            ORDER BY day
+        `,[month,year]);
+
+        res.json(rows);
+
+    } catch(err) {
+
+        console.error(err);
+        res.status(500).json({error:"Database error"});
+
+    }
+};
+
+
+
+// BOOKING SUMMARY BY DAY
+exports.getBookingSummary = async (req, res) => {
+
+    const {month, year} = req.query;
+
+    try {
+
+        const [rows] = await db.query(`
+            SELECT DAY(created_on) as day, COUNT(*) as count
+            FROM bookings
+            WHERE MONTH(created_on)=? AND YEAR(created_on)=?
+            GROUP BY DAY(created_on)
+            ORDER BY day
+        `,[month,year]);
+
+        res.json(rows);
+
+    } catch(err) {
+
+        console.error(err);
+        res.status(500).json({error:"Database error"});
+
+    }
+};

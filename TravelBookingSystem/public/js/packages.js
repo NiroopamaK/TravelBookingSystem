@@ -3,15 +3,14 @@ let page = 1;
 const limit = 5;
 
 document.addEventListener("DOMContentLoaded", () => {
+
     loadPackages();
 
-    // Filter button
     document.getElementById("applyFilter").addEventListener("click", () => {
         page = 1;
         renderTable();
     });
 
-    // Pagination buttons
     document.getElementById("next").onclick = () => {
         page++;
         renderTable();
@@ -21,15 +20,21 @@ document.addEventListener("DOMContentLoaded", () => {
         if(page > 1) page--;
         renderTable();
     };
+
 });
 
-async function loadPackages() {
+
+async function loadPackages(){
+
     const res = await fetch("/api/admin/packages");
     packages = await res.json();
     renderTable();
+
 }
 
-function renderTable() {
+
+function renderTable(){
+
     const table = document.getElementById("packagesTable");
     if(!table) return;
 
@@ -38,8 +43,8 @@ function renderTable() {
     const min = parseFloat(document.getElementById("minPrice").value);
     const max = parseFloat(document.getElementById("maxPrice").value);
 
-    // Filter packages
     let filtered = packages.filter(p => {
+
         const creator = `${p.agent_first_name} ${p.agent_last_name}`.toLowerCase();
         const price = parseFloat(p.price);
 
@@ -49,38 +54,63 @@ function renderTable() {
             (isNaN(min) || price >= min) &&
             (isNaN(max) || price <= max)
         );
+
     });
 
-    // Pagination
+
     const start = (page-1)*limit;
-    const end = start+limit;
+    const end = start + limit;
     const paginated = filtered.slice(start,end);
 
     table.innerHTML = "";
 
-    paginated.forEach((p,i) => {
+    paginated.forEach((p) => {
+
         const row = document.createElement("tr");
+
         row.innerHTML = `
             <td>${p.title}</td>
             <td>${p.destination}</td>
             <td>${p.agent_first_name} ${p.agent_last_name}</td>
             <td>$${p.price}</td>
-            <td><button onclick="toggleDetails(${i})">View</button></td>
+            <td><button onclick="toggleDetails(${p.package_id})">View</button></td>
         `;
 
         const details = document.createElement("tr");
-        details.id = "details-"+i;
+
+        details.id = "details-"+p.package_id;
         details.style.display = "none";
-        details.innerHTML = `<td colspan="5">${p.description}</td>`;
+
+        details.innerHTML = `
+            <td colspan="5">
+                <strong>Description:</strong> ${p.description}
+            </td>
+        `;
 
         table.appendChild(row);
         table.appendChild(details);
+
     });
 
-    // Update page number
     document.getElementById("pageNumber").textContent = page;
 
-    // Disable next button if no more pages
     const nextBtn = document.getElementById("next");
     nextBtn.disabled = end >= filtered.length;
+
+}
+
+
+// TOGGLE PACKAGE DETAILS
+function toggleDetails(id){
+
+    const row = document.getElementById("details-"+id);
+
+    if(!row) return;
+
+    if(row.style.display === "none"){
+        row.style.display = "table-row";
+    }else{
+        row.style.display = "none";
+    }
+
 }

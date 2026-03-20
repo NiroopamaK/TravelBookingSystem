@@ -2,23 +2,63 @@ extends ../layout
 
 block content
   link(rel="stylesheet", href="/css/adminDashboard.css")
-  h1 Admin Dashboard
 
-  .cards
-    .card
-      h2 Packages
-      p#packages 0
+  .dashboard-container
 
-    .card
-      h2 Bookings
-      p#bookings 0
+    h1 Admin Dashboard
 
-    .card
-      h2 Travel Agents
-      p#agents 0
+    .cards
+      .card
+        h2 Packages
+        p#packages 0
 
-    .card
-      h2 Travellers
-      p#travellers 0
+      .card
+        h2 Bookings
+        p#bookings 0
 
+      .card
+        h2 Travel Agents
+        p#agents 0
+
+      .card
+        h2 Travellers
+        p#travellers 0
+
+
+    h2.summary-title Monthly Summary
+
+    .date-selector
+      label(for="monthSelect") Month
+      select#monthSelect
+        option(value="1") January
+        option(value="2") February
+        option(value="3") March
+        option(value="4") April
+        option(value="5") May
+        option(value="6") June
+        option(value="7") July
+        option(value="8") August
+        option(value="9") September
+        option(value="10") October
+        option(value="11") November
+        option(value="12") December
+
+      label(for="yearSelect") Year
+      select#yearSelect
+        option(value="2025") 2025
+        option(value="2026") 2026
+        option(value="2027") 2027
+
+
+    .charts
+      .chart-container
+        h3 Packages Created
+        canvas#packageChart
+
+      .chart-container
+        h3 Bookings Created
+        canvas#bookingChart
+
+
+  script(src="https://cdn.jsdelivr.net/npm/chart.js")
   script(src="/js/adminDashboard.js")
