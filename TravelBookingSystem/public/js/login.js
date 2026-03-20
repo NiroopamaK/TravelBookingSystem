@@ -212,6 +212,11 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   }
 
+  password.addEventListener("input", () => {
+  document.getElementById("passwordRules").classList.remove("hidden");
+  validatePassword();
+  });
+
   password.addEventListener("input", validatePassword);
   confirmPassword.addEventListener("input", validatePassword);
 
