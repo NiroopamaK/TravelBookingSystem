@@ -27,6 +27,23 @@ let currentPage  = 1;
 let currentLimit = 5;
 let totalPages   = 1;
 
+// Set min date for start date to tomorrow
+const tomorrow = new Date();
+tomorrow.setDate(tomorrow.getDate() + 1);
+startDateInput.min = tomorrow.toISOString().split('T')[0];
+
+// Update end date min whenever start date changes
+startDateInput.addEventListener('change', () => {
+    if (startDateInput.value) {
+        const dayAfterStart = new Date(startDateInput.value);
+        dayAfterStart.setDate(dayAfterStart.getDate() + 1);
+        endDateInput.min = dayAfterStart.toISOString().split('T')[0];
+        if (endDateInput.value && endDateInput.value <= startDateInput.value) {
+            endDateInput.value = '';
+        }
+    }
+});
+
 // ===== LOAD PACKAGES =====
 async function loadPackages(page = 1) {
     currentPage = page;
@@ -119,6 +136,7 @@ function openPackageModal() { packageModal.classList.add('active'); }
 function closePackageModal() { packageModal.classList.remove('active'); resetForm(); }
 
 openPackageModalBtn.addEventListener('click', () => {
+    resetForm();
     packageFormTitle.textContent = 'Add New Package';
     cancelEditBtn.style.display = 'none';
     openPackageModal();
@@ -188,6 +206,16 @@ cancelEditBtn.addEventListener('click', resetForm);
 packageForm.addEventListener('submit', async (e) => {
     e.preventDefault();
 
+    const today = new Date().toISOString().split('T')[0];
+    if (startDateInput.value <= today) {
+        alert('Start date must be greater than today.');
+        return;
+    }
+    if (endDateInput.value <= startDateInput.value) {
+        alert('End date must be greater than start date.');
+        return;
+    }
+
     const titles = [...document.querySelectorAll('input[name="itinerary_title[]"]')].map(i => i.value);
     const descs  = [...document.querySelectorAll('textarea[name="itinerary_description[]"]')].map(t => t.value);
     const itinerary_items = titles.map((t, i) => ({ title: t, description: descs[i] }));
@@ -220,4 +248,3 @@ packageForm.addEventListener('submit', async (e) => {
 });
 
 loadPackages();
-addItineraryItem();

@@ -1,6 +1,6 @@
 const db = require('../config/db');
 
-// ===== AGENT PROFILE =====
+// AGENT PROFILE 
 
 const jwt = require('jsonwebtoken');
 
@@ -25,7 +25,7 @@ const getAgentProfile = async (req, res) => {
     }
 };
 
-// ===== PACKAGES =====
+// PACKAGES 
 
 const getAllPackages = async (req, res) => {
     try {
@@ -135,7 +135,7 @@ const deletePackage = async (req, res) => {
     }
 };
 
-// ===== BOOKINGS =====
+// BOOKINGS 
 
 const getAllBookings = async (req, res) => {
     try {
@@ -199,7 +199,7 @@ const updateBookingStatus = async (req, res) => {
     }
 };
 
-// ===== TRIPS (bookings joined with packages + users) =====
+//  TRIPS (bookings joined with packages + users) 
 
 const getTrips = async (req, res) => {
     try {
