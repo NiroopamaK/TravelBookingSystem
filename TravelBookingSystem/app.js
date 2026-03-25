@@ -94,7 +94,7 @@ app.get('/admin/users', (req, res) => res.render('admin/users'));
 
 // travel-agent-pages
 app.get('/agent/agentDashboard', (req, res) => res.render('travelAgent/agentDashboard'));
-app.get('/agent/profile', (req, res) => res.render('travelAgent/agentProfile'));
+
 
 // Routes
 app.use('/', profileRoutes);              

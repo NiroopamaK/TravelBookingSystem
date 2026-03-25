@@ -2,8 +2,7 @@ const express = require('express');
 const router = express.Router();
 const agentController = require('../controllers/agentController');
 
-// Agent Profile
-router.get('/profile', agentController.getAgentProfile);
+
 
 // Packages
 router.get('/packages', agentController.getAllPackages);

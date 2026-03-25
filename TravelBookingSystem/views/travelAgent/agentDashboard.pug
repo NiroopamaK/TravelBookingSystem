@@ -29,5 +29,23 @@ block content
 
   .pagination#tripsPagination
 
+  .modal-overlay#tripInfoModal
+    .modal
+      button.modal-close#closeTripInfoModalBtn &times;
+      .trip-info-card
+        h3#tripInfoId -
+        p#tripInfoName -
+        span.trip-status-badge#tripInfoStatus -
+        .trip-info-grid
+          .trip-info-box
+            label Start Date
+            p#tripInfoStartDate -
+          .trip-info-box
+            label End Date
+            p#tripInfoEndDate -
+          .trip-info-box
+            label Cost
+            p#tripInfoCost -
+
 block scripts
   script(src="/js/agent-dashboard.js")
