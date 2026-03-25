@@ -18,5 +18,11 @@ router.get("/bookings", adminController.getAllBookings);
 // VIEW PACKAGES
 router.get("/packages", adminController.getAllPackages);
 
+// PACKAGE SUMMARY
+router.get("/package-summary", adminController.getPackageSummary);
+
+// BOOKING SUMMARY
+router.get("/booking-summary", adminController.getBookingSummary);
+
 
 module.exports = router;
