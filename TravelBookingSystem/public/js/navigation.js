@@ -54,14 +54,27 @@ function initNavbar() {
   });
 
   // Load user info
-  const payload = getTokenPayload();
-  if (payload) {
-    const nameEl = document.querySelector(".profile-name");
-    const roleEl = document.querySelector(".profile-role");
+  // Load user info and profile picture
+const payload = getTokenPayload();
+if (payload) {
+  const nameEl = document.querySelector(".profile-name");
+  const roleEl = document.querySelector(".profile-role");
+  const profilePic = document.getElementById("profilePic");
 
-    if (nameEl) nameEl.textContent = payload.first_name || "User";
-    if (roleEl) roleEl.textContent = payload.role || "";
+  if (nameEl) nameEl.textContent = payload.first_name || "User";
+  if (roleEl) roleEl.textContent = payload.role || "";
+
+  // Fetch actual profile picture
+  const token = localStorage.getItem("token");
+  if (token && profilePic) {
+    fetch(`/getProfilePicture?token=${token}`)
+      .then(res => res.json())
+      .then(data => {
+        if (data.path) profilePic.src = data.path;
+      })
+      .catch(err => console.error("Error fetching profile picture:", err));
   }
+}
 }
 
 //   SIDEBAR MENUS

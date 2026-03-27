@@ -175,13 +175,33 @@ function togglePasswordRule(id, valid){
 }
 
     // PROFILE IMAGE PREVIEW
-    document.getElementById("profileUpload")?.addEventListener("change", function(){
-        const file = this.files[0]
-        if(!file) return
-        const reader = new FileReader()
-        reader.onload = e => document.getElementById("sidebarProfilePic").src = e.target.result
-        reader.readAsDataURL(file)
+    document.getElementById("profileUpload")?.addEventListener("change", function () {
+    const file = this.files[0];
+    if (!file) return;
+
+    // PREVIEW IMAGE
+    const reader = new FileReader();
+    reader.onload = e => {
+        document.getElementById("sidebarProfilePic").src = e.target.result;
+    };
+    reader.readAsDataURL(file);
+
+    // AUTO UPLOAD
+    const formData = new FormData();
+    formData.append("profile_picture", file);
+
+    fetch(`/profile/upload-picture?token=${new URLSearchParams(window.location.search).get("token")}`, {
+        method: "POST",
+        body: formData
     })
+    .then(res => res.json())
+    .then(data => {
+        console.log("Upload success:", data);
+    })
+    .catch(err => {
+        console.error("Upload error:", err);
+    });
+});
 
     // LOGOUT
     document.getElementById("logoutBtn")?.addEventListener("click", () => {

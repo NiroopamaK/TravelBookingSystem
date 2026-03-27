@@ -23,7 +23,6 @@ services:
       JWT_SECRET: secret123
     volumes:
       - ./TravelBookingSystem:/app
-      - node_modules:/app/node_modules
     command: npm run dev
 
   phpmyadmin:
