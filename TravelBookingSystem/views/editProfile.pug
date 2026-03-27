@@ -4,19 +4,19 @@
     .left-sidebar
         .sidebar-top
             .sidebar-picture
-                img#sidebarProfilePic(src=(user.profile_picture ? user.profile_picture : "/assets/admin.png"))
+                img#sidebarProfilePic(src=(user.profile_picture || "/assets/propics/profile_image.jpg"))
                 label.camera-icon(for="profileUpload")
                     i.fa.fa-camera
                 input#profileUpload(type="file" name="profile_picture" accept="image/*" hidden)
 
-            h3.sidebar-name #{user.first_name} #{user.last_name}
-            p.sidebar-role= user.role
-            p.sidebar-email= user.email
-            p.sidebar-passport Passport: #{user.passport}
+            h3.sidebar-name #{user.first_name || ''}
+            p.sidebar-role #{user.role || ''}
+            p.sidebar-email #{user.email || ''}
+            p.sidebar-passport Passport: #{user.passport || ''}
 
         .sidebar-bottom
             button#changePasswordBtn.sidebar-btn Change Password
-            button#dashboardBtn.sidebar-btn(type="button" data-role=user.role) Go to Dashboard
+            button#dashboardBtn.sidebar-btn(type="button" data-role=(user.role || '')) Go to Dashboard
             button#logoutBtn.sidebar-btn Log Out
 
     // RIGHT SIDE
@@ -28,13 +28,13 @@
             .profile-section#profileSection
                 h2 Profile Details
 
-                form#profileForm(method="POST" action=`/profile/update?token=${token}`)
+                form#profileForm(method="POST" action="/profile/update")
 
                     // FIRST NAME
                     .info-section.editable
                         label First Name
                         .input-edit
-                            input#editFirstName(type="text" name="first_name" value=user.first_name minlength="2" disabled)
+                            input#editFirstName(type="text" name="first_name" value=(user.first_name || '') minlength="2" disabled)
                             i.edit-icon.fa.fa-pen
                         ul#editFirstNameRules.rules.hidden
                             li Cannot leave empty
@@ -43,7 +43,7 @@
                     .info-section.editable
                         label Last Name
                         .input-edit
-                            input#editLastName(type="text" name="last_name" value=user.last_name minlength="2" disabled)
+                            input#editLastName(type="text" name="last_name" value=(user.last_name || '') minlength="2" disabled)
                             i.edit-icon.fa.fa-pen
                         ul#editLastNameRules.rules.hidden
                             li Cannot leave empty
@@ -52,7 +52,7 @@
                     .info-section.editable
                         label Telephone
                         .input-edit
-                            input#editTelephone(type="tel" name="telephone" value=user.telephone pattern="[0-9]{7,12}" disabled)
+                            input#editTelephone(type="tel" name="telephone" value=(user.telephone || '') pattern="[0-9]{7,12}" disabled)
                             i.edit-icon.fa.fa-pen
                         ul#editTelephoneRules.rules.hidden
                             li Enter 7–12 digits
@@ -61,7 +61,7 @@
                     .info-section.editable
                         label Address
                         .input-edit
-                            textarea#editAddress(name="address" minlength="5" disabled)= user.address
+                            textarea#editAddress(name="address" minlength="5" disabled)= (user.address || '')
                             i.edit-icon.fa.fa-pen
                         ul#editAddressRules.rules.hidden
                             li Cannot leave empty
@@ -74,11 +74,11 @@
                 span#backToProfileBtn.back-arrow ← Back
                 h2 Change Password
 
-                form#passwordForm(method="POST" action=`/profile/update?token=${token}`)
+                form#passwordForm(method="POST" action="/profile/update")
 
                     .info-section
                         label New Password
-                        input#password(type="password" name="password" )
+                        input#password(type="password" name="password")
                         ul#passwordRules.rules.hidden
                             li#ruleLength Minimum 8 characters
                             li#ruleUpper At least 1 uppercase letter

@@ -1,14 +1,20 @@
 console.log("traveller_booking.js loaded ✅");
-function getTokenPayload() {
-  const token = localStorage.getItem("token");
-  if (!token) return null;
 
+let currentUser = null;
+
+// ================= FETCH CURRENT USER (SESSION) =================
+async function fetchCurrentUser() {
   try {
-    const base64 = token.split('.')[1].replace(/-/g, '+').replace(/_/g, '/');
-    return JSON.parse(atob(base64));
+    const res = await fetch("/api/auth/me", { credentials: "include" });
+    if (!res.ok) throw new Error("Not authenticated");
+
+    currentUser = await res.json();
+    console.log("SESSION USER:", currentUser);
+
   } catch (err) {
-    console.error("Invalid token");
-    return null;
+    console.error("Session fetch failed:", err);
+    alert("Please log in.");
+    window.location.href = "/"; // redirect to login if not logged in
   }
 }
 
@@ -38,7 +44,11 @@ function updateSummary() {
   if (totalOut) totalOut.textContent = formatGBP(total);
 }
 
-document.addEventListener("DOMContentLoaded", () => {
+// ================= INIT =================
+document.addEventListener("DOMContentLoaded", async () => {
+  await fetchCurrentUser();
+  if (!currentUser) return; // if not logged in, fetchCurrentUser will redirect
+
   const peopleInput = document.getElementById("people");
   if (peopleInput) peopleInput.addEventListener("input", updateSummary);
   updateSummary();
@@ -49,13 +59,6 @@ document.addEventListener("DOMContentLoaded", () => {
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
 
-    const payload = getTokenPayload();
-    if (!payload) {
-      alert("Please log in again.");
-      window.location.href = "/";
-      return;
-    }
-
     const packageId = document.getElementById("packageId")?.value;
     const people = Number(document.getElementById("people")?.value) || 1;
     const notes = document.getElementById("notes")?.value || "";
@@ -63,13 +66,13 @@ document.addEventListener("DOMContentLoaded", () => {
     const total = people * pricePerPerson;
 
     const now = new Date();
-  const year = now.getFullYear();
-  const month = String(now.getMonth() + 1).padStart(2, "0"); // months are 0-indexed
-  const day = String(now.getDate()).padStart(2, "0");
-  const createdOn = `${year}-${month}-${day}`;
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, "0");
+    const day = String(now.getDate()).padStart(2, "0");
+    const createdOn = `${year}-${month}-${day}`;
 
     const booking = {
-      user_id: payload.user_id,
+      user_id: currentUser.user_id,  // ✅ set from session
       package_id: Number(packageId),
       packsize: people,
       additional_notes: notes,
@@ -82,17 +85,23 @@ document.addEventListener("DOMContentLoaded", () => {
       const res = await fetch("/bookings/createBooking", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
+        credentials: "include", // use session
         body: JSON.stringify(booking)
       });
 
-      const data = await res.json();
-      if (!res.ok || !data.success) {
-        console.error(data);
+      if (!res.ok) {
+        if (res.status === 401 || res.status === 403) {
+          alert("Session expired. Please log in again.");
+          window.location.href = "/";
+          return;
+        }
+        const errData = await res.json();
+        console.error(errData);
         alert("Failed to submit booking request.");
         return;
       }
 
-      // show success
+      const data = await res.json();
       document.getElementById("successBox").style.display = "block";
       form.style.display = "none";
 

@@ -10,11 +10,17 @@ html(lang="en")
     nav.top-nav
       .nav-left
         img.logo(src="/assets/logo.jpg" alt="Logo")
+
       .nav-right
-        span.profile-name Name
-        span.profile-role Role
+        span.profile-name
+        span.profile-role
+
         .profile-dropdown-container
-          img.profile-pic#profilePic(src="/assets/propics/profile_image.jpg" alt="Profile")
+          img.profile-pic#profilePic(
+            src="/assets/propics/profile_image.jpg"
+            alt="Profile"
+          )
+
           .dropdown-menu#dropdownMenu
             a#editProfileLink(href="#") Edit Profile
             a#signOutBtn(href="#") Sign Out

@@ -1,6 +1,4 @@
 const API_BOOKINGS = '/api/agent/bookings';
-const token = localStorage.getItem('token');
-const authHeaders = { Authorization: 'Bearer ' + token };
 
 const bookingModal          = document.getElementById('bookingModal');
 const closeBookingModalBtn  = document.getElementById('closeBookingModalBtn');
@@ -65,32 +63,38 @@ bookingModal.addEventListener('click', (e) => {
 
 /*  LOAD BOOKINGS  */
 async function loadBookings(page = 1) {
-    currentPage = page;
-    const res = await fetch(`${API_BOOKINGS}?page=${currentPage}&limit=${currentLimit}`, { headers: authHeaders });
-    const result = await res.json();
-    totalPages = result.totalPages;
+    try {
+        currentPage = page;
+        const res = await fetch(`${API_BOOKINGS}?page=${currentPage}&limit=${currentLimit}`, { credentials: 'include' });
+        if (!res.ok) throw new Error('Failed to fetch bookings');
 
-    bookingsBody.innerHTML = '';
-    result.data.forEach(b => {
-        bookingsMap[b.booking_id] = b;
-        const tr = document.createElement('tr');
-        const startDate = b.start_date ? new Date(b.start_date).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }) : '';
-        const endDate   = b.end_date   ? new Date(b.end_date).toLocaleDateString('en-GB',   { day: 'numeric', month: 'short', year: 'numeric' }) : '';
-        tr.innerHTML = `
-            <td>${b.trip_id}</td>
-            <td>${b.package_name}</td>
-            <td>${b.traveller}</td>
-            <td>${startDate} - ${endDate}</td>
-            <td class="status-${b.status ? b.status.toLowerCase() : ''}">${b.status}</td>
-            <td>
-                <button class="btn-view" onclick="openTripInfoModal(${b.booking_id})">View</button>
-                <button class="btn-edit" onclick="openBookingModal(${b.booking_id})">Update Status</button>
-            </td>
-        `;
-        bookingsBody.appendChild(tr);
-    });
+        const result = await res.json();
+        totalPages = result.totalPages;
 
-    renderPagination();
+        bookingsBody.innerHTML = '';
+        result.data.forEach(b => {
+            bookingsMap[b.booking_id] = b;
+            const tr = document.createElement('tr');
+            const startDate = b.start_date ? new Date(b.start_date).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }) : '';
+            const endDate   = b.end_date   ? new Date(b.end_date).toLocaleDateString('en-GB',   { day: 'numeric', month: 'short', year: 'numeric' }) : '';
+            tr.innerHTML = `
+                <td>${b.trip_id}</td>
+                <td>${b.package_name}</td>
+                <td>${b.traveller}</td>
+                <td>${startDate} - ${endDate}</td>
+                <td class="status-${b.status ? b.status.toLowerCase() : ''}">${b.status}</td>
+                <td>
+                    <button class="btn-view" onclick="openTripInfoModal(${b.booking_id})">View</button>
+                    <button class="btn-edit" onclick="openBookingModal(${b.booking_id})">Update Status</button>
+                </td>
+            `;
+            bookingsBody.appendChild(tr);
+        });
+
+        renderPagination();
+    } catch (err) {
+        console.error('Error loading bookings:', err);
+    }
 }
 
 /*  PAGINATION  */
@@ -124,16 +128,23 @@ updateStatusForm.addEventListener('submit', async (e) => {
     const id     = modalBookingId.value;
     const status = document.getElementById('status').value;
 
-    const res = await fetch(`${API_BOOKINGS}/${id}/status`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ status })
-    });
+    try {
+        const res = await fetch(`${API_BOOKINGS}/${id}/status`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ status }),
+            credentials: 'include'
+        });
 
-    const data = await res.json();
-    alert(data.message);
-    closeBookingModal();
-    loadBookings(currentPage);
+        if (!res.ok) throw new Error('Failed to update status');
+        const data = await res.json();
+        alert(data.message);
+        closeBookingModal();
+        loadBookings(currentPage);
+    } catch (err) {
+        console.error('Error updating booking status:', err);
+        alert('Could not update booking status');
+    }
 });
 
 loadBookings();
