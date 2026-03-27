@@ -1,6 +1,4 @@
 const API = '/api/agent/packages';
-const token = localStorage.getItem('token');
-const authHeaders = { Authorization: 'Bearer ' + token };
 
 //  ELEMENTS 
 const packageModal         = document.getElementById('packageModal');
@@ -46,14 +44,22 @@ startDateInput.addEventListener('change', () => {
 
 //  LOAD PACKAGES 
 async function loadPackages(page = 1) {
-    currentPage = page;
-    const res = await fetch(`${API}?page=${currentPage}&limit=${currentLimit}`, { headers: authHeaders });
-    const result = await res.json();
-    allPackages = result.data;
-    totalPages  = result.totalPages;
-    populateDestinationFilter(allPackages);
-    renderPackages(allPackages);
-    renderPagination();
+    try {
+        currentPage = page;
+        const res = await fetch(`${API}?page=${currentPage}&limit=${currentLimit}`, { credentials: 'include' });
+        if (!res.ok) throw new Error('Failed to load packages');
+
+        const result = await res.json();
+        allPackages = result.data;
+        totalPages  = result.totalPages;
+
+        populateDestinationFilter(allPackages);
+        renderPackages(allPackages);
+        renderPagination();
+    } catch (err) {
+        console.error('Error loading packages:', err);
+        alert('Could not load packages');
+    }
 }
 
 function populateDestinationFilter(packages) {
@@ -160,34 +166,46 @@ addItineraryBtn.addEventListener('click', () => addItineraryItem());
 
 //  EDIT 
 async function editPackage(id) {
-    const res = await fetch(`${API}/${id}`, { headers: authHeaders });
-    const pkg = await res.json();
+    try {
+        const res = await fetch(`${API}/${id}`, { credentials: 'include' });
+        if (!res.ok) throw new Error('Failed to fetch package');
+        const pkg = await res.json();
 
-    packageFormTitle.textContent = 'Edit Package';
-    packageIdInput.value    = pkg.package_id;
-    titleInput.value        = pkg.title;
-    destinationInput.value  = pkg.destination;
-    startDateInput.value    = pkg.start_date ? pkg.start_date.slice(0, 10) : '';
-    endDateInput.value      = pkg.end_date   ? pkg.end_date.slice(0, 10)   : '';
-    descriptionInput.value  = pkg.description;
-    priceInput.value        = pkg.price;
+        packageFormTitle.textContent = 'Edit Package';
+        packageIdInput.value    = pkg.package_id;
+        titleInput.value        = pkg.title;
+        destinationInput.value  = pkg.destination;
+        startDateInput.value    = pkg.start_date ? pkg.start_date.slice(0, 10) : '';
+        endDateInput.value      = pkg.end_date   ? pkg.end_date.slice(0, 10)   : '';
+        descriptionInput.value  = pkg.description;
+        priceInput.value        = pkg.price;
 
-    itineraryList.innerHTML = '';
-    if (pkg.itinerary_items && pkg.itinerary_items.length > 0) {
-        pkg.itinerary_items.forEach(item => addItineraryItem(item.title, item.description));
-    } else {
-        addItineraryItem();
+        itineraryList.innerHTML = '';
+        if (pkg.itinerary_items && pkg.itinerary_items.length > 0) {
+            pkg.itinerary_items.forEach(item => addItineraryItem(item.title, item.description));
+        } else {
+            addItineraryItem();
+        }
+
+        cancelEditBtn.style.display = 'inline-block';
+        openPackageModal();
+    } catch (err) {
+        console.error('Error fetching package:', err);
+        alert('Could not load package details');
     }
-
-    cancelEditBtn.style.display = 'inline-block';
-    openPackageModal();
 }
 
 //  DELETE 
 async function deletePackage(id) {
     if (!confirm('Delete this package?')) return;
-    await fetch(`${API}/${id}`, { method: 'DELETE', headers: authHeaders });
-    loadPackages(currentPage);
+    try {
+        const res = await fetch(`${API}/${id}`, { method: 'DELETE', credentials: 'include' });
+        if (!res.ok) throw new Error('Failed to delete package');
+        loadPackages(currentPage);
+    } catch (err) {
+        console.error('Error deleting package:', err);
+        alert('Could not delete package');
+    }
 }
 
 //  RESET 
@@ -220,10 +238,10 @@ packageForm.addEventListener('submit', async (e) => {
     const descs  = [...document.querySelectorAll('textarea[name="itinerary_description[]"]')].map(t => t.value);
     const itinerary_items = titles.map((t, i) => ({ title: t, description: descs[i] }));
     const now = new Date();
-  const year = now.getFullYear();
-  const month = String(now.getMonth() + 1).padStart(2, "0"); // months are 0-indexed
-  const day = String(now.getDate()).padStart(2, "0");
-  const createdOn = `${year}-${month}-${day}`;
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, "0");
+    const day = String(now.getDate()).padStart(2, "0");
+    const createdOn = `${year}-${month}-${day}`;
 
     const body = {
         title: titleInput.value,
@@ -240,11 +258,22 @@ packageForm.addEventListener('submit', async (e) => {
     const method = id ? 'PUT' : 'POST';
     const url    = id ? `${API}/${id}` : API;
 
-    const res  = await fetch(url, { method, headers: { 'Content-Type': 'application/json', ...authHeaders }, body: JSON.stringify(body) });
-    const data = await res.json();
-    alert(data.message);
-    closePackageModal();
-    loadPackages(currentPage);
+    try {
+        const res = await fetch(url, {
+            method,
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(body),
+            credentials: 'include'
+        });
+        if (!res.ok) throw new Error('Failed to save package');
+        const data = await res.json();
+        alert(data.message);
+        closePackageModal();
+        loadPackages(currentPage);
+    } catch (err) {
+        console.error('Error saving package:', err);
+        alert('Could not save package');
+    }
 });
 
 loadPackages();

@@ -1,163 +1,70 @@
-const db = require("../config/db");
+// controllers/adminController.js
+const adminModel = require('../models/adminModel');
 
 // DASHBOARD STATS
 exports.getDashboardStats = async (req, res) => {
-
     try {
-
-        const [rows] = await db.query(`
-            SELECT
-            (SELECT COUNT(*) FROM packages) AS packages,
-            (SELECT COUNT(*) FROM bookings) AS bookings,
-            (SELECT COUNT(*) FROM users WHERE role='TRAVEL_AGENT') AS travel_agents,
-            (SELECT COUNT(*) FROM users WHERE role='TRAVELLER') AS travellers
-        `);
-
-        res.json(rows[0]);
-
+        const stats = await adminModel.getDashboardStats();
+        res.json(stats);
     } catch (err) {
-
         console.error(err);
-        res.status(500).json({error:"Database error"});
-
+        res.status(500).json({ error: "Database error" });
     }
 };
-
-
 
 // GET ALL USERS
-exports.getAllUsers = async (req,res)=>{
-
-    try{
-
-        const [rows] = await db.query(`
-            SELECT user_id,email,role,first_name,last_name,
-                   passport,address,telephone
-            FROM users
-        `);
-
-        res.json(rows);
-
-    }catch(err){
-
+exports.getAllUsers = async (req, res) => {
+    try {
+        const users = await adminModel.getAllUsers();
+        res.json(users);
+    } catch (err) {
         console.error(err);
-        res.status(500).json({error:"Database error"});
-
+        res.status(500).json({ error: "Database error" });
     }
-
 };
-
-
 
 // GET ALL BOOKINGS
-exports.getAllBookings = async (req,res)=>{
-
-    try{
-
-        const [rows] = await db.query(`
-            SELECT 
-                b.booking_id,
-                u.first_name,
-                u.last_name,
-                p.title AS package_title,
-                b.packsize,
-                b.total_price,
-                b.status
-            FROM bookings b
-            JOIN users u ON b.user_id = u.user_id
-            JOIN packages p ON b.package_id = p.package_id
-        `);
-
-        res.json(rows);
-
-    }catch(err){
-
+exports.getAllBookings = async (req, res) => {
+    try {
+        const bookings = await adminModel.getAllBookings();
+        res.json(bookings);
+    } catch (err) {
         console.error(err);
-        res.status(500).json({error:"Database error"});
-
+        res.status(500).json({ error: "Database error" });
     }
-
 };
 
-
-
 // GET ALL PACKAGES
-exports.getAllPackages = async (req,res)=>{
-
-    try{
-
-        const [rows] = await db.query(`
-            SELECT 
-                p.package_id,
-                p.title,
-                p.destination,
-                p.description,
-                p.price,
-                u.first_name AS agent_first_name,
-                u.last_name AS agent_last_name
-            FROM packages p
-            JOIN users u ON p.user_id = u.user_id
-        `);
-
-        res.json(rows);
-
-    }catch(err){
-
+exports.getAllPackages = async (req, res) => {
+    try {
+        const packages = await adminModel.getAllPackages();
+        res.json(packages);
+    } catch (err) {
         console.error(err);
-        res.status(500).json({error:"Database error"});
-
+        res.status(500).json({ error: "Database error" });
     }
-
 };
 
 // PACKAGE SUMMARY BY DAY
 exports.getPackageSummary = async (req, res) => {
-
-    const {month, year} = req.query;
-
+    const { month, year } = req.query;
     try {
-
-        const [rows] = await db.query(`
-            SELECT DAY(created_on) as day, COUNT(*) as count
-            FROM packages
-            WHERE MONTH(created_on)=? AND YEAR(created_on)=?
-            GROUP BY DAY(created_on)
-            ORDER BY day
-        `,[month,year]);
-
-        res.json(rows);
-
-    } catch(err) {
-
+        const summary = await adminModel.getPackageSummary(month, year);
+        res.json(summary);
+    } catch (err) {
         console.error(err);
-        res.status(500).json({error:"Database error"});
-
+        res.status(500).json({ error: "Database error" });
     }
 };
 
-
-
 // BOOKING SUMMARY BY DAY
 exports.getBookingSummary = async (req, res) => {
-
-    const {month, year} = req.query;
-
+    const { month, year } = req.query;
     try {
-
-        const [rows] = await db.query(`
-            SELECT DAY(created_on) as day, COUNT(*) as count
-            FROM bookings
-            WHERE MONTH(created_on)=? AND YEAR(created_on)=?
-            GROUP BY DAY(created_on)
-            ORDER BY day
-        `,[month,year]);
-
-        res.json(rows);
-
-    } catch(err) {
-
+        const summary = await adminModel.getBookingSummary(month, year);
+        res.json(summary);
+    } catch (err) {
         console.error(err);
-        res.status(500).json({error:"Database error"});
-
+        res.status(500).json({ error: "Database error" });
     }
 };

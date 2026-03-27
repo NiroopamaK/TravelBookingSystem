@@ -1,63 +1,118 @@
-const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
-const db = require('../config/db');
-const { createUser, findUserByEmail } = require('../models/userModel');
+const {
+  registerUser,
+  loginUser,
+  resetUserPassword
+} = require('../services/authService');
 
+// REGISTER
 const register = async (req, res) => {
-  console.log('Incoming signup request body:', req.body);
   try {
-    const {  email, role, first_name, last_name, passport, address, telephone, password  } = req.body;
-    const hashedPassword = await bcrypt.hash(password, 10);
+    const result = await registerUser(req.body);
 
-    const result = await createUser({  email, role, first_name, last_name, passport, address, telephone, password : hashedPassword });
-    res.json({ message: 'User registered', userId: result.insertId });
+    res.json({
+      message: 'User registered',
+      userId: result.insertId
+    });
+
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
 };
 
+// LOGIN
 const login = async (req, res) => {
   try {
-    const { email, password } = req.body; // renamed
-    const user = await findUserByEmail(email);
-    if (!user) return res.status(404).json({ message: 'User not found' });
+    const { email, password } = req.body;
 
-    const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) return res.status(401).json({ message: 'Invalid credentials' });
+    const { user, token } = await loginUser(email, password);
 
-    const token = jwt.sign({ user_id: user.user_id, role: user.role, first_name : user.first_name }, process.env.JWT_SECRET, { expiresIn: "1h" });
-    res.json({ token });
+    // ✅ STORE SESSION (NEW)
+    req.session.user = user;
+    console.log("SESSION AFTER LOGIN:", req.session);
+
+    // DELETE LATER (JWT START)
+    res.json({
+      message: "Login successful",
+      token
+    });
+    // DELETE LATER (JWT END)
+
+    // ✅ FINAL VERSION WILL BE:
+    // res.json({ message: "Login successful" });
+
   } catch (err) {
+    if (err.message === 'User not found') {
+      return res.status(404).json({ message: err.message });
+    }
+
+    if (err.message === 'Invalid credentials') {
+      return res.status(401).json({ message: err.message });
+    }
+
     res.status(500).json({ message: err.message });
   }
 };
 
-async function resetPassword(req, res) {
+// RESET PASSWORD
+const resetPassword = async (req, res) => {
   const { email, password } = req.body;
 
   if (!email || !password) {
-    return res.status(400).json({ success: false, message: 'Email and password are required' });
+    return res.status(400).json({
+      success: false,
+      message: 'Email and password are required'
+    });
   }
 
   try {
-    // Check if user exists
-    const [users] = await db.query('SELECT * FROM users WHERE email = ?', [email]);
+    await resetUserPassword(email, password);
 
-    if (users.length === 0) {
-      return res.status(404).json({ success: false, message: 'User not found' });
+    res.json({
+      success: true,
+      message: 'Password reset successful'
+    });
+
+  } catch (err) {
+    if (err.message === 'User not found') {
+      return res.status(404).json({
+        success: false,
+        message: err.message
+      });
     }
 
-    // Hash new password
-    const hashedPassword = await bcrypt.hash(password, 10);
-
-    // Update password
-    await db.query('UPDATE users SET password = ? WHERE email = ?', [hashedPassword, email]);
-
-    return res.json({ success: true, message: 'Password reset successful' });
-  } catch (err) {
-    console.error(err);
-    return res.status(500).json({ success: false, message: 'Failed to reset password', error: err.message });
+    res.status(500).json({
+      success: false,
+      message: 'Failed to reset password',
+      error: err.message
+    });
   }
-}
+};
 
-module.exports = { register, login , resetPassword};
+// ✅ GET CURRENT USER (SESSION)
+const getCurrentUser = (req, res) => {
+  if (req.session && req.session.user) {
+    //console.log("Returning session user:", req.session.user);
+    res.json(req.session.user); // ✅ send user to frontend
+  } else {
+    res.status(401).json({ message: "Not authenticated" });
+  }
+};
+
+// ✅ LOGOUT
+const logout = (req, res) => {
+  req.session.destroy(err => {
+    if (err) {
+      return res.status(500).json({ message: "Logout failed" });
+    }
+
+    res.json({ message: "Logged out successfully" });
+  });
+};
+
+module.exports = {
+  register,
+  login,
+  resetPassword,
+  getCurrentUser,
+  logout
+};

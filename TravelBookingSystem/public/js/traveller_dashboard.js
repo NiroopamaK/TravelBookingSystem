@@ -1,16 +1,27 @@
-function getTokenPayload() {
-  const token = localStorage.getItem("token");
-  if (!token) return null;
+// traveller_dashboard.js
+console.log("traveller_dashboard.js loaded ✅");
 
+// ================= GLOBALS =================
+let currentUser = null;
+
+// ================= FETCH USER FROM SESSION =================
+async function fetchCurrentUser() {
+  console.log("Fetching current user from session...");
   try {
-    const base64 = token.split('.')[1].replace(/-/g, '+').replace(/_/g, '/');
-    return JSON.parse(atob(base64));
+    const res = await fetch("/api/auth/me", { credentials: "include" });
+    if (!res.ok) throw new Error("Not authenticated");
+
+    currentUser = await res.json();
+    console.log("CURRENT USER:", currentUser);
+
   } catch (err) {
-    console.error("Invalid token");
-    return null;
+    console.error("User fetch failed:", err);
+    alert("Please log in.");
+    window.location.href = "/"; // redirect if not logged in
   }
 }
 
+// ================= HELPERS =================
 function pillClass(status) {
   const s = String(status || "").toUpperCase();
   if (s === "CONFIRMED" || s === "ACTIVE") return "pill pill-active";
@@ -35,6 +46,8 @@ function renderStats(bookings) {
   const active = upper.filter(s => s === "CONFIRMED" || s === "ACTIVE").length;
   const completed = upper.filter(s => s === "COMPLETED").length;
 
+  console.log("Stats - Upcoming:", upcoming, "Active:", active, "Completed:", completed);
+
   if (upcomingEl) upcomingEl.textContent = String(upcoming);
   if (activeEl) activeEl.textContent = String(active);
   if (completedEl) completedEl.textContent = String(completed);
@@ -50,6 +63,7 @@ function renderTable(bookings) {
         <td colspan="4" style="padding:16px;">No bookings yet.</td>
       </tr>
     `;
+    console.log("No bookings to display.");
     return;
   }
 
@@ -57,32 +71,39 @@ function renderTable(bookings) {
     const pkg = b.title || `Package #${b.package_id}`;
     const dest = b.destination || "-";
     const status = b.status || "PENDING";
-
     const viewLink = `/traveller/booking/${b.package_id}`;
 
     return `
-        <tr>
-            <td>${escapeHtml(pkg)}</td>
-            <td>${escapeHtml(dest)}</td>
-            <td><span class="${pillClass(status)}">${escapeHtml(status)}</span></td>
-            <td class="table-right">
-                <a class="btn" href="${viewLink}">View</a>
-            </td>
-        </tr>
+      <tr>
+        <td>${escapeHtml(pkg)}</td>
+        <td>${escapeHtml(dest)}</td>
+        <td><span class="${pillClass(status)}">${escapeHtml(status)}</span></td>
+        <td class="table-right">
+          <a class="btn" href="${viewLink}">View</a>
+        </td>
+      </tr>
     `;
   }).join("");
+
+  console.log("Bookings table rendered:", bookings.length, "rows");
 }
 
+// ================= LOAD BOOKINGS =================
 async function loadBookings() {
-  const payload = getTokenPayload();
-  if (!payload) {
-    console.log("No token found");
+  if (!currentUser) {
+    console.log("No current user, cannot load bookings");
     return;
   }
 
+  console.log("Loading bookings for user_id:", currentUser.user_id);
+
   try {
-    const res = await fetch(`/bookings/getBookingsByUser/${payload.user_id}`);
+    const res = await fetch(`/bookings/getBookingsByUser/${currentUser.user_id}`, {
+      credentials: "include"
+    });
     const json = await res.json();
+
+    console.log("Bookings API response:", json);
 
     if (!res.ok || !json.success) {
       console.error("Bookings API error:", json);
@@ -90,7 +111,7 @@ async function loadBookings() {
     }
 
     const bookings = json.data || [];
-    console.log("Bookings:", bookings);
+    console.log("Bookings loaded:", bookings);
 
     renderStats(bookings);
     renderTable(bookings);
@@ -100,4 +121,13 @@ async function loadBookings() {
   }
 }
 
-document.addEventListener("DOMContentLoaded", loadBookings);
+// ================= INIT =================
+(async function init() {
+  console.log("traveller_dashboard.js INIT");
+
+  await fetchCurrentUser(); // 🔥 MUST fetch session first
+  if (!currentUser) return; // redirect happens inside fetchCurrentUser
+
+  console.log("Session user fetched, now loading bookings...");
+  await loadBookings();
+})();
