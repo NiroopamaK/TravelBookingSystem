@@ -1,4 +1,4 @@
-/* ===== RESET ===== */
+/*  RESET  */
 * {
   margin: 0;
   padding: 0;
@@ -13,7 +13,7 @@ body {
   flex-direction: column;
 }
 
-/* ===== TOP NAVBAR ===== */
+/*  TOP NAVBAR  */
 .top-nav {
   display: flex;
   justify-content: space-between;
@@ -56,7 +56,7 @@ body {
   border: 2px solid #F5DEB3;
 }
 
-/* ===== DROPDOWN ===== */
+/*  DROPDOWN  */
 .profile-dropdown-container {
   position: relative;
 }
@@ -86,14 +86,14 @@ body {
   background-color: #D2B48C;
 }
 
-/* ===== DASHBOARD LAYOUT ===== */
+/*  DASHBOARD LAYOUT  */
 .dashboard-wrapper {
   display: flex;
   flex: 1;
   overflow: hidden;
 }
 
-/* ===== SIDEBAR ===== */
+/*  SIDEBAR  */
 #sidebar {
   width: 220px;
   background: #EADDCA;
@@ -130,7 +130,7 @@ body {
   display: block;
 }
 
-/* ===== MAIN CONTENT ===== */
+/*  MAIN CONTENT  */
 .dashboard-content {
   flex: 1;
   padding: 30px;
@@ -155,7 +155,7 @@ body {
   margin: 16px 0 8px;
 }
 
-/* ===== FORMS ===== */
+/*  FORMS  */
 form {
   background: white;
   padding: 24px;
@@ -203,7 +203,7 @@ textarea {
   min-height: 80px;
 }
 
-/* ===== ITINERARY ITEMS ===== */
+/*  ITINERARY ITEMS  */
 .itinerary-item {
   border: 1px solid #EADDCA;
   border-radius: 6px;
@@ -214,7 +214,7 @@ textarea {
   gap: 8px;
 }
 
-/* ===== BUTTONS ===== */
+/*  BUTTONS  */
 .submit-btn {
   padding: 10px 20px;
   border: none;
@@ -267,7 +267,7 @@ textarea {
   background: #EADDCA;
 }
 
-/* ===== TABLES ===== */
+/*  TABLES  */
 table {
   width: 100%;
   border-collapse: collapse;
@@ -339,7 +339,7 @@ tbody td {
 .status-completed  { color: #2b6cb0; font-weight: bold; }
 .status-cancelled  { color: #c0392b; font-weight: bold; }
 
-/* ===== MODALS ===== */
+/*  MODALS  */
 .modal-overlay {
   display: none;
   position: fixed;
@@ -409,7 +409,7 @@ tbody td {
   background-color: #70452a;
 }
 
-/* ===== STATS CARDS ===== */
+/*  STATS CARDS  */
 .stats-container {
   display: flex;
   gap: 20px;
@@ -438,7 +438,7 @@ tbody td {
   color: #8b5e3c;
 }
 
-/* ===== PACKAGES PAGE HEADER ===== */
+/*  PACKAGES PAGE HEADER  */
 .packages-header {
   display: flex;
   justify-content: space-between;
@@ -476,7 +476,7 @@ tbody td {
   border: 2px solid #EADDCA;
 }
 
-/* ===== PACKAGES CONTROLS ===== */
+/*  PACKAGES CONTROLS  */
 .packages-controls {
   display: flex;
   gap: 12px;
@@ -522,7 +522,7 @@ input[type="text"].search-input {
   background-color: #3d2510;
 }
 
-/* ===== PAGINATION ===== */
+/*  PAGINATION  */
 .pagination {
   display: flex;
   justify-content: space-between;
@@ -594,7 +594,7 @@ input[type="text"].search-input {
   cursor: pointer;
 }
 
-/* ===== VIEW BUTTON ===== */
+/*  VIEW BUTTON  */
 .btn-view {
   padding: 5px 14px;
   border: none;
@@ -611,7 +611,7 @@ input[type="text"].search-input {
   color: #5a381e;
 }
 
-/* ===== TRIP DETAIL MODAL ===== */
+/*  TRIP DETAIL MODAL  */
 .trip-status-badge {
   display: inline-block;
   background-color: #5a381e;
@@ -651,7 +651,7 @@ input[type="text"].search-input {
   color: #5a381e;
 }
 
-/* ===== TRIP INFO MODAL ===== */
+/*  TRIP INFO MODAL  */
 .btn-view {
   padding: 5px 12px;
   border: none;

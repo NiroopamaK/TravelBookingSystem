@@ -70,7 +70,9 @@ body {
   background: #f1f5f9;
   overflow-y: auto;
   box-sizing: border-box;
-}/* ===== RESET ===== */
+}
+
+/*  RESET  */
 body {
     margin: 0;
     font-family: Arial, sans-serif;
@@ -79,7 +81,7 @@ body {
     flex-direction: column;
 }
 
-/* ===== TOP NAVBAR ===== */
+/*  TOP NAVBAR  */
 .top-nav {
     display: flex;
     justify-content: space-between;
@@ -158,7 +160,7 @@ body {
     background-color: #D2B48C;
 }
 
-/* ===== DASHBOARD LAYOUT ===== */
+/*  DASHBOARD LAYOUT  */
 .dashboard-wrapper {
     display: flex;
     flex: 1;

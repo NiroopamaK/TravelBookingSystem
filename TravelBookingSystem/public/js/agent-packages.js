@@ -2,7 +2,7 @@ const API = '/api/agent/packages';
 const token = localStorage.getItem('token');
 const authHeaders = { Authorization: 'Bearer ' + token };
 
-// ===== ELEMENTS =====
+//  ELEMENTS 
 const packageModal         = document.getElementById('packageModal');
 const openPackageModalBtn  = document.getElementById('openPackageModalBtn');
 const closePackageModalBtn = document.getElementById('closePackageModalBtn');
@@ -44,7 +44,7 @@ startDateInput.addEventListener('change', () => {
     }
 });
 
-// ===== LOAD PACKAGES =====
+//  LOAD PACKAGES 
 async function loadPackages(page = 1) {
     currentPage = page;
     const res = await fetch(`${API}?page=${currentPage}&limit=${currentLimit}`, { headers: authHeaders });
@@ -89,7 +89,7 @@ function renderPackages(packages) {
     });
 }
 
-// ===== SEARCH & FILTER =====
+//  SEARCH & FILTER 
 function applyFilters() {
     const query       = searchInput.value.toLowerCase();
     const destination = filterDropdown.value;
@@ -106,7 +106,7 @@ function applyFilters() {
 searchInput.addEventListener('input', applyFilters);
 filterDropdown.addEventListener('change', applyFilters);
 
-// ===== PAGINATION =====
+//  PAGINATION 
 function renderPagination() {
     const container = document.getElementById('packagesPagination');
     if (!container) return;
@@ -131,7 +131,7 @@ function changePackageLimit(val) {
     loadPackages(1);
 }
 
-// ===== MODAL =====
+//  MODAL 
 function openPackageModal() { packageModal.classList.add('active'); }
 function closePackageModal() { packageModal.classList.remove('active'); resetForm(); }
 
@@ -144,7 +144,7 @@ openPackageModalBtn.addEventListener('click', () => {
 closePackageModalBtn.addEventListener('click', closePackageModal);
 packageModal.addEventListener('click', (e) => { if (e.target === packageModal) closePackageModal(); });
 
-// ===== ITINERARY =====
+//  ITINERARY 
 function addItineraryItem(title = '', desc = '') {
     const div = document.createElement('div');
     div.className = 'itinerary-item';
@@ -158,7 +158,7 @@ function addItineraryItem(title = '', desc = '') {
 
 addItineraryBtn.addEventListener('click', () => addItineraryItem());
 
-// ===== EDIT =====
+//  EDIT 
 async function editPackage(id) {
     const res = await fetch(`${API}/${id}`, { headers: authHeaders });
     const pkg = await res.json();
@@ -183,14 +183,14 @@ async function editPackage(id) {
     openPackageModal();
 }
 
-// ===== DELETE =====
+//  DELETE 
 async function deletePackage(id) {
     if (!confirm('Delete this package?')) return;
     await fetch(`${API}/${id}`, { method: 'DELETE', headers: authHeaders });
     loadPackages(currentPage);
 }
 
-// ===== RESET =====
+//  RESET 
 function resetForm() {
     packageForm.reset();
     packageIdInput.value = '';
@@ -202,7 +202,7 @@ function resetForm() {
 
 cancelEditBtn.addEventListener('click', resetForm);
 
-// ===== SUBMIT =====
+//  SUBMIT 
 packageForm.addEventListener('submit', async (e) => {
     e.preventDefault();
 
