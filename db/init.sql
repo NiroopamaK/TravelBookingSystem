@@ -69,6 +69,7 @@ CREATE TABLE bookings (
         ON UPDATE CASCADE
 ) ENGINE=InnoDB;
 
+ALTER TABLE users ADD profile_picture VARCHAR(255);
 
 -- USERS
 INSERT INTO users (email, role, first_name, last_name, passport, address, telephone, password) VALUES
