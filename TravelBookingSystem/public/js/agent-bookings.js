@@ -17,7 +17,7 @@ let currentLimit = 5;
 let totalPages   = 1;
 const bookingsMap = {};
 
-/* ===== TRIP INFO MODAL ===== */
+/*  TRIP INFO MODAL  */
 function openTripInfoModal(bookingId) {
     const booking = bookingsMap[bookingId];
     if (!booking) return;
@@ -45,7 +45,7 @@ tripInfoModal.addEventListener('click', (e) => {
     if (e.target === tripInfoModal) closeTripInfoModal();
 });
 
-/* ===== BOOKING STATUS MODAL ===== */
+/*  BOOKING STATUS MODAL  */
 function openBookingModal(id) {
     modalBookingId.value = id;
     modalBookingIdDisplay.textContent = id;
@@ -63,7 +63,7 @@ bookingModal.addEventListener('click', (e) => {
     if (e.target === bookingModal) closeBookingModal();
 });
 
-/* ===== LOAD BOOKINGS ===== */
+/*  LOAD BOOKINGS  */
 async function loadBookings(page = 1) {
     currentPage = page;
     const res = await fetch(`${API_BOOKINGS}?page=${currentPage}&limit=${currentLimit}`, { headers: authHeaders });
@@ -93,7 +93,7 @@ async function loadBookings(page = 1) {
     renderPagination();
 }
 
-/* ===== PAGINATION ===== */
+/*  PAGINATION  */
 function renderPagination() {
     const container = document.getElementById('bookingsPagination');
     if (!container) return;
@@ -118,7 +118,7 @@ function changeBookingLimit(val) {
     loadBookings(1);
 }
 
-/* ===== SUBMIT ===== */
+/*  SUBMIT  */
 updateStatusForm.addEventListener('submit', async (e) => {
     e.preventDefault();
     const id     = modalBookingId.value;
