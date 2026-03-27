@@ -4,26 +4,6 @@ const db = require('../config/db');
 
 const jwt = require('jsonwebtoken');
 
-const getAgentProfile = async (req, res) => {
-    try {
-        const authHeader = req.headers.authorization;
-        if (!authHeader) return res.status(401).json({ message: 'Unauthorized' });
-
-        const token = authHeader.split(' ')[1];
-        const decoded = jwt.verify(token, process.env.JWT_SECRET);
-
-        const [rows] = await db.query(
-            'SELECT user_id, first_name, last_name, email, passport, address, telephone FROM users WHERE user_id = ?',
-            [decoded.user_id]
-        );
-
-        if (rows.length === 0) return res.status(404).json({ message: 'Agent not found' });
-
-        res.json(rows[0]);
-    } catch (error) {
-        res.status(500).json({ message: error.message });
-    }
-};
 
 // PACKAGES 
 
@@ -164,6 +144,7 @@ const getAllBookings = async (req, res) => {
                 CONCAT(u.first_name, ' ', u.last_name) AS traveller,
                 p.start_date,
                 p.end_date,
+                b.total_price AS cost,
                 b.status
             FROM bookings b
             JOIN users u ON b.user_id = u.user_id
@@ -277,7 +258,7 @@ const getDashboardStats = async (req, res) => {
 
 
 module.exports = {
-    getAgentProfile,
+    
     getAllPackages,
     getPackageById,
     createPackage,

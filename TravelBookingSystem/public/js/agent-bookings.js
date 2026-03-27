@@ -9,11 +9,43 @@ const modalBookingId        = document.getElementById('modalBookingId');
 const modalBookingIdDisplay = document.getElementById('modalBookingIdDisplay');
 const bookingsBody          = document.getElementById('bookingsBody');
 
+const tripInfoModal         = document.getElementById('tripInfoModal');
+const closeTripInfoModalBtn = document.getElementById('closeTripInfoModalBtn');
+
 let currentPage  = 1;
 let currentLimit = 5;
 let totalPages   = 1;
+const bookingsMap = {};
 
-/* ===== MODAL ===== */
+/* ===== TRIP INFO MODAL ===== */
+function openTripInfoModal(bookingId) {
+    const booking = bookingsMap[bookingId];
+    if (!booking) return;
+    document.getElementById('tripInfoId').textContent   = 'Trip: ' + booking.trip_id;
+    document.getElementById('tripInfoName').textContent = booking.package_name;
+
+    const statusEl = document.getElementById('tripInfoStatus');
+    statusEl.textContent  = booking.status;
+    statusEl.className    = 'trip-status-badge status-' + (booking.status ? booking.status.toLowerCase() : '');
+
+    const fmt = d => d ? new Date(d).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' }).toUpperCase() : '-';
+    document.getElementById('tripInfoStartDate').textContent = fmt(booking.start_date);
+    document.getElementById('tripInfoEndDate').textContent   = fmt(booking.end_date);
+    document.getElementById('tripInfoCost').textContent      = booking.cost != null ? '£' + Number(booking.cost).toLocaleString('en-GB', { minimumFractionDigits: 0 }) : '-';
+
+    tripInfoModal.classList.add('active');
+}
+
+function closeTripInfoModal() {
+    tripInfoModal.classList.remove('active');
+}
+
+closeTripInfoModalBtn.addEventListener('click', closeTripInfoModal);
+tripInfoModal.addEventListener('click', (e) => {
+    if (e.target === tripInfoModal) closeTripInfoModal();
+});
+
+/* ===== BOOKING STATUS MODAL ===== */
 function openBookingModal(id) {
     modalBookingId.value = id;
     modalBookingIdDisplay.textContent = id;
@@ -40,6 +72,7 @@ async function loadBookings(page = 1) {
 
     bookingsBody.innerHTML = '';
     result.data.forEach(b => {
+        bookingsMap[b.booking_id] = b;
         const tr = document.createElement('tr');
         const startDate = b.start_date ? new Date(b.start_date).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }) : '';
         const endDate   = b.end_date   ? new Date(b.end_date).toLocaleDateString('en-GB',   { day: 'numeric', month: 'short', year: 'numeric' }) : '';
@@ -50,6 +83,7 @@ async function loadBookings(page = 1) {
             <td>${startDate} - ${endDate}</td>
             <td class="status-${b.status ? b.status.toLowerCase() : ''}">${b.status}</td>
             <td>
+                <button class="btn-view" onclick="openTripInfoModal(${b.booking_id})">View</button>
                 <button class="btn-edit" onclick="openBookingModal(${b.booking_id})">Update Status</button>
             </td>
         `;
