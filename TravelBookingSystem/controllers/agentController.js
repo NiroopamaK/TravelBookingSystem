@@ -3,27 +3,20 @@ const db = require('../config/db');
 // ================= PACKAGES =================
 const getAllPackages = async (req, res) => {
     try {
-        const userId = req.session.user?.user_id;
-        console.log('getAllPackages | session userId:', userId);
-        if (!userId) return res.status(401).json({ message: 'Unauthorized' });
-
-        const page  = Math.max(1, parseInt(req.query.page)  || 1);
-        const limit = Math.max(1, parseInt(req.query.limit) || 10);
+        const userId = req.user.user_id;
+        const page   = Math.max(1, parseInt(req.query.page)  || 1);
+        const limit  = Math.max(1, parseInt(req.query.limit) || 10);
         const offset = (page - 1) * limit;
-
-        console.log(`getAllPackages | page: ${page}, limit: ${limit}, offset: ${offset}`);
 
         const [[{ total }]] = await db.query(
             'SELECT COUNT(*) AS total FROM packages WHERE user_id = ?',
             [userId]
         );
-        console.log('getAllPackages | total packages:', total);
 
         const [rows] = await db.query(
             'SELECT * FROM packages WHERE user_id = ? LIMIT ? OFFSET ?',
             [userId, limit, offset]
         );
-        console.log('getAllPackages | rows fetched:', rows.length);
 
         res.json({ data: rows, total, page, limit, totalPages: Math.ceil(total / limit) });
     } catch (error) {
@@ -34,12 +27,10 @@ const getAllPackages = async (req, res) => {
 
 const getPackageById = async (req, res) => {
     try {
-        console.log('getPackageById | package_id:', req.params.id);
         const [rows] = await db.query('SELECT * FROM packages WHERE package_id = ?', [req.params.id]);
         if (rows.length === 0) return res.status(404).json({ message: 'Package not found' });
 
         const [items] = await db.query('SELECT * FROM itinerary_items WHERE package_id = ?', [req.params.id]);
-        console.log('getPackageById | itinerary items:', items.length);
 
         res.json({ ...rows[0], itinerary_items: items });
     } catch (error) {
@@ -50,18 +41,13 @@ const getPackageById = async (req, res) => {
 
 const createPackage = async (req, res) => {
     try {
-        const userId = req.session.user?.user_id;
-        console.log('createPackage | session userId:', userId);
-        if (!userId) return res.status(401).json({ message: 'Unauthorized' });
-
+        const userId = req.user.user_id;
         const { title, destination, start_date, end_date, description, created_on, price, itinerary_items } = req.body;
-        console.log('createPackage | payload:', req.body);
 
         const [result] = await db.query(
             'INSERT INTO packages (user_id, title, destination, start_date, end_date, description, created_on, price) VALUES (?,?,?,?,?,?,?,?)',
             [userId, title, destination, start_date, end_date, description, created_on, price]
         );
-        console.log('createPackage | insert result:', result);
 
         const package_id = result.insertId;
         if (itinerary_items && itinerary_items.length > 0) {
@@ -71,7 +57,6 @@ const createPackage = async (req, res) => {
                     [item.title, item.description, package_id]
                 );
             }
-            console.log('createPackage | inserted itinerary items count:', itinerary_items.length);
         }
 
         res.status(201).json({ message: 'Package created successfully', package_id });
@@ -83,7 +68,6 @@ const createPackage = async (req, res) => {
 
 const updatePackage = async (req, res) => {
     try {
-        console.log('updatePackage | package_id:', req.params.id, 'payload:', req.body);
         const { title, destination, start_date, end_date, description, price, itinerary_items } = req.body;
 
         await db.query(
@@ -101,7 +85,6 @@ const updatePackage = async (req, res) => {
             }
         }
 
-        console.log('updatePackage | updated successfully');
         res.json({ message: 'Package updated successfully' });
     } catch (error) {
         console.error('updatePackage error:', error);
@@ -111,9 +94,7 @@ const updatePackage = async (req, res) => {
 
 const deletePackage = async (req, res) => {
     try {
-        console.log('deletePackage | package_id:', req.params.id);
         await db.query('DELETE FROM packages WHERE package_id = ?', [req.params.id]);
-        console.log('deletePackage | deleted successfully');
         res.json({ message: 'Package deleted successfully' });
     } catch (error) {
         console.error('deletePackage error:', error);
@@ -124,22 +105,40 @@ const deletePackage = async (req, res) => {
 // ================= BOOKINGS =================
 const getAllBookings = async (req, res) => {
     try {
-        const userId = req.session.user?.user_id;
-        console.log('getAllBookings | session userId:', userId);
-        if (!userId) return res.status(401).json({ message: 'Unauthorized' });
-
-        const page  = Math.max(1, parseInt(req.query.page)  || 1);
-        const limit = Math.max(1, parseInt(req.query.limit) || 10);
+        const userId = req.user.user_id;
+        const page   = Math.max(1, parseInt(req.query.page)  || 1);
+        const limit  = Math.max(1, parseInt(req.query.limit) || 10);
         const offset = (page - 1) * limit;
-        console.log(`getAllBookings | page: ${page}, limit: ${limit}, offset: ${offset}`);
+
+        const filterTraveller = req.query.traveller || '';
+        const filterPackage   = req.query.package   || '';
+        const filterStatus    = req.query.status    || '';
+
+        const filterConditions = ['p.user_id = ?'];
+        const filterParams     = [userId];
+
+        if (filterTraveller) {
+            filterConditions.push("CONCAT(u.first_name, ' ', u.last_name) LIKE ?");
+            filterParams.push(`%${filterTraveller}%`);
+        }
+        if (filterPackage) {
+            filterConditions.push('p.title LIKE ?');
+            filterParams.push(`%${filterPackage}%`);
+        }
+        if (filterStatus) {
+            filterConditions.push('b.status = ?');
+            filterParams.push(filterStatus);
+        }
+
+        const whereClause = filterConditions.join(' AND ');
 
         const [[{ total }]] = await db.query(`
             SELECT COUNT(*) AS total
             FROM bookings b
+            JOIN users u ON b.user_id = u.user_id
             JOIN packages p ON b.package_id = p.package_id
-            WHERE p.user_id = ?
-        `, [userId]);
-        console.log('getAllBookings | total bookings:', total);
+            WHERE ${whereClause}
+        `, filterParams);
 
         const [rows] = await db.query(`
             SELECT
@@ -154,10 +153,9 @@ const getAllBookings = async (req, res) => {
             FROM bookings b
             JOIN users u ON b.user_id = u.user_id
             JOIN packages p ON b.package_id = p.package_id
-            WHERE p.user_id = ?
+            WHERE ${whereClause}
             LIMIT ? OFFSET ?
-        `, [userId, limit, offset]);
-        console.log('getAllBookings | rows fetched:', rows.length);
+        `, [...filterParams, limit, offset]);
 
         res.json({ data: rows, total, page, limit, totalPages: Math.ceil(total / limit) });
     } catch (error) {
@@ -166,9 +164,53 @@ const getAllBookings = async (req, res) => {
     }
 };
 
+const getTravellerSuggestions = async (req, res) => {
+    try {
+        const userId = req.user.user_id;
+        const q = req.query.q || '';
+
+        const [rows] = await db.query(`
+            SELECT DISTINCT CONCAT(u.first_name, ' ', u.last_name) AS name
+            FROM bookings b
+            JOIN users u ON b.user_id = u.user_id
+            JOIN packages p ON b.package_id = p.package_id
+            WHERE p.user_id = ?
+              AND CONCAT(u.first_name, ' ', u.last_name) LIKE ?
+            ORDER BY name
+            LIMIT 10
+        `, [userId, `%${q}%`]);
+
+        res.json(rows.map(r => r.name));
+    } catch (error) {
+        console.error('getTravellerSuggestions error:', error);
+        res.status(500).json({ message: error.message });
+    }
+};
+
+const getPackageSuggestions = async (req, res) => {
+    try {
+        const userId = req.user.user_id;
+        const q = req.query.q || '';
+
+        const [rows] = await db.query(`
+            SELECT DISTINCT p.title AS name
+            FROM bookings b
+            JOIN packages p ON b.package_id = p.package_id
+            WHERE p.user_id = ?
+              AND p.title LIKE ?
+            ORDER BY name
+            LIMIT 10
+        `, [userId, `%${q}%`]);
+
+        res.json(rows.map(r => r.name));
+    } catch (error) {
+        console.error('getPackageSuggestions error:', error);
+        res.status(500).json({ message: error.message });
+    }
+};
+
 const updateBookingStatus = async (req, res) => {
     try {
-        console.log('updateBookingStatus | booking_id:', req.params.id, 'payload:', req.body);
         const { status } = req.body;
         const validStatuses = ['PENDING', 'CONFIRMED', 'COMPLETED', 'CANCELLED'];
         if (!validStatuses.includes(status)) {
@@ -179,7 +221,6 @@ const updateBookingStatus = async (req, res) => {
             'UPDATE bookings SET status = ? WHERE booking_id = ?',
             [status, req.params.id]
         );
-        console.log('updateBookingStatus | affectedRows:', result.affectedRows);
 
         if (result.affectedRows === 0) return res.status(404).json({ message: 'Booking not found' });
 
@@ -190,17 +231,71 @@ const updateBookingStatus = async (req, res) => {
     }
 };
 
+// ================= DASHBOARD SUMMARY =================
+const getDashboardSummary = async (req, res) => {
+    try {
+        const userId = req.user.user_id;
+
+        const [pkgRows] = await db.query(`
+            SELECT p.package_id, p.title, p.destination, p.start_date, p.end_date,
+                   p.price, p.description, p.created_on,
+                   COUNT(b.booking_id) AS completed_count
+            FROM bookings b
+            JOIN packages p ON b.package_id = p.package_id
+            WHERE p.user_id = ? AND b.status = 'COMPLETED'
+            GROUP BY p.package_id
+            ORDER BY completed_count DESC
+            LIMIT 1
+        `, [userId]);
+        const mostUsedPackage = pkgRows[0] || null;
+
+        let itinerary_items = [];
+        if (mostUsedPackage) {
+            const [items] = await db.query(
+                'SELECT * FROM itinerary_items WHERE package_id = ?',
+                [mostUsedPackage.package_id]
+            );
+            itinerary_items = items;
+        }
+
+        const [[{ total_revenue }]] = await db.query(`
+            SELECT COALESCE(SUM(b.total_price), 0) AS total_revenue
+            FROM bookings b
+            JOIN packages p ON b.package_id = p.package_id
+            WHERE p.user_id = ? AND b.status = 'COMPLETED'
+        `, [userId]);
+
+        const [travRows] = await db.query(`
+            SELECT CONCAT(u.first_name, ' ', u.last_name) AS traveller_name,
+                   COUNT(b.booking_id) AS trip_count
+            FROM bookings b
+            JOIN users u ON b.user_id = u.user_id
+            JOIN packages p ON b.package_id = p.package_id
+            WHERE p.user_id = ? AND b.status = 'COMPLETED'
+            GROUP BY u.user_id
+            ORDER BY trip_count DESC
+            LIMIT 1
+        `, [userId]);
+        const topTraveller = travRows[0] || null;
+
+        res.json({
+            mostUsedPackage: mostUsedPackage ? { ...mostUsedPackage, itinerary_items } : null,
+            totalRevenue: total_revenue,
+            topTraveller
+        });
+    } catch (error) {
+        console.error('getDashboardSummary error:', error);
+        res.status(500).json({ message: error.message });
+    }
+};
+
 // ================= TRIPS =================
 const getTrips = async (req, res) => {
     try {
-        const userId = req.session.user?.user_id;
-        console.log('getTrips | session userId:', userId);
-        if (!userId) return res.status(401).json({ message: 'Unauthorized' });
-
-        const page  = Math.max(1, parseInt(req.query.page)  || 1);
-        const limit = Math.max(1, parseInt(req.query.limit) || 10);
+        const userId = req.user.user_id;
+        const page   = Math.max(1, parseInt(req.query.page)  || 1);
+        const limit  = Math.max(1, parseInt(req.query.limit) || 10);
         const offset = (page - 1) * limit;
-        console.log(`getTrips | page: ${page}, limit: ${limit}, offset: ${offset}`);
 
         const [[{ total }]] = await db.query(`
             SELECT COUNT(*) AS total
@@ -208,7 +303,6 @@ const getTrips = async (req, res) => {
             JOIN packages p ON b.package_id = p.package_id
             WHERE p.user_id = ?
         `, [userId]);
-        console.log('getTrips | total trips:', total);
 
         const [rows] = await db.query(`
             SELECT
@@ -226,7 +320,6 @@ const getTrips = async (req, res) => {
             WHERE p.user_id = ?
             LIMIT ? OFFSET ?
         `, [userId, limit, offset]);
-        console.log('getTrips | rows fetched:', rows.length);
 
         res.json({ data: rows, total, page, limit, totalPages: Math.ceil(total / limit) });
     } catch (error) {
@@ -235,12 +328,10 @@ const getTrips = async (req, res) => {
     }
 };
 
-// ================= DASHBOARD =================
+// ================= DASHBOARD STATS =================
 const getDashboardStats = async (req, res) => {
     try {
-        const userId = req.session.user?.user_id;
-        console.log('getDashboardStats | session userId:', userId);
-        if (!userId) return res.status(401).json({ message: 'Unauthorized' });
+        const userId = req.user.user_id;
 
         const [[{ totalPackages }]] = await db.query(
             'SELECT COUNT(*) AS totalPackages FROM packages WHERE user_id = ?',
@@ -259,7 +350,6 @@ const getDashboardStats = async (req, res) => {
             WHERE p.user_id = ? AND b.status = 'CONFIRMED'
         `, [userId]);
 
-        console.log('getDashboardStats | totalPackages:', totalPackages, 'totalTrips:', totalTrips, 'confirmedBookings:', confirmedBookings);
         res.json({ totalPackages, totalTrips, confirmedBookings });
     } catch (error) {
         console.error('getDashboardStats error:', error);
@@ -274,7 +364,10 @@ module.exports = {
     updatePackage,
     deletePackage,
     getAllBookings,
+    getTravellerSuggestions,
+    getPackageSuggestions,
     updateBookingStatus,
     getTrips,
     getDashboardStats,
+    getDashboardSummary,
 };

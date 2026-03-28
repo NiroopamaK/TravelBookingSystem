@@ -1,108 +1,108 @@
-let currentPage  = 1;
-let currentLimit = 5;
-let totalPages   = 1;
-const tripsMap   = {};
-
 // ================= STATS =================
 async function loadStats() {
     try {
         const res = await fetch('/api/agent/dashboard-stats', { credentials: 'include' });
         if (!res.ok) throw new Error('Failed to fetch stats');
-
         const data = await res.json();
-        document.getElementById('totalPackages').textContent = data.totalPackages;
-        document.getElementById('totalTrips').textContent = data.totalTrips;
+        document.getElementById('totalPackages').textContent    = data.totalPackages;
+        document.getElementById('totalTrips').textContent       = data.totalTrips;
         document.getElementById('confirmedBookings').textContent = data.confirmedBookings;
     } catch (err) {
         console.error('Error loading stats:', err);
     }
 }
 
-// ================= TRIPS =================
-async function loadTrips(page = 1) {
+// ================= SUMMARY =================
+let cachedMostUsedPackage = null;
+
+async function loadSummary() {
     try {
-        currentPage = page;
-        const res = await fetch(`/api/agent/trips?page=${currentPage}&limit=${currentLimit}`, { credentials: 'include' });
-        if (!res.ok) throw new Error('Failed to fetch trips');
+        const res = await fetch('/api/agent/dashboard-summary', { credentials: 'include' });
+        if (!res.ok) throw new Error('Failed to fetch summary');
+        const data = await res.json();
 
-        const result = await res.json();
-        totalPages = result.totalPages;
+        // Most Used Package
+        const pkg = data.mostUsedPackage;
+        cachedMostUsedPackage = pkg;
+        if (pkg) {
+            document.getElementById('mostUsedPackageName').textContent = pkg.title;
+            document.getElementById('mostUsedPackageSub').textContent  =
+                pkg.destination + '  •  ' + pkg.completed_count + ' completed trip' + (pkg.completed_count !== 1 ? 's' : '');
+            document.getElementById('mostUsedPackageCard').classList.add('summary-card--active');
+        } else {
+            document.getElementById('mostUsedPackageName').textContent = 'No completed trips yet';
+            document.getElementById('mostUsedPackageSub').textContent  = '';
+            document.getElementById('mostUsedPackageCard').classList.remove('summary-card--active');
+        }
 
-        const tbody = document.getElementById('tripsBody');
-        tbody.innerHTML = '';
-        result.data.forEach(t => {
-            tripsMap[t.booking_id] = t;
-            const tr = document.createElement('tr');
-            const startDate = t.start_date ? new Date(t.start_date).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }) : '';
-            const endDate   = t.end_date   ? new Date(t.end_date).toLocaleDateString('en-GB',   { day: 'numeric', month: 'short', year: 'numeric' }) : '';
-            tr.innerHTML = `
-                <td>${t.trip_id}</td>
-                <td>${t.package_name}</td>
-                <td>${t.traveller}</td>
-                <td>${startDate} - ${endDate}</td>
-                <td class="status-${t.status ? t.status.toLowerCase() : ''}">${t.status}</td>
-                <td><button class="btn-view" onclick="viewTrip(${t.booking_id})">View</button></td>
-            `;
-            tbody.appendChild(tr);
-        });
+        // Total Revenue
+        const rev = Number(data.totalRevenue);
+        document.getElementById('totalRevenue').textContent =
+            '£' + rev.toLocaleString('en-GB', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
-        renderPagination();
+        // Top Traveller
+        const trav = data.topTraveller;
+        if (trav) {
+            document.getElementById('topTravellerName').textContent = trav.traveller_name;
+            document.getElementById('topTravellerSub').textContent  =
+                trav.trip_count + ' completed trip' + (trav.trip_count !== 1 ? 's' : '');
+        } else {
+            document.getElementById('topTravellerName').textContent = 'No completed trips yet';
+            document.getElementById('topTravellerSub').textContent  = '';
+        }
     } catch (err) {
-        console.error('Error loading trips:', err);
+        console.error('Error loading summary:', err);
     }
 }
 
-// ================= PAGINATION =================
-function renderPagination() {
-    const container = document.getElementById('tripsPagination');
-    if (!container) return;
-    container.innerHTML = `
-        <div class="pagination-controls">
-            <button class="page-btn" onclick="loadTrips(${currentPage - 1})" ${currentPage <= 1 ? 'disabled' : ''}>&laquo; Prev</button>
-            <span class="page-info">Page ${currentPage} of ${totalPages}</span>
-            <button class="page-btn" onclick="loadTrips(${currentPage + 1})" ${currentPage >= totalPages ? 'disabled' : ''}>Next &raquo;</button>
-        </div>
-        <div class="pagination-limit">
-            <span>Show</span>
-            <select class="limit-select" onchange="changeTripLimit(this.value)">
-                ${[5, 10, 25, 50].map(n => `<option value="${n}" ${n === currentLimit ? 'selected' : ''}>${n}</option>`).join('')}
-            </select>
-            <span>per page</span>
-        </div>
-    `;
+// ================= PACKAGE DETAIL MODAL =================
+const pkgDetailModal       = document.getElementById('pkgDetailModal');
+const closePkgDetailModalBtn = document.getElementById('closePkgDetailModalBtn');
+
+function openMostUsedPackageModal() {
+    const pkg = cachedMostUsedPackage;
+    if (!pkg) return;
+
+    const fmt = d => d ? new Date(d).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' }) : '-';
+
+    document.getElementById('pkgDetailTitle').textContent      = pkg.title;
+    document.getElementById('pkgDetailDestination').textContent = pkg.destination;
+    document.getElementById('pkgDetailStartDate').textContent  = fmt(pkg.start_date);
+    document.getElementById('pkgDetailEndDate').textContent    = fmt(pkg.end_date);
+    document.getElementById('pkgDetailPrice').textContent      =
+        pkg.price != null ? '£' + Number(pkg.price).toLocaleString('en-GB', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : '-';
+    document.getElementById('pkgDetailCreatedOn').textContent  = fmt(pkg.created_on);
+    document.getElementById('pkgDetailDescription').textContent = pkg.description || '-';
+
+    const itineraryEl = document.getElementById('pkgDetailItinerary');
+    itineraryEl.innerHTML = '';
+    if (pkg.itinerary_items && pkg.itinerary_items.length > 0) {
+        pkg.itinerary_items.forEach((item, i) => {
+            const li = document.createElement('li');
+            li.className = 'view-pkg-itinerary-item';
+            li.innerHTML = `
+                <span class="itinerary-step">${i + 1}</span>
+                <div>
+                    <strong>${item.title}</strong>
+                    <p>${item.description}</p>
+                </div>
+            `;
+            itineraryEl.appendChild(li);
+        });
+    } else {
+        itineraryEl.innerHTML = '<li class="no-itinerary">No itinerary items.</li>';
+    }
+
+    pkgDetailModal.classList.add('active');
 }
 
-function changeTripLimit(val) {
-    currentLimit = parseInt(val);
-    loadTrips(1);
-}
+function closePkgDetailModal() { pkgDetailModal.classList.remove('active'); }
 
-// ================= TRIP MODAL =================
-const tripInfoModal         = document.getElementById('tripInfoModal');
-const closeTripInfoModalBtn = document.getElementById('closeTripInfoModalBtn');
+closePkgDetailModalBtn.addEventListener('click', closePkgDetailModal);
+pkgDetailModal.addEventListener('click', (e) => { if (e.target === pkgDetailModal) closePkgDetailModal(); });
 
-function viewTrip(bookingId) {
-    const trip = tripsMap[bookingId];
-    if (!trip) return;
-
-    document.getElementById('tripInfoId').textContent   = 'Trip: ' + trip.trip_id;
-    document.getElementById('tripInfoName').textContent = trip.package_name;
-
-    const statusEl = document.getElementById('tripInfoStatus');
-    statusEl.textContent = trip.status;
-    statusEl.className   = 'trip-status-badge status-' + (trip.status ? trip.status.toLowerCase() : '');
-
-    const fmt = d => d ? new Date(d).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' }).toUpperCase() : '-';
-    document.getElementById('tripInfoStartDate').textContent = fmt(trip.start_date);
-    document.getElementById('tripInfoEndDate').textContent   = fmt(trip.end_date);
-    document.getElementById('tripInfoCost').textContent      = trip.cost != null ? '£' + Number(trip.cost).toLocaleString('en-GB', { minimumFractionDigits: 0 }) : '-';
-
-    tripInfoModal.classList.add('active');
-}
-
-closeTripInfoModalBtn.addEventListener('click', () => tripInfoModal.classList.remove('active'));
-tripInfoModal.addEventListener('click', (e) => { if (e.target === tripInfoModal) tripInfoModal.classList.remove('active'); });
+document.getElementById('mostUsedPackageCard').addEventListener('click', openMostUsedPackageModal);
 
 // ================= INIT =================
 loadStats();
-loadTrips();
+loadSummary();

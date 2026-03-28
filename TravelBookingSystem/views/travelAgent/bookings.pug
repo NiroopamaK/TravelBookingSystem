@@ -7,6 +7,23 @@ block content
   h2 Manage Bookings
 
   h3 All Bookings
+
+  .filter-bar
+    .autocomplete-wrapper
+      input#filterTraveller(type="text" placeholder="Filter by traveller..." autocomplete="off")
+      ul#filterTravellerList.autocomplete-list
+    .autocomplete-wrapper
+      input#filterPackage(type="text" placeholder="Filter by package..." autocomplete="off")
+      ul#filterPackageList.autocomplete-list
+    select#filterStatus
+      option(value="") All Statuses
+      option(value="PENDING") PENDING
+      option(value="CONFIRMED") CONFIRMED
+      option(value="COMPLETED") COMPLETED
+      option(value="CANCELLED") CANCELLED
+    button#applyFiltersBtn Apply Filters
+    button#resetFiltersBtn Reset
+
   table#bookingsTable
     thead
       tr
@@ -52,7 +69,6 @@ block content
         label Status
         select#status(name="status" required)
           option(value="") Select Status
-          option(value="PENDING") PENDING
           option(value="CONFIRMED") CONFIRMED
           option(value="COMPLETED") COMPLETED
           option(value="CANCELLED") CANCELLED
