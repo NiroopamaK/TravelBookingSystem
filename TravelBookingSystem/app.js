@@ -30,7 +30,7 @@ app.use(session({
   resave: false,
   saveUninitialized: false,
   cookie: {
-    secure: false, // true if HTTPS
+    secure: false,
     httpOnly: true,
     maxAge: 1000 * 60 * 60
   }
@@ -40,69 +40,29 @@ app.use(session({
 app.use(express.static(path.join(__dirname, 'public')));
 
 //login page
-app.get('/', (req, res) => {
-  res.render('index');
-});
-
+app.get('/', (req, res) => res.render('index'));
 //sign up page
-app.get('/signup', (req, res) => {
-  res.render('signup');
-});
-
-//dashboard
-app.get('/dashboard', (req, res) => {
-  res.render('dashboard');
-});
-
-//Admin - analytics
-app.get('/analytics', (req, res) => {
-  res.render('admin/analytics');
-});
-
-//Admin - packages
-app.get('/packages', (req, res) => {
-  res.render('admin/packages');
-});
-
-//Admin - users
-app.get('/users', (req, res) => {
-  res.render('admin/users');
-});
-
-//Agent - packages
-app.get('/agent/packages', (req, res) => {
-  res.render('travelAgent/packages');
-});
-
-//Agent - bookings
-app.get('/agent/bookings', (req, res) => {
-  res.render('travelAgent/bookings');
-});
-
-//Agent - customers
-app.get('/agent/customers', (req, res) => {
-  res.render('travelAgent/customers');
-});
-// Middleware
-//app.use(cors());
-//app.use(bodyParser.urlencoded({ extended: true }));
-//app.use(bodyParser.json());
+app.get('/signup', (req, res) => res.render('signup'));
 
 // Pages
 app.get('/', (req, res) => res.render('index'));
 app.get('/signup', (req, res) => res.render('signup'));
 app.get('/dashboard', (req, res) => res.render('dashboard'));
-//admin-pages
+
 // admin-pages
 app.get('/admin/adminDashboard', (req, res) => res.render('admin/adminDashboard'));
 app.get('/admin/packages', (req, res) => res.render('admin/packages'));
 app.get('/admin/users', (req, res) => res.render('admin/users'));
+
+// agent - pages
+app.get('/agent/packages', (req, res) => res.render('travelAgent/packages'));
+app.get('/agent/bookings', (req, res) => res.render('travelAgent/bookings'));
 app.get('/agent/agentDashboard', (req, res) => res.render('travelAgent/agentDashboard'));
 
 // traveller-pages
 app.get('/traveller/dashboard', (req, res) => res.render('traveller/traveller_dashboard'));
 app.get('/traveller/explore', (req, res) => res.render('traveller/traveller_explore'));
-app.get('/traveller/booking', (req, res) => res.render('traveller/traveller_booking'));
+app.get('/traveller/booking/:package_id', (req, res) => res.render('traveller/traveller_booking'));
 
 // Routes
 app.use('/', profileRoutes);              
@@ -112,23 +72,6 @@ app.use('/api/agent', agentRoutes);
 app.use('/traveller', travellerRoutes);   
 app.use('/bookings', bookingRoutes); 
 app.use("/api/admin", adminRoutes);     
-
-// Test route
-app.get('/test', (req, res) => {
-  res.send('Server working');
-});
-
-// DB test route
-app.get('/db_test/printdata', async (req, res) => {
-  try {
-    const [rows] = await db.query('SELECT * FROM users');
-    console.log(rows);
-    res.json(rows);
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: 'Database query failed', error: err.message });
-  }
-});
 
 // 404 handler
 app.use((req, res) => {

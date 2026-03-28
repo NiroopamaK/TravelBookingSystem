@@ -1,8 +1,6 @@
 // ================= GLOBAL USER =================
 let currentUser = null;
 
-
-// ================= INIT =================
 document.addEventListener("DOMContentLoaded", async () => {
   await fetchCurrentUser(); // 🔥 MUST HAPPEN FIRST
   initNavbar();
@@ -25,7 +23,7 @@ async function fetchCurrentUser() {
 
   } catch (err) {
     console.error("User fetch failed:", err);
-    window.location.href = "/"; // redirect if not logged in
+    window.location.href = "/"; 
   }
 }
 
@@ -74,7 +72,6 @@ function initNavbar() {
     if (nameEl) nameEl.textContent = currentUser.first_name || "User";
     if (roleEl) roleEl.textContent = currentUser.role || "";
 
-    // Fetch profile picture (SESSION BASED)
     if (profilePic) {
       fetch(`/getProfilePicture`, {
         credentials: 'include'
@@ -168,7 +165,6 @@ function initEditProfileLink() {
       return;
     }
 
-    // ✅ NO TOKEN ANYMORE
     window.location.href = "/editProfile";
   });
 }

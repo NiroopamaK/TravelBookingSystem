@@ -1,82 +1,79 @@
 extends ../layout
 
 block append head
-    title Request Booking
+  title Request Booking
 
-    // shared layout
-    link(rel="stylesheet", href="/css/dashboard.css")
-    // booking page css
-    link(rel="stylesheet", href="/css/traveller_booking.css")
-block content 
+  link(rel="stylesheet", href="/css/traveller_booking.css")
 
-      .dashboard-content
-        h1 Request Booking
+block content
+  .dashboard-content
+    h1 Request Booking
 
-        a.back-link(href="/traveller/explore") ← Back to Explore
+    a.back-link(href="/traveller/explore") ← Back to Explore
 
-        .booking-card
-          form#bookingForm
-            // package info from backend (optional UI block)
-            if pkg
-              .summary
-                .summary-title Package Summary
-                .summary-box
-                  .sum-row
-                    .sum-left Package
-                    .sum-right #{pkg.title}
-                  .sum-row
-                    .sum-left Destination
-                    .sum-right #{pkg.destination}
-                  .sum-row
-                    .sum-left Dates
-                    .sum-right #{pkg.start_date} - #{pkg.end_date}
-                  .sum-row
-                    .sum-left Price per person
-                    .sum-right#pricePerPerson(data-price=pkg.price) £ #{pkg.price}
+    .booking-card
+      form#bookingForm
+        // Package Summary
+        .summary
+          .summary-title Package Summary
+          .summary-box
+            .sum-row
+              .sum-left Package
+              .sum-right
+                span#packageTitle Loading...
+            .sum-row
+              .sum-left Destination
+              .sum-right
+                span#packageDestination Loading...
+            .sum-row
+              .sum-left Dates
+              .sum-right
+                span#packageDates Loading...
+            .sum-row
+              .sum-left Price per person
+              .sum-right
+                span#pricePerPerson(data-price=0) £ 0
 
-            .row
-              .field
-                .label Dates
-                .fake-input
-                  span.icon 📅
-                  if pkg
-                    span.datedText #{pkg.start_date} - #{pkg.end_date}
-                  else
-                    span.datedText Select from package
+        .row
+          .field
+            .label Dates
+            .fake-input
+              span.icon 📅
+              span#displayDates Select from package
 
-              .field
-                .label Number of People
-                input#people.input(type="number", min="1", value="2")
+          .field
+            .label Number of People
+            input#people.input(type="number", min="1", value="2")
 
-            .field
-              .label Additional Notes
-              textarea#notes.textarea(placeholder="Write anything important here...")
+        .field
+          .label Additional Notes
+          textarea#notes.textarea(placeholder="Write anything important here...")
 
-            .summary
-              .summary-title Booking Summary
-              .summary-box
-                .sum-row
-                  .sum-left Price per Person
-                  .sum-right#pricePerPersonOut £ 0
-                .sum-row
-                  .sum-left Number of People
-                  .sum-right#peopleOut 2
-                .sum-row.total
-                  .sum-left Total Estimated Cost:
-                  .sum-right#totalOut £ 0
+        .summary
+          .summary-title Booking Summary
+          .summary-box
+            .sum-row
+              .sum-left Price per Person
+              .sum-right#pricePerPersonOut £ 0
+            .sum-row
+              .sum-left Number of People
+              .sum-right#peopleOut 2
+            .sum-row.total
+              .sum-left Total Estimated Cost:
+              .sum-right#totalOut £ 0
 
-            // hidden fields for JS
-            input#packageId(type="hidden", value=(pkg ? pkg.package_id : ""))
-            button.btn.submit-btn(type="submit") Submit Request
+        // hidden field for JS
+        input#package_id(type="hidden", value="")
+        button.btn.submit-btn(type="submit") Submit Request
 
-          .divider
+      .divider
 
-          .success#successBox
-            h2 Booking Request Submitted!
-            p Your booking request has been successfully submitted.
-            .success-actions
-              a.btn(href="/traveller/dashboard") View My Bookings
-              a.btn(href="/traveller/explore") Explore More Packages
+      .success#successBox(style="display:none;")
+        h2 Booking Request Submitted!
+        p Your booking request has been successfully submitted.
+        .success-actions
+          a.btn(href="/traveller/dashboard") View My Bookings
+          a.btn(href="/traveller/explore") Explore More Packages
 
-        script(src="/js/dashboard.js")
-        script(src="/js/traveller_booking.js")
+  // scripts
+  script(src="/js/traveller_booking.js")

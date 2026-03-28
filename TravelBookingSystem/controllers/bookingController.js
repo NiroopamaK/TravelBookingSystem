@@ -1,42 +1,51 @@
 const bookingModel = require('../models/bookingModel');
 
-// POST /bookings/createBooking
-async function createBooking(req, res) {
+// CREATE BOOKING
+const createBooking = async (req, res) => {
   try {
-    const booking = req.body;
+    const user = req.session.user;
+    if (!user) {
+      return res.status(401).json({ success: false, message: "Unauthorized" });
+    }
+
+    const { package_id, packsize, additional_notes, total_price } = req.body;
+
+    if (!package_id) {
+      return res.status(400).json({ success: false, message: "Package ID is required" });
+    }
+
+    const booking = {
+      user_id: user.user_id,
+      package_id: Number(package_id),
+      packsize: Number(packsize) || 1,
+      additional_notes: additional_notes || "",
+      created_on: new Date().toISOString().slice(0, 10),
+      total_price: Number(total_price) || 0,
+      status: "PENDING"
+    };
+
     const result = await bookingModel.createBooking(booking);
 
-    return res.status(201).json({
-      success: true,
-      message: 'Booking created successfully',
-      data: result
-    });
-  } catch (error) {
-    console.error('Create Booking Error:', error);
-    return res.status(500).json({
-      success: false,
-      message: 'Failed to create booking'
-    });
-  }
-}
+    res.status(201).json({ success: true, data: result });
 
-// GET /bookings/getBookingsByUser/:user_id
-async function getAllBookingsByUser(req, res) {
+  } catch (err) {
+    console.error("createBooking error:", err);
+    res.status(500).json({ success: false, message: err.message });
+  }
+};
+
+// GET BOOKINGS BY USER
+// GET /bookings/getBookingsByUser
+const getAllBookingsByUser = async (req, res) => {
   try {
-    const { user_id } = req.params;
-    const bookings = await bookingModel.getAllBookingsByUser(user_id);
+    const user = req.session.user;
+    if (!user) return res.status(401).json({ success: false, message: 'Unauthorized' });
 
-    return res.status(200).json({
-      success: true,
-      data: bookings
-    });
-  } catch (error) {
-    console.error('Get Bookings Error:', error);
-    return res.status(500).json({
-      success: false,
-      message: 'Failed to fetch bookings'
-    });
+    const bookings = await bookingModel.getAllBookingsByUser(user.user_id);
+    res.json({ success: true, data: bookings });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
   }
-}
+};
 
 module.exports = { createBooking, getAllBookingsByUser };

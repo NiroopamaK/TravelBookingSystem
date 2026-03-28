@@ -1,39 +1,94 @@
 const { getPackages, getPackageById } = require('../models/packageModel');
+const bookingModel = require('../models/bookingModel');
 
-async function explore(req, res) {
-  const data = await getPackages();
+// Format package dates for frontend
+function formatPackageDates(pkg) {
+  if (!pkg.start_date || !pkg.end_date) return pkg;
 
-  const packages = data.map(pkg => {
-    const monthNameStart = pkg.start_date.toLocaleString('en-US', { month: 'long' });
-    const monthNameEnd = pkg.end_date.toLocaleString('en-US', { month: 'long' });
-
-    pkg.start_date = `${monthNameStart} ${pkg.start_date.getDate()}`;
-    pkg.end_date = `${monthNameEnd} ${pkg.end_date.getDate()} ${pkg.end_date.getFullYear()}`;
-    return pkg;
-  });
-    console.log (packages)
-  res.render('traveller/traveller_explore', { packages });
-}
-
-function dashboard(req, res) {
-  res.render('traveller/traveller_dashboard');
-}
-
-async function bookingPage(req, res) {
-  const { packageId } = req.params;
-
-  const pkg = await getPackageById(packageId);
-  if (!pkg) {
-    return res.status(404).send("Package not found");
-  }
-
-  // Format dates same style as explore
   const monthNameStart = pkg.start_date.toLocaleString('en-US', { month: 'long' });
   const monthNameEnd = pkg.end_date.toLocaleString('en-US', { month: 'long' });
-  pkg.start_date = `${monthNameStart} ${pkg.start_date.getDate()}`;
-  pkg.end_date = `${monthNameEnd} ${pkg.end_date.getDate()} ${pkg.end_date.getFullYear()}`;
 
-  res.render('traveller/traveller_booking', { pkg });
+  return {
+    ...pkg,
+    start_date: `${monthNameStart} ${pkg.start_date.getDate()}`,
+    end_date: `${monthNameEnd} ${pkg.end_date.getDate()} ${pkg.end_date.getFullYear()}`
+  };
 }
 
-module.exports = { explore, dashboard, bookingPage };
+// ================= PACKAGES =================
+
+// GET /traveller/explore/data
+const getPackagesData = async (req, res) => {
+  try {
+    const userId = req.session.user?.user_id;
+    if (!userId) return res.status(401).json({ success: false, message: 'Unauthorized' });
+
+    const data = await getPackages();
+    const packages = data.map(formatPackageDates);
+
+    res.json({ success: true, data: packages });
+  } catch (err) {
+    console.error('getPackagesData error:', err);
+    res.status(500).json({ success: false, message: err.message });
+  }
+};
+
+// GET /traveller/booking/:packageId/data
+const getPackageData = async (req, res) => {
+  try {
+    const userId = req.session.user?.user_id;
+    if (!userId) return res.status(401).json({ success: false, message: 'Unauthorized' });
+
+    const { packageId } = req.params;
+    const pkg = await getPackageById(packageId);
+    if (!pkg) return res.status(404).json({ success: false, message: 'Package not found' });
+
+    res.json({ success: true, data: formatPackageDates(pkg) });
+  } catch (err) {
+    console.error('getPackageData error:', err);
+    res.status(500).json({ success: false, message: err.message });
+  }
+};
+
+// ================= BOOKINGS =================
+
+// POST /bookings/createBooking
+const createBooking = async (req, res) => {
+  try {
+    const user = req.session.user;
+    if (!user) return res.status(401).json({ success: false, message: 'Unauthorized' });
+
+    const booking = {
+      ...req.body,
+      user_id: user.user_id,
+      status: "PENDING"
+    };
+
+    const result = await bookingModel.createBooking(booking);
+    res.status(201).json({ success: true, data: result });
+  } catch (err) {
+    console.error('createBooking error:', err);
+    res.status(500).json({ success: false, message: err.message });
+  }
+};
+
+// GET /bookings/getBookingsByUser
+const getAllBookingsByUser = async (req, res) => {
+  try {
+    const userId = req.session.user?.user_id;
+    if (!userId) return res.status(401).json({ success: false, message: 'Unauthorized' });
+
+    const bookings = await bookingModel.getAllBookingsByUser(userId);
+    res.json({ success: true, data: bookings });
+  } catch (err) {
+    console.error('getAllBookingsByUser error:', err);
+    res.status(500).json({ success: false, message: err.message });
+  }
+};
+
+module.exports = {
+  getPackagesData,
+  getPackageData,
+  createBooking,
+  getAllBookingsByUser
+};

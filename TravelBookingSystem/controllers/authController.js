@@ -24,21 +24,13 @@ const login = async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    const { user, token } = await loginUser(email, password);
+    const { user} = await loginUser(email, password);
 
-    // ✅ STORE SESSION (NEW)
+    // STORE SESSION (NEW)
     req.session.user = user;
     console.log("SESSION AFTER LOGIN:", req.session);
 
-    // DELETE LATER (JWT START)
-    res.json({
-      message: "Login successful",
-      token
-    });
-    // DELETE LATER (JWT END)
-
-    // ✅ FINAL VERSION WILL BE:
-    // res.json({ message: "Login successful" });
+    res.json({ message: "Login successful" });
 
   } catch (err) {
     if (err.message === 'User not found') {
@@ -88,17 +80,16 @@ const resetPassword = async (req, res) => {
   }
 };
 
-// ✅ GET CURRENT USER (SESSION)
+// GET CURRENT USER (SESSION)
 const getCurrentUser = (req, res) => {
   if (req.session && req.session.user) {
-    //console.log("Returning session user:", req.session.user);
-    res.json(req.session.user); // ✅ send user to frontend
+    res.json(req.session.user); //send user to frontend
   } else {
     res.status(401).json({ message: "Not authenticated" });
   }
 };
 
-// ✅ LOGOUT
+// LOGOUT
 const logout = (req, res) => {
   req.session.destroy(err => {
     if (err) {
