@@ -1,3 +1,4 @@
+const db = require('../config/db');
 const bookingModel = require('../models/bookingModel');
 
 // CREATE BOOKING
@@ -48,4 +49,53 @@ const getAllBookingsByUser = async (req, res) => {
   }
 };
 
-module.exports = { createBooking, getAllBookingsByUser };
+// GET BOOKINGS BY USER WITH PACKAGE DETAILS
+// GET /bookings/getBookingDetails
+const getBookingDetails = async (req,res) => {
+  try {
+    const userId = req.session.user?.user_id;
+    if (!userId) return res.status(401).json({ success: false, message: 'Unauthorized' });
+
+    if (!userId) {
+      return res.status(401).json({
+        success: false,
+        message: "Unauthorized"
+      });
+    }
+
+    const query = `
+      SELECT 
+        b.booking_id,
+        b.package_id,
+        b.packsize,
+        b.total_price,
+        b.status,
+        b.created_on,
+        p.title AS package_name,
+        p.destination
+      FROM bookings b
+      JOIN packages p 
+        ON b.package_id = p.package_id
+      WHERE b.user_id = ?
+      ORDER BY b.created_on DESC
+    `;
+
+    const [rows] = await db.execute(query, [userId]);
+
+    res.json({
+      success: true,
+      data: rows
+    });
+
+  } catch (error) {
+    console.error("Error fetching bookings:", error);
+
+    res.status(500).json({
+      success: false,
+      message: "Server error"
+    });
+  }
+};
+
+
+module.exports = { createBooking, getAllBookingsByUser, getBookingDetails };
