@@ -87,7 +87,8 @@ async function loadBookings() {
   console.log("Loading bookings for session user...");
 
   try {
-    const res = await fetch("/bookings/getBookingsByUser", {
+    const res = await fetch("/bookings/getBookingDetails", {
+    //const res = await fetch("/bookings/getBookingsByUser", {
       credentials: "include"
     });
     const json = await res.json();
