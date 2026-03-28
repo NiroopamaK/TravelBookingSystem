@@ -1,18 +1,11 @@
-// traveller_dashboard.js
-console.log("traveller_dashboard.js loaded ✅");
-
-// ================= GLOBALS =================
-let currentUser = null;
-
-// ================= FETCH USER FROM SESSION =================
-async function fetchCurrentUser() {
+// ================= AUTH CHECK =================
+async function ensureAuthenticated() {
   console.log("Fetching current user from session...");
   try {
     const res = await fetch("/api/auth/me", { credentials: "include" });
     if (!res.ok) throw new Error("Not authenticated");
 
-    currentUser = await res.json();
-    console.log("CURRENT USER:", currentUser);
+    console.log("User authenticated");
 
   } catch (err) {
     console.error("User fetch failed:", err);
@@ -26,6 +19,7 @@ function pillClass(status) {
   const s = String(status || "").toUpperCase();
   if (s === "CONFIRMED" || s === "ACTIVE") return "pill pill-active";
   if (s === "COMPLETED") return "pill pill-completed";
+  if (s === "PENDING") return "pill pill-pending";
   return "pill pill-active"; 
 }
 
@@ -46,11 +40,11 @@ function renderStats(bookings) {
   const active = upper.filter(s => s === "CONFIRMED" || s === "ACTIVE").length;
   const completed = upper.filter(s => s === "COMPLETED").length;
 
-  console.log("Stats - Upcoming:", upcoming, "Active:", active, "Completed:", completed);
-
   if (upcomingEl) upcomingEl.textContent = String(upcoming);
   if (activeEl) activeEl.textContent = String(active);
   if (completedEl) completedEl.textContent = String(completed);
+
+  console.log("Stats - Upcoming:", upcoming, "Active:", active, "Completed:", completed);
 }
 
 function renderTable(bookings) {
@@ -68,7 +62,7 @@ function renderTable(bookings) {
   }
 
   tbody.innerHTML = bookings.map(b => {
-    const pkg = b.title || `Package #${b.package_id}`;
+    const pkg = b.package_name || `Package #${b.package_id}`;
     const dest = b.destination || "-";
     const status = b.status || "PENDING";
     const viewLink = `/traveller/booking/${b.package_id}`;
@@ -77,7 +71,7 @@ function renderTable(bookings) {
       <tr>
         <td>${escapeHtml(pkg)}</td>
         <td>${escapeHtml(dest)}</td>
-        <td><span class="${pillClass(status)}">${escapeHtml(status)}</span></td>
+        <td>${escapeHtml(status)}</td>
         <td class="table-right">
           <a class="btn" href="${viewLink}">View</a>
         </td>
@@ -90,15 +84,10 @@ function renderTable(bookings) {
 
 // ================= LOAD BOOKINGS =================
 async function loadBookings() {
-  if (!currentUser) {
-    console.log("No current user, cannot load bookings");
-    return;
-  }
-
-  console.log("Loading bookings for user_id:", currentUser.user_id);
+  console.log("Loading bookings for session user...");
 
   try {
-    const res = await fetch(`/bookings/getBookingsByUser/${currentUser.user_id}`, {
+    const res = await fetch("/bookings/getBookingsByUser", {
       credentials: "include"
     });
     const json = await res.json();
@@ -125,9 +114,8 @@ async function loadBookings() {
 (async function init() {
   console.log("traveller_dashboard.js INIT");
 
-  await fetchCurrentUser(); // 🔥 MUST fetch session first
-  if (!currentUser) return; // redirect happens inside fetchCurrentUser
+  await ensureAuthenticated(); // validate session only
+  console.log("Session validated, now loading bookings...");
 
-  console.log("Session user fetched, now loading bookings...");
   await loadBookings();
 })();

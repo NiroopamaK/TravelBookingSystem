@@ -1,38 +1,31 @@
 extends ../layout
 
 block append head 
-    title Explore
+  title Explore
 
-    // shared layout
-    link(rel="stylesheet", href="/css/dashboard.css")
+  // shared layout
+  link(rel="stylesheet", href="/css/dashboard.css")
 
-    // your explore page css
-    link(rel="stylesheet", href="/css/traveller_explore.css")
+  // explore page css
+  link(rel="stylesheet", href="/css/traveller_explore.css")
 
 block content 
-        // Content
-        .search-area
-          .one-field.destination-field
-            p.small-title Destination
-            input.text-input(type="text", placeholder="Search...")
+  // ================= SEARCH AREA =================
+  .search-area
+    .one-field.destination-field
+      p.small-title Destination
+      input#searchInput.text-input(type="text", placeholder="Search...")
 
-          .one-field.price-field
-            p.small-title Price Range
-            .price-inputs
-              input.text-input(type="number", placeholder="Min Price")
-              span.dash -
-              input.text-input(type="number", placeholder="Max Price")
+    .one-field.price-field
+      p.small-title Price Range
+      .price-inputs
+        input#minPrice.text-input(type="number", placeholder="Min Price")
+        span.dash -
+        input#maxPrice.text-input(type="number", placeholder="Max Price")
 
-        .cards
-          each package in packages
-            .package-card
-              img.card-img(src="/assets/Hawaii.png", alt="Package image")
-              .card-info
-                h3= package.title
-                p 📍 #{package.destination}
-                p 🗓 Dates: #{package.start_date} - #{package.end_date}
-                p £ #{package.price}
-                a.btn(href=`/traveller/booking/${package.package_id}`) Request Booking
+  // ================= PACKAGES CONTAINER =================
+  .cards#cardsContainer
+    p Loading packages...
 
-        // shared JS (sidebar + dropdown + token name/role)
-        script(src="/js/navigation.js")
+  // ================= SCRIPTS =================
+  script(src="/js/traveller_explore.js")

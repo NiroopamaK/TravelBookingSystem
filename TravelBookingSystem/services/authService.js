@@ -1,5 +1,4 @@
 const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken'); // DELETE LATER (JWT)
 
 const {
   createUser,
@@ -45,25 +44,12 @@ const loginUser = async (email, password) => {
     throw new Error('Invalid credentials');
   }
 
-  // DELETE LATER (JWT START)
-  const token = jwt.sign(
-    {
-      user_id: user.user_id,
-      role: user.role,
-      first_name: user.first_name
-    },
-    process.env.JWT_SECRET,
-    { expiresIn: '1h' }
-  );
-  // DELETE LATER (JWT END)
-
   return {
     user: {
       user_id: user.user_id,
       role: user.role,
       first_name: user.first_name
-    },
-    token // DELETE LATER (JWT)
+    }
   };
 };
 
@@ -83,23 +69,6 @@ const resetUserPassword = async (email, password) => {
 };
 
 // ================= MIDDLEWARE =================
-
-// AUTH TOKEN (JWT)
-const authenticateToken = (req, res, next) => {
-  // DELETE LATER (JWT START)
-  const authHeader = req.headers['authorization'];
-  const token = authHeader && authHeader.split(' ')[1];
-
-  if (!token) return res.status(401).json({ message: 'No token provided' });
-
-  jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
-    if (err) return res.status(403).json({ message: 'Invalid token' });
-
-    req.user = user;
-    next();
-  });
-  // DELETE LATER (JWT END)
-};
 
 // SESSION AUTH (NEW)
 const authenticateSession = (req, res, next) => {
@@ -128,7 +97,6 @@ module.exports = {
   registerUser,
   loginUser,
   resetUserPassword,
-  authenticateToken, // DELETE LATER (JWT)
   authenticateSession,
   authorizeRoles
 };
