@@ -1,32 +1,36 @@
-document.addEventListener("DOMContentLoaded", () => {
+// ================= GLOBAL USER =================
+let currentUser = null;
+
+
+// ================= INIT =================
+document.addEventListener("DOMContentLoaded", async () => {
+  await fetchCurrentUser(); // 🔥 MUST HAPPEN FIRST
   initNavbar();
   renderSidebar();
   initEditProfileLink();
 });
 
-function getTokenPayload() {
-  const token = localStorage.getItem("token");
-  if (!token) return null;
 
+// ================= FETCH USER FROM SESSION =================
+async function fetchCurrentUser() {
   try {
-    const base64 = token.split(".")[1]
-      .replace(/-/g, "+")
-      .replace(/_/g, "/");
+    const res = await fetch('/api/auth/me', {
+      credentials: 'include' // 🔥 REQUIRED FOR SESSIONS
+    });
 
-    return JSON.parse(atob(base64));
+    if (!res.ok) throw new Error("Not authenticated");
+
+    currentUser = await res.json();
+    console.log("CURRENT USER:", currentUser);
+
   } catch (err) {
-    console.error("Invalid token");
-    return null;
+    console.error("User fetch failed:", err);
+    window.location.href = "/"; // redirect if not logged in
   }
 }
 
-function getUserRole() {
-  const payload = getTokenPayload();
-  return payload ? payload.role : null;
-}
 
-
-//   NAVBAR LOGIC
+// ================= NAVBAR =================
 function initNavbar() {
   const profilePic = document.getElementById("profilePic");
   const dropdownMenu = document.getElementById("dropdownMenu");
@@ -47,37 +51,45 @@ function initNavbar() {
     }
   });
 
-  // Sign out
-  signOutBtn.addEventListener("click", () => {
-    localStorage.removeItem("token");
-    window.location.href = "/";
+  // ================= LOGOUT =================
+  signOutBtn.addEventListener("click", async () => {
+    try {
+      await fetch('/api/auth/logout', {
+        method: 'POST',
+        credentials: 'include'
+      });
+
+      window.location.href = "/";
+
+    } catch (err) {
+      console.error("Logout failed:", err);
+    }
   });
 
-  // Load user info
-  // Load user info and profile picture
-const payload = getTokenPayload();
-if (payload) {
-  const nameEl = document.querySelector(".profile-name");
-  const roleEl = document.querySelector(".profile-role");
-  const profilePic = document.getElementById("profilePic");
+  // ================= LOAD USER INFO =================
+  if (currentUser) {
+    const nameEl = document.querySelector(".profile-name");
+    const roleEl = document.querySelector(".profile-role");
 
-  if (nameEl) nameEl.textContent = payload.first_name || "User";
-  if (roleEl) roleEl.textContent = payload.role || "";
+    if (nameEl) nameEl.textContent = currentUser.first_name || "User";
+    if (roleEl) roleEl.textContent = currentUser.role || "";
 
-  // Fetch actual profile picture
-  const token = localStorage.getItem("token");
-  if (token && profilePic) {
-    fetch(`/getProfilePicture?token=${token}`)
-      .then(res => res.json())
-      .then(data => {
-        if (data.path) profilePic.src = data.path;
+    // Fetch profile picture (SESSION BASED)
+    if (profilePic) {
+      fetch(`/getProfilePicture`, {
+        credentials: 'include'
       })
-      .catch(err => console.error("Error fetching profile picture:", err));
+        .then(res => res.json())
+        .then(data => {
+          if (data.path) profilePic.src = data.path;
+        })
+        .catch(err => console.error("Error fetching profile picture:", err));
+    }
   }
 }
-}
 
-//   SIDEBAR MENUS
+
+// ================= SIDEBAR MENUS =================
 const menus = {
   ADMIN: [
     { name: "Dashboard", link: "/admin/adminDashboard" },
@@ -95,14 +107,21 @@ const menus = {
   ]
 };
 
+
+// ================= ACTIVE MENU =================
 function setActive(selectedLi) {
-  document.querySelectorAll("#sidebar li").forEach(li => li.classList.remove("active"));
+  document.querySelectorAll("#sidebar li")
+    .forEach(li => li.classList.remove("active"));
+
   selectedLi.classList.add("active");
 }
 
+
+// ================= RENDER SIDEBAR =================
 function renderSidebar() {
-  const role = getUserRole();
+  const role = currentUser?.role;
   const sidebar = document.getElementById("sidebar");
+
   if (!sidebar) return;
 
   if (!role || !menus[role]) {
@@ -128,11 +147,14 @@ function renderSidebar() {
 
   const currentPath = window.location.pathname;
   const idx = menus[role].findIndex(m => m.link === currentPath);
+
   if (idx >= 0 && ul.children[idx]) {
     setActive(ul.children[idx]);
   }
 }
 
+
+// ================= EDIT PROFILE =================
 function initEditProfileLink() {
   const editLink = document.getElementById("editProfileLink");
   if (!editLink) return;
@@ -140,13 +162,13 @@ function initEditProfileLink() {
   editLink.addEventListener("click", function (e) {
     e.preventDefault();
 
-    const token = localStorage.getItem("token");
-    if (!token) {
+    if (!currentUser) {
       alert("Not logged in");
       window.location.href = "/";
       return;
     }
 
-    window.location.href = "/editProfile?token=" + token;
+    // ✅ NO TOKEN ANYMORE
+    window.location.href = "/editProfile";
   });
 }

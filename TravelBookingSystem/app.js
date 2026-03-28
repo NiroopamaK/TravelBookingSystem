@@ -1,4 +1,5 @@
 const express = require('express');
+const session = require('express-session');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const path = require('path');
@@ -24,6 +25,16 @@ app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use('/propics', express.static('public/assets/propics'));
+app.use(session({
+  secret: process.env.SESSION_SECRET || 'secret123',
+  resave: false,
+  saveUninitialized: false,
+  cookie: {
+    secure: false, // true if HTTPS
+    httpOnly: true,
+    maxAge: 1000 * 60 * 60
+  }
+}));
 
 // Serve frontend
 app.use(express.static(path.join(__dirname, 'public')));
@@ -89,14 +100,9 @@ app.get('/admin/users', (req, res) => res.render('admin/users'));
 app.get('/agent/agentDashboard', (req, res) => res.render('travelAgent/agentDashboard'));
 
 // traveller-pages
-//app.get('/traveller/dashboard', (req, res) => res.render('traveller/trav_dashboard'));
-//app.get('/traveller/dashboard', (req, res) => res.render('traveller/traveller_dashboard'));
-//app.get('/traveller/explore', (req, res) => res.render('traveller/traveller_explore'));
-//app.get('/traveller/booking', (req, res) => res.render('traveller/traveller_booking'));
-
-// travel-agent-pages
-//app.get('/agent/agentDashboard', (req, res) => res.render('travelAgent/agentDashboard'));
-
+app.get('/traveller/dashboard', (req, res) => res.render('traveller/traveller_dashboard'));
+app.get('/traveller/explore', (req, res) => res.render('traveller/traveller_explore'));
+app.get('/traveller/booking', (req, res) => res.render('traveller/traveller_booking'));
 
 // Routes
 app.use('/', profileRoutes);              

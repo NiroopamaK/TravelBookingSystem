@@ -1,46 +1,58 @@
-const token = localStorage.getItem('token');
-const authHeaders = { Authorization: 'Bearer ' + token };
-
 let currentPage  = 1;
 let currentLimit = 5;
 let totalPages   = 1;
 const tripsMap   = {};
 
+// ================= STATS =================
 async function loadStats() {
-    const res = await fetch('/api/agent/dashboard-stats', { headers: authHeaders });
-    const data = await res.json();
-    document.getElementById('totalPackages').textContent = data.totalPackages;
-    document.getElementById('totalTrips').textContent = data.totalTrips;
-    document.getElementById('confirmedBookings').textContent = data.confirmedBookings;
+    try {
+        const res = await fetch('/api/agent/dashboard-stats', { credentials: 'include' });
+        if (!res.ok) throw new Error('Failed to fetch stats');
+
+        const data = await res.json();
+        document.getElementById('totalPackages').textContent = data.totalPackages;
+        document.getElementById('totalTrips').textContent = data.totalTrips;
+        document.getElementById('confirmedBookings').textContent = data.confirmedBookings;
+    } catch (err) {
+        console.error('Error loading stats:', err);
+    }
 }
 
+// ================= TRIPS =================
 async function loadTrips(page = 1) {
-    currentPage = page;
-    const res = await fetch(`/api/agent/trips?page=${currentPage}&limit=${currentLimit}`, { headers: authHeaders });
-    const result = await res.json();
-    totalPages = result.totalPages;
+    try {
+        currentPage = page;
+        const res = await fetch(`/api/agent/trips?page=${currentPage}&limit=${currentLimit}`, { credentials: 'include' });
+        if (!res.ok) throw new Error('Failed to fetch trips');
 
-    const tbody = document.getElementById('tripsBody');
-    tbody.innerHTML = '';
-    result.data.forEach(t => {
-        tripsMap[t.booking_id] = t;
-        const tr = document.createElement('tr');
-        const startDate = t.start_date ? new Date(t.start_date).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }) : '';
-        const endDate   = t.end_date   ? new Date(t.end_date).toLocaleDateString('en-GB',   { day: 'numeric', month: 'short', year: 'numeric' }) : '';
-        tr.innerHTML = `
-            <td>${t.trip_id}</td>
-            <td>${t.package_name}</td>
-            <td>${t.traveller}</td>
-            <td>${startDate} - ${endDate}</td>
-            <td class="status-${t.status ? t.status.toLowerCase() : ''}">${t.status}</td>
-            <td><button class="btn-view" onclick="viewTrip(${t.booking_id})">View</button></td>
-        `;
-        tbody.appendChild(tr);
-    });
+        const result = await res.json();
+        totalPages = result.totalPages;
 
-    renderPagination();
+        const tbody = document.getElementById('tripsBody');
+        tbody.innerHTML = '';
+        result.data.forEach(t => {
+            tripsMap[t.booking_id] = t;
+            const tr = document.createElement('tr');
+            const startDate = t.start_date ? new Date(t.start_date).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }) : '';
+            const endDate   = t.end_date   ? new Date(t.end_date).toLocaleDateString('en-GB',   { day: 'numeric', month: 'short', year: 'numeric' }) : '';
+            tr.innerHTML = `
+                <td>${t.trip_id}</td>
+                <td>${t.package_name}</td>
+                <td>${t.traveller}</td>
+                <td>${startDate} - ${endDate}</td>
+                <td class="status-${t.status ? t.status.toLowerCase() : ''}">${t.status}</td>
+                <td><button class="btn-view" onclick="viewTrip(${t.booking_id})">View</button></td>
+            `;
+            tbody.appendChild(tr);
+        });
+
+        renderPagination();
+    } catch (err) {
+        console.error('Error loading trips:', err);
+    }
 }
 
+// ================= PAGINATION =================
 function renderPagination() {
     const container = document.getElementById('tripsPagination');
     if (!container) return;
@@ -65,12 +77,14 @@ function changeTripLimit(val) {
     loadTrips(1);
 }
 
+// ================= TRIP MODAL =================
 const tripInfoModal         = document.getElementById('tripInfoModal');
 const closeTripInfoModalBtn = document.getElementById('closeTripInfoModalBtn');
 
 function viewTrip(bookingId) {
     const trip = tripsMap[bookingId];
     if (!trip) return;
+
     document.getElementById('tripInfoId').textContent   = 'Trip: ' + trip.trip_id;
     document.getElementById('tripInfoName').textContent = trip.package_name;
 
@@ -89,5 +103,6 @@ function viewTrip(bookingId) {
 closeTripInfoModalBtn.addEventListener('click', () => tripInfoModal.classList.remove('active'));
 tripInfoModal.addEventListener('click', (e) => { if (e.target === tripInfoModal) tripInfoModal.classList.remove('active'); });
 
+// ================= INIT =================
 loadStats();
 loadTrips();

@@ -22,5 +22,6 @@ router.get('/editProfile', profileController.getProfile);
 router.post('/profile/update', profileController.updateProfile);
 router.post('/profile/upload-picture',upload.single('profile_picture'),profileController.uploadProfilePicture);
 router.get('/getProfilePicture', profileController.getProfilePicture);
+router.get('/getProfile', profileController.getProfile);
 
 module.exports = router;
