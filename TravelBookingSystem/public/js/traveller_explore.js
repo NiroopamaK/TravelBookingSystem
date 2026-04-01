@@ -35,9 +35,9 @@ async function loadPackages() {
           <p>📍 ${escapeHtml(pkg.destination)}</p>
           <p>🗓 ${escapeHtml(pkg.start_date)} - ${escapeHtml(pkg.end_date)}</p>
           <p>£ ${escapeHtml(pkg.price)}</p>
-          <a class="btn" href="/traveller/booking/${pkg.package_id}">
-            Request Booking
-          </a>
+          <button class="btn" onclick="viewPackage(${pkg.package_id})">
+          View Package
+          </button>
         </div>
       </div>
     `).join("");
@@ -46,6 +46,73 @@ async function loadPackages() {
 
   } catch (err) {
     console.error("Error loading packages:", err);
+  }
+}
+
+// ================= VIEW MODAL =================
+const viewPackageModal = document.getElementById('viewPackageModal');
+const closeViewPackageModalBtn = document.getElementById('closeViewPackageModalBtn');
+
+function closeViewPackageModal() {
+  viewPackageModal.classList.remove('active');
+}
+
+closeViewPackageModalBtn.addEventListener('click', closeViewPackageModal);
+viewPackageModal.addEventListener('click', (e) => {
+  if (e.target === viewPackageModal) closeViewPackageModal();
+});
+
+async function viewPackage(id) {
+  console.log(id)
+  try {
+    const res = await fetch(`/traveller/package/${id}`, {
+      credentials: 'include'
+    });
+    console.log(res)
+    if (!res.ok) throw new Error('Failed to fetch package');
+
+    const pkg = await res.json();
+
+    const fmt = d =>
+      d ? new Date(d).toLocaleDateString('en-GB') : '-';
+
+    // Populate modal
+    document.getElementById('viewPkgTitle').textContent = pkg.title;
+    document.getElementById('viewPkgDestination').textContent = pkg.destination;
+    document.getElementById('viewPkgStartDate').textContent = fmt(pkg.start_date);
+    document.getElementById('viewPkgEndDate').textContent = fmt(pkg.end_date);
+    document.getElementById('viewPkgPrice').textContent =
+      pkg.price ? '£' + Number(pkg.price).toLocaleString() : '-';
+    document.getElementById('viewPkgDescription').textContent =
+      pkg.description || '-';
+
+    // Itinerary
+    const itineraryEl = document.getElementById('viewPkgItinerary');
+    itineraryEl.innerHTML = '';
+
+    if (pkg.itinerary_items && pkg.itinerary_items.length > 0) {
+      pkg.itinerary_items.forEach((item, i) => {
+        const li = document.createElement('li');
+        li.innerHTML = `
+          <strong>${item.title}</strong>
+          <p>${item.description}</p>
+        `;
+        itineraryEl.appendChild(li);
+      });
+    } else {
+      itineraryEl.innerHTML = '<li>No itinerary available</li>';
+    }
+
+    // 🔥 Set booking button link
+    document.getElementById('viewPkgBookingBtn').href =
+      `/traveller/booking/${pkg.package_id}`;
+
+    // Show modal
+    viewPackageModal.classList.add('active');
+
+  } catch (err) {
+    console.error(err);
+    alert('Failed to load package details');
   }
 }
 

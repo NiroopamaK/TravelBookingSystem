@@ -1,4 +1,4 @@
-const { getPackages, getPackageById } = require('../models/packageModel');
+const { getPackages, getPackageById, getPackageByIdWithItinerary } = require('../models/packageModel');
 const bookingModel = require('../models/bookingModel');
 
 // Format package dates for frontend
@@ -86,9 +86,28 @@ const getAllBookingsByUser = async (req, res) => {
   }
 };
 
+const viewPackageByID = async (req, res) => {
+  try {
+    const { packageId } = req.params;
+    const pkg = await getPackageByIdWithItinerary(packageId);
+    const formattedPkg = formatPackageDates(pkg);
+
+    if (!pkg) {
+      return res.status(404).json({ message: 'Package not found' });
+    }
+
+    res.json(formattedPkg);
+
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: error.message });
+  }
+};
+
 module.exports = {
   getPackagesData,
   getPackageData,
   createBooking,
-  getAllBookingsByUser
+  getAllBookingsByUser,
+  viewPackageByID
 };

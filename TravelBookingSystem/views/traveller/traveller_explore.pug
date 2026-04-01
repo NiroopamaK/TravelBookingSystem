@@ -3,13 +3,17 @@ extends ../layout
 block append head 
   title Explore
 
-  // shared layout
+  // Shared layout
   link(rel="stylesheet", href="/css/dashboard.css")
 
-  // explore page css
+  // Explore page css
   link(rel="stylesheet", href="/css/traveller_explore.css")
 
+  // (Optional) reuse modal styling from agent page
+  link(rel="stylesheet", href="/css/agent.css")
+
 block content 
+
   // ================= SEARCH AREA =================
   .search-area
     .one-field.destination-field
@@ -27,5 +31,38 @@ block content
   .cards#cardsContainer
     p Loading packages...
 
+  // ================= VIEW PACKAGE MODAL =================
+  .modal-overlay#viewPackageModal
+    .modal.modal-view
+      button.modal-close#closeViewPackageModalBtn &times;
+
+      .view-pkg-header
+        h3#viewPkgTitle -
+        span.view-pkg-destination#viewPkgDestination -
+
+      .view-pkg-meta
+        .view-pkg-meta-item
+          label Start Date
+          p#viewPkgStartDate -
+        .view-pkg-meta-item
+          label End Date
+          p#viewPkgEndDate -
+        .view-pkg-meta-item
+          label Price
+          p#viewPkgPrice -
+
+      .view-pkg-section
+        label Description
+        p#viewPkgDescription -
+
+      .view-pkg-section
+        label Itinerary
+        ul#viewPkgItinerary.view-pkg-itinerary
+
+      // ===== ACTION BUTTON =====
+      .view-pkg-actions
+        a#viewPkgBookingBtn.btn(href="#") Request Booking
+
   // ================= SCRIPTS =================
   script(src="/js/traveller_explore.js")
+  
