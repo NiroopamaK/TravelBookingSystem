@@ -17,7 +17,6 @@ block content
   table#packagesTable
     thead
       tr
-        th Package ID
         th Title
         th Destination
         th Start Date
@@ -65,6 +64,32 @@ block content
         .form-actions
           button#submitPackageBtn.submit-btn(type="submit") Save Package
           button#cancelEditBtn.cancel-btn(type="button" style="display:none") Cancel
+
+  .modal-overlay#viewPackageModal
+    .modal.modal-view
+      button.modal-close#closeViewPackageModalBtn &times;
+      .view-pkg-header
+        h3#viewPkgTitle -
+        span.view-pkg-destination#viewPkgDestination -
+      .view-pkg-meta
+        .view-pkg-meta-item
+          label Start Date
+          p#viewPkgStartDate -
+        .view-pkg-meta-item
+          label End Date
+          p#viewPkgEndDate -
+        .view-pkg-meta-item
+          label Price
+          p#viewPkgPrice -
+        .view-pkg-meta-item
+          label Created On
+          p#viewPkgCreatedOn -
+      .view-pkg-section
+        label Description
+        p#viewPkgDescription -
+      .view-pkg-section
+        label Itinerary
+        ul#viewPkgItinerary.view-pkg-itinerary
 
 block scripts
   script(src="/js/agent-packages.js")

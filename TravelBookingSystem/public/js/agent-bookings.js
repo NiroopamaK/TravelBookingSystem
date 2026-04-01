@@ -61,11 +61,77 @@ bookingModal.addEventListener('click', (e) => {
     if (e.target === bookingModal) closeBookingModal();
 });
 
+/*  AUTOCOMPLETE  */
+function setupAutocomplete(inputId, listId, apiUrl) {
+    const input = document.getElementById(inputId);
+    const list  = document.getElementById(listId);
+    let debounceTimer = null;
+
+    input.addEventListener('input', () => {
+        clearTimeout(debounceTimer);
+        const q = input.value.trim();
+        if (!q) { list.innerHTML = ''; list.classList.remove('open'); return; }
+
+        debounceTimer = setTimeout(async () => {
+            try {
+                const res  = await fetch(`${apiUrl}?q=${encodeURIComponent(q)}`, { credentials: 'include' });
+                const data = await res.json();
+                list.innerHTML = '';
+                if (!data.length) { list.classList.remove('open'); return; }
+                data.forEach(name => {
+                    const li = document.createElement('li');
+                    li.textContent = name;
+                    li.addEventListener('mousedown', (e) => {
+                        e.preventDefault();
+                        input.value = name;
+                        list.innerHTML = '';
+                        list.classList.remove('open');
+                        loadBookings(1);
+                    });
+                    list.appendChild(li);
+                });
+                list.classList.add('open');
+            } catch (err) {
+                console.error('Autocomplete error:', err);
+            }
+        }, 200);
+    });
+
+    input.addEventListener('blur', () => {
+        setTimeout(() => { list.innerHTML = ''; list.classList.remove('open'); }, 150);
+    });
+}
+
+setupAutocomplete('filterTraveller', 'filterTravellerList', '/api/agent/bookings/suggestions/travellers');
+setupAutocomplete('filterPackage',   'filterPackageList',   '/api/agent/bookings/suggestions/packages');
+
+/*  FILTERS  */
+document.getElementById('applyFiltersBtn').addEventListener('click', () => loadBookings(1));
+document.getElementById('resetFiltersBtn').addEventListener('click', () => {
+    document.getElementById('filterTraveller').value = '';
+    document.getElementById('filterPackage').value   = '';
+    document.getElementById('filterStatus').value    = '';
+    loadBookings(1);
+});
+
+function buildFilterParams() {
+    const traveller = document.getElementById('filterTraveller').value.trim();
+    const pkg       = document.getElementById('filterPackage').value.trim();
+    const status    = document.getElementById('filterStatus').value;
+    const params = new URLSearchParams();
+    if (traveller) params.set('traveller', traveller);
+    if (pkg)       params.set('package',   pkg);
+    if (status)    params.set('status',    status);
+    return params.toString();
+}
+
 /*  LOAD BOOKINGS  */
 async function loadBookings(page = 1) {
     try {
         currentPage = page;
-        const res = await fetch(`${API_BOOKINGS}?page=${currentPage}&limit=${currentLimit}`, { credentials: 'include' });
+        const filters = buildFilterParams();
+        const query   = `page=${currentPage}&limit=${currentLimit}${filters ? '&' + filters : ''}`;
+        const res = await fetch(`${API_BOOKINGS}?${query}`, { credentials: 'include' });
         if (!res.ok) throw new Error('Failed to fetch bookings');
 
         const result = await res.json();

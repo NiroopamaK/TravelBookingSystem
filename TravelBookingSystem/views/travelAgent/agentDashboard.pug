@@ -15,37 +15,64 @@ block content
       span.stat-number#confirmedBookings 0
       span.stat-label Confirmed Bookings
 
-  h2 Trips
-  table#tripsTable
-    thead
-      tr
-        th Trip ID
-        th Package
-        th Traveller
-        th Dates
-        th Status
-        th Actions
-    tbody#tripsBody
+  h2 Performance Summary
 
-  .pagination#tripsPagination
+  .summary-grid
+    .summary-card.summary-card--clickable#mostUsedPackageCard
+      .summary-card-icon-wrap
+        svg(xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2")
+          path(d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z")
+      .summary-card-body
+        span.summary-card-label Most Used Package
+        strong.summary-card-value#mostUsedPackageName —
+        span.summary-card-sub#mostUsedPackageSub —
+      span.summary-card-cta View Details
 
-  .modal-overlay#tripInfoModal
-    .modal
-      button.modal-close#closeTripInfoModalBtn &times;
-      .trip-info-card
-        h3#tripInfoId -
-        p#tripInfoName -
-        span.trip-status-badge#tripInfoStatus -
-        .trip-info-grid
-          .trip-info-box
-            label Start Date
-            p#tripInfoStartDate -
-          .trip-info-box
-            label End Date
-            p#tripInfoEndDate -
-          .trip-info-box
-            label Cost
-            p#tripInfoCost -
+    .summary-card
+      .summary-card-icon-wrap
+        svg(xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2")
+          line(x1="12" y1="1" x2="12" y2="23")
+          path(d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6")
+      .summary-card-body
+        span.summary-card-label Total Revenue
+        strong.summary-card-value#totalRevenue —
+        span.summary-card-sub From completed trips
+
+    .summary-card
+      .summary-card-icon-wrap
+        svg(xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2")
+          path(d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2")
+          circle(cx="12" cy="7" r="4")
+      .summary-card-body
+        span.summary-card-label Top Traveller
+        strong.summary-card-value#topTravellerName —
+        span.summary-card-sub#topTravellerSub —
+
+  .modal-overlay#pkgDetailModal
+    .modal.modal-view
+      button.modal-close#closePkgDetailModalBtn &times;
+      .view-pkg-header
+        h3#pkgDetailTitle -
+        span.view-pkg-destination#pkgDetailDestination -
+      .view-pkg-meta
+        .view-pkg-meta-item
+          label Start Date
+          p#pkgDetailStartDate -
+        .view-pkg-meta-item
+          label End Date
+          p#pkgDetailEndDate -
+        .view-pkg-meta-item
+          label Price
+          p#pkgDetailPrice -
+        .view-pkg-meta-item
+          label Created On
+          p#pkgDetailCreatedOn -
+      .view-pkg-section
+        label Description
+        p#pkgDetailDescription -
+      .view-pkg-section
+        label Itinerary
+        ul#pkgDetailItinerary.view-pkg-itinerary
 
 block scripts
   script(src="/js/agent-dashboard.js")

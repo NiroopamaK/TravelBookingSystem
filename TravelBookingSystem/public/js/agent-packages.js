@@ -80,13 +80,14 @@ function renderPackages(packages) {
         const startDate = pkg.start_date ? pkg.start_date.slice(0, 10) : '';
         const endDate   = pkg.end_date   ? pkg.end_date.slice(0, 10)   : '';
         tr.innerHTML = `
-            <td>${pkg.package_id}</td>
+            
             <td>${pkg.title}</td>
             <td>${pkg.destination}</td>
             <td>${startDate}</td>
             <td>${endDate}</td>
             <td>£${Number(pkg.price).toLocaleString()}</td>
             <td>
+                <button class="btn-view" onclick="viewPackage(${pkg.package_id})">View</button>
                 <button class="btn-edit" onclick="editPackage(${pkg.package_id})">Edit</button>
                 <button class="btn-delete" onclick="deletePackage(${pkg.package_id})">Delete</button>
             </td>
@@ -137,7 +138,58 @@ function changePackageLimit(val) {
     loadPackages(1);
 }
 
-//  MODAL 
+//  VIEW MODAL
+const viewPackageModal       = document.getElementById('viewPackageModal');
+const closeViewPackageModalBtn = document.getElementById('closeViewPackageModalBtn');
+
+function closeViewPackageModal() { viewPackageModal.classList.remove('active'); }
+
+closeViewPackageModalBtn.addEventListener('click', closeViewPackageModal);
+viewPackageModal.addEventListener('click', (e) => { if (e.target === viewPackageModal) closeViewPackageModal(); });
+
+async function viewPackage(id) {
+    try {
+        const res = await fetch(`${API}/${id}`, { credentials: 'include' });
+        if (!res.ok) throw new Error('Failed to fetch package');
+        const pkg = await res.json();
+
+        const fmt = d => d ? new Date(d).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' }) : '-';
+
+        document.getElementById('viewPkgTitle').textContent      = pkg.title;
+        document.getElementById('viewPkgDestination').textContent = pkg.destination;
+        document.getElementById('viewPkgStartDate').textContent   = fmt(pkg.start_date);
+        document.getElementById('viewPkgEndDate').textContent     = fmt(pkg.end_date);
+        document.getElementById('viewPkgPrice').textContent       = pkg.price != null ? '£' + Number(pkg.price).toLocaleString('en-GB', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : '-';
+        document.getElementById('viewPkgCreatedOn').textContent   = fmt(pkg.created_on);
+        document.getElementById('viewPkgDescription').textContent = pkg.description || '-';
+
+        const itineraryEl = document.getElementById('viewPkgItinerary');
+        itineraryEl.innerHTML = '';
+        if (pkg.itinerary_items && pkg.itinerary_items.length > 0) {
+            pkg.itinerary_items.forEach((item, i) => {
+                const li = document.createElement('li');
+                li.className = 'view-pkg-itinerary-item';
+                li.innerHTML = `
+                    <span class="itinerary-step">${i + 1}</span>
+                    <div>
+                        <strong>${item.title}</strong>
+                        <p>${item.description}</p>
+                    </div>
+                `;
+                itineraryEl.appendChild(li);
+            });
+        } else {
+            itineraryEl.innerHTML = '<li class="no-itinerary">No itinerary items.</li>';
+        }
+
+        viewPackageModal.classList.add('active');
+    } catch (err) {
+        console.error('Error viewing package:', err);
+        alert('Could not load package details');
+    }
+}
+
+//  MODAL
 function openPackageModal() { packageModal.classList.add('active'); }
 function closePackageModal() { packageModal.classList.remove('active'); resetForm(); }
 
