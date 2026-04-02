@@ -1,8 +1,9 @@
 extends ../layout
 
-block head
+block append head
   meta(name="viewport", content="width=device-width, initial-scale=1.0")
   link(rel="stylesheet", href="/css/traveller_dashboard.css")
+  link(rel="stylesheet", href="/css/agent.css")
 
 block content
   h2.section-title My Bookings
@@ -28,11 +29,42 @@ block content
           th Destination
           th Status
           th.table-right Actions
-
       tbody#bookingsTbody
 
+  .pagination#bookingsPagination
+
   .center
-    button.btn.btn-wide(type="button") Browse More Packages
+    a.btn.btn-wide(href="/traveller/explore") Browse More Packages
+
+  .modal-overlay#viewPackageModal
+    .modal.modal-view
+      button.modal-close#closeViewPackageModalBtn &times;
+
+      .view-pkg-header
+        h3#viewPkgTitle -
+        span.view-pkg-destination#viewPkgDestination -
+
+      .view-pkg-meta
+        .view-pkg-meta-item
+          label Start Date
+          p#viewPkgStartDate -
+        .view-pkg-meta-item
+          label End Date
+          p#viewPkgEndDate -
+        .view-pkg-meta-item
+          label Price
+          p#viewPkgPrice -
+
+      .view-pkg-section
+        label Description
+        p#viewPkgDescription -
+
+      .view-pkg-section
+        label Itinerary
+        ul#viewPkgItinerary.view-pkg-itinerary
+
+      .view-pkg-actions
+        a#viewPkgBookingBtn.btn(href="#") Request Booking
 
 block scripts
   script(src="/js/traveller_dashboard.js")
