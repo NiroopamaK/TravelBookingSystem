@@ -71,6 +71,26 @@ const deleteItineraryByPackageId = async (packageId) => {
 const deletePackageById = async (packageId) => {
   await pool.execute('DELETE FROM packages WHERE package_id = ?', [packageId]);
 };
+const getPackageByIdWithItinerary = async (packageId) => {
+  // Get package
+  const [rows] = await pool.query(
+    'SELECT * FROM packages WHERE package_id = ?',
+    [packageId]
+  );
+
+  if (rows.length === 0) return null;
+
+  // Get itinerary items
+  const [items] = await pool.query(
+    'SELECT * FROM itinerary_items WHERE package_id = ?',
+    [packageId]
+  );
+
+  return {
+    ...rows[0],
+    itinerary_items: items
+  };
+};
 
 module.exports = {
   getPackages,
@@ -84,4 +104,5 @@ module.exports = {
   updatePackageById,
   deleteItineraryByPackageId,
   deletePackageById,
+  getPackageByIdWithItinerary
 };
