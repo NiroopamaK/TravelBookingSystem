@@ -214,6 +214,23 @@ textarea {
   gap: 8px;
 }
 
+.itinerary-item button {
+  align-self: flex-end;
+  padding: 4px 12px;
+  background-color: #fff;
+  color: #c0392b;
+  border: 1px solid #c0392b;
+  border-radius: 4px;
+  font-size: 13px;
+  cursor: pointer;
+  transition: background-color 0.2s, color 0.2s;
+}
+
+.itinerary-item button:hover {
+  background-color: #c0392b;
+  color: #fff;
+}
+
 /*  BUTTONS  */
 .submit-btn {
   padding: 10px 20px;
@@ -611,8 +628,8 @@ input[type="text"].search-input {
   color: #5a381e;
 }
 
-/*  TRIP DETAIL MODAL  */
-.trip-status-badge {
+/*  BOOKING DETAIL MODAL  */
+.booking-status-badge {
   display: inline-block;
   background-color: #5a381e;
   color: white;
@@ -622,13 +639,13 @@ input[type="text"].search-input {
   margin: 8px 0 20px;
 }
 
-.trip-info-cards {
+.booking-info-cards {
   display: flex;
   gap: 16px;
   margin-top: 16px;
 }
 
-.trip-info-card {
+.booking-info-card {
   flex: 1;
   background: #f1f5f9;
   border-radius: 8px;
@@ -651,7 +668,7 @@ input[type="text"].search-input {
   color: #5a381e;
 }
 
-/*  TRIP INFO MODAL  */
+/*  BOOKING INFO MODAL  */
 .btn-view {
   padding: 5px 12px;
   border: none;
@@ -667,19 +684,19 @@ input[type="text"].search-input {
   background-color: #376045;
 }
 
-.trip-info-card h3 {
+.booking-info-card h3 {
   font-size: 1.3rem;
   color: #5a381e;
   margin-bottom: 4px;
 }
 
-.trip-info-card > p {
+.booking-info-card > p {
   color: #555;
   margin-bottom: 12px;
   font-size: 1rem;
 }
 
-.trip-status-badge {
+.booking-status-badge {
   display: inline-block;
   padding: 4px 14px;
   border-radius: 20px;
@@ -690,19 +707,19 @@ input[type="text"].search-input {
   margin-bottom: 20px;
 }
 
-.trip-info-grid {
+.booking-info-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 12px;
 }
 
-.trip-info-box {
+.booking-info-box {
   background: #f1f5f9;
   border-radius: 8px;
   padding: 14px 16px;
 }
 
-.trip-info-box label {
+.booking-info-box label {
   display: block;
   font-size: 0.75rem;
   color: #8b5e3c;
@@ -711,7 +728,7 @@ input[type="text"].search-input {
   margin-bottom: 6px;
 }
 
-.trip-info-box p {
+.booking-info-box p {
   font-size: 1rem;
   font-weight: bold;
   color: #5a381e;

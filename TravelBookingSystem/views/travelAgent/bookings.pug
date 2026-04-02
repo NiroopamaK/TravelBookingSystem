@@ -27,7 +27,7 @@ block content
   table#bookingsTable
     thead
       tr
-        th Trip ID
+        th Booking ID
         th Package
         th Traveller
         th Dates
@@ -37,23 +37,23 @@ block content
 
   .pagination#bookingsPagination
 
-  .modal-overlay#tripInfoModal
+  .modal-overlay#bookingInfoModal
     .modal
-      button.modal-close#closeTripInfoModalBtn &times;
-      .trip-info-card
-        h3#tripInfoId -
-        p#tripInfoName -
-        span.trip-status-badge#tripInfoStatus -
-        .trip-info-grid
-          .trip-info-box
+      button.modal-close#closeBookingInfoModalBtn &times;
+      .booking-info-card
+        h3#bookingInfoId -
+        p#bookingInfoName -
+        span.booking-status-badge#bookingInfoStatus -
+        .booking-info-grid
+          .booking-info-box
             label Start Date
-            p#tripInfoStartDate -
-          .trip-info-box
+            p#bookingInfoStartDate -
+          .booking-info-box
             label End Date
-            p#tripInfoEndDate -
-          .trip-info-box
+            p#bookingInfoEndDate -
+          .booking-info-box
             label Cost
-            p#tripInfoCost -
+            p#bookingInfoCost -
 
   .modal-overlay#bookingModal
     .modal

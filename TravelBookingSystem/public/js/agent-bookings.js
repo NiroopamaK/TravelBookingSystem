@@ -7,40 +7,40 @@ const modalBookingId        = document.getElementById('modalBookingId');
 const modalBookingIdDisplay = document.getElementById('modalBookingIdDisplay');
 const bookingsBody          = document.getElementById('bookingsBody');
 
-const tripInfoModal         = document.getElementById('tripInfoModal');
-const closeTripInfoModalBtn = document.getElementById('closeTripInfoModalBtn');
+const bookingInfoModal         = document.getElementById('bookingInfoModal');
+const closeBookingInfoModalBtn = document.getElementById('closeBookingInfoModalBtn');
 
 let currentPage  = 1;
 let currentLimit = 5;
 let totalPages   = 1;
 const bookingsMap = {};
 
-/*  TRIP INFO MODAL  */
-function openTripInfoModal(bookingId) {
+/*  BOOKING INFO MODAL  */
+function openBookingInfoModal(bookingId) {
     const booking = bookingsMap[bookingId];
     if (!booking) return;
-    document.getElementById('tripInfoId').textContent   = 'Trip: ' + booking.trip_id;
-    document.getElementById('tripInfoName').textContent = booking.package_name;
+    document.getElementById('bookingInfoId').textContent   = 'Booking: ' + booking.trip_id;
+    document.getElementById('bookingInfoName').textContent = booking.package_name;
 
-    const statusEl = document.getElementById('tripInfoStatus');
+    const statusEl = document.getElementById('bookingInfoStatus');
     statusEl.textContent  = booking.status;
-    statusEl.className    = 'trip-status-badge status-' + (booking.status ? booking.status.toLowerCase() : '');
+    statusEl.className    = 'booking-status-badge status-' + (booking.status ? booking.status.toLowerCase() : '');
 
     const fmt = d => d ? new Date(d).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' }).toUpperCase() : '-';
-    document.getElementById('tripInfoStartDate').textContent = fmt(booking.start_date);
-    document.getElementById('tripInfoEndDate').textContent   = fmt(booking.end_date);
-    document.getElementById('tripInfoCost').textContent      = booking.cost != null ? '£' + Number(booking.cost).toLocaleString('en-GB', { minimumFractionDigits: 0 }) : '-';
+    document.getElementById('bookingInfoStartDate').textContent = fmt(booking.start_date);
+    document.getElementById('bookingInfoEndDate').textContent   = fmt(booking.end_date);
+    document.getElementById('bookingInfoCost').textContent      = booking.cost != null ? '£' + Number(booking.cost).toLocaleString('en-GB', { minimumFractionDigits: 0 }) : '-';
 
-    tripInfoModal.classList.add('active');
+    bookingInfoModal.classList.add('active');
 }
 
-function closeTripInfoModal() {
-    tripInfoModal.classList.remove('active');
+function closeBookingInfoModal() {
+    bookingInfoModal.classList.remove('active');
 }
 
-closeTripInfoModalBtn.addEventListener('click', closeTripInfoModal);
-tripInfoModal.addEventListener('click', (e) => {
-    if (e.target === tripInfoModal) closeTripInfoModal();
+closeBookingInfoModalBtn.addEventListener('click', closeBookingInfoModal);
+bookingInfoModal.addEventListener('click', (e) => {
+    if (e.target === bookingInfoModal) closeBookingInfoModal();
 });
 
 /*  BOOKING STATUS MODAL  */
@@ -150,7 +150,7 @@ async function loadBookings(page = 1) {
                 <td>${startDate} - ${endDate}</td>
                 <td class="status-${b.status ? b.status.toLowerCase() : ''}">${b.status}</td>
                 <td>
-                    <button class="btn-view" onclick="openTripInfoModal(${b.booking_id})">View</button>
+                    <button class="btn-view" onclick="openBookingInfoModal(${b.booking_id})">View</button>
                     <button class="btn-edit" onclick="openBookingModal(${b.booking_id})">Update Status</button>
                 </td>
             `;
