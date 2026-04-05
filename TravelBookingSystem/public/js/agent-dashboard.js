@@ -5,7 +5,7 @@ async function loadStats() {
         if (!res.ok) throw new Error('Failed to fetch stats');
         const data = await res.json();
         document.getElementById('totalPackages').textContent    = data.totalPackages;
-        document.getElementById('totalTrips').textContent       = data.totalTrips;
+        document.getElementById('totalBookings').textContent     = data.totalTrips;
         document.getElementById('confirmedBookings').textContent = data.confirmedBookings;
     } catch (err) {
         console.error('Error loading stats:', err);
@@ -27,10 +27,10 @@ async function loadSummary() {
         if (pkg) {
             document.getElementById('mostUsedPackageName').textContent = pkg.title;
             document.getElementById('mostUsedPackageSub').textContent  =
-                pkg.destination + '  •  ' + pkg.completed_count + ' completed trip' + (pkg.completed_count !== 1 ? 's' : '');
+                pkg.destination + '  •  ' + pkg.completed_count + ' completed booking' + (pkg.completed_count !== 1 ? 's' : '');
             document.getElementById('mostUsedPackageCard').classList.add('summary-card--active');
         } else {
-            document.getElementById('mostUsedPackageName').textContent = 'No completed trips yet';
+            document.getElementById('mostUsedPackageName').textContent = 'No completed bookings yet';
             document.getElementById('mostUsedPackageSub').textContent  = '';
             document.getElementById('mostUsedPackageCard').classList.remove('summary-card--active');
         }
@@ -45,9 +45,9 @@ async function loadSummary() {
         if (trav) {
             document.getElementById('topTravellerName').textContent = trav.traveller_name;
             document.getElementById('topTravellerSub').textContent  =
-                trav.trip_count + ' completed trip' + (trav.trip_count !== 1 ? 's' : '');
+                trav.trip_count + ' completed booking' + (trav.trip_count !== 1 ? 's' : '');
         } else {
-            document.getElementById('topTravellerName').textContent = 'No completed trips yet';
+            document.getElementById('topTravellerName').textContent = 'No completed bookings yet';
             document.getElementById('topTravellerSub').textContent  = '';
         }
     } catch (err) {
