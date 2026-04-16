@@ -13,7 +13,7 @@ const agentRoutes = require('./routes/agentRoutes');
 const travellerRoutes = require('./routes/travellerRoutes');
 const profileRoutes = require('./routes/profileRoutes');
 const adminRoutes = require("./routes/adminRoutes");
-
+const {authenticateSession,authorizeRoles} = require('./services/authService');
 const app = express();
 
 // set up pug
@@ -47,31 +47,31 @@ app.get('/signup', (req, res) => res.render('signup'));
 // Pages
 app.get('/', (req, res) => res.render('index'));
 app.get('/signup', (req, res) => res.render('signup'));
-app.get('/dashboard', (req, res) => res.render('dashboard'));
+//app.get('/dashboard', (req, res) => res.render('dashboard'));
 
 // admin-pages
-app.get('/admin/adminDashboard', (req, res) => res.render('admin/adminDashboard'));
-app.get('/admin/packages', (req, res) => res.render('admin/packages'));
-app.get('/admin/users', (req, res) => res.render('admin/users'));
+app.get('/admin/adminDashboard', authenticateSession, authorizeRoles('ADMIN'),(req, res) => res.render('admin/adminDashboard'));
+app.get('/admin/packages', authenticateSession, authorizeRoles('ADMIN'), (req, res) => res.render('admin/packages'));
+app.get('/admin/users', authenticateSession, authorizeRoles('ADMIN'), (req, res) => res.render('admin/users'));
 
 // agent - pages
-app.get('/agent/packages', (req, res) => res.render('travelAgent/packages'));
-app.get('/agent/bookings', (req, res) => res.render('travelAgent/bookings'));
-app.get('/agent/agentDashboard', (req, res) => res.render('travelAgent/agentDashboard'));
+app.get('/agent/packages', authenticateSession, authorizeRoles('TRAVEL_AGENT'),(req, res) => res.render('travelAgent/packages'));
+app.get('/agent/bookings',authenticateSession, authorizeRoles('TRAVEL_AGENT'), (req, res) => res.render('travelAgent/bookings'));
+app.get('/agent/agentDashboard',authenticateSession, authorizeRoles('TRAVEL_AGENT'), (req, res) => res.render('travelAgent/agentDashboard'));
 
 // traveller-pages
-app.get('/traveller/dashboard', (req, res) => res.render('traveller/traveller_dashboard'));
-app.get('/traveller/explore', (req, res) => res.render('traveller/traveller_explore'));
-app.get('/traveller/booking/:package_id', (req, res) => res.render('traveller/traveller_booking'));
+app.get('/traveller/dashboard',authenticateSession, authorizeRoles('TRAVELLER'), (req, res) => res.render('traveller/traveller_dashboard'));
+app.get('/traveller/explore',authenticateSession, authorizeRoles('TRAVELLER'), (req, res) => res.render('traveller/traveller_explore'));
+app.get('/traveller/booking/:package_id', authenticateSession, authorizeRoles('TRAVELLER'),(req, res) => res.render('traveller/traveller_booking'));
 
 // Routes
 app.use('/', profileRoutes);              
 app.use('/api/auth', authRoutes);
 app.use('/api/email', emailVerificationRoutes);
-app.use('/api/agent', agentRoutes);
-app.use('/traveller', travellerRoutes);   
-app.use('/bookings', bookingRoutes); 
-app.use("/api/admin", adminRoutes);     
+app.use('/api/agent',authenticateSession, authorizeRoles('TRAVEL_AGENT'), agentRoutes);
+app.use('/traveller',authenticateSession, authorizeRoles('TRAVELLER'), travellerRoutes);   
+app.use('/bookings',authenticateSession, authorizeRoles('TRAVELLER'), bookingRoutes); 
+app.use("/api/admin",authenticateSession, authorizeRoles('ADMIN'), adminRoutes);     
 
 // 404 handler
 app.use((req, res) => {
