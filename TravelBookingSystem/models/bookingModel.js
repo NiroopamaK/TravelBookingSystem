@@ -106,6 +106,14 @@ const findPackageSuggestions = async (userId, q) => {
   return rows.map(r => r.name);
 };
 
+const getBookingStatusById = async (bookingId) => {
+  const [[row]] = await pool.execute(
+    'SELECT status FROM bookings WHERE booking_id = ?',
+    [bookingId]
+  );
+  return row ? row.status : null;
+};
+
 const updateBookingStatusById = async (bookingId, status) => {
   const [result] = await pool.execute(
     'UPDATE bookings SET status = ? WHERE booking_id = ?',
@@ -121,5 +129,6 @@ module.exports = {
   findBookingsByAgent,
   findTravellerSuggestions,
   findPackageSuggestions,
+  getBookingStatusById,
   updateBookingStatusById,
 };

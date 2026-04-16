@@ -45,9 +45,33 @@ bookingInfoModal.addEventListener('click', (e) => {
 
 /*  BOOKING STATUS MODAL  */
 function openBookingModal(id) {
+    const booking = bookingsMap[id];
+    if (!booking) return;
+
+    const allowedTransitions = {
+        PENDING: ['CONFIRMED'],
+        CONFIRMED: ['COMPLETED'],
+        COMPLETED: [],
+    };
+
+    const nextStatuses = allowedTransitions[booking.status] || [];
+    if (nextStatuses.length === 0) {
+        alert('This booking is already completed and cannot be changed.');
+        return;
+    }
+
     modalBookingId.value = id;
     modalBookingIdDisplay.textContent = id;
-    document.getElementById('status').value = '';
+
+    const statusSelect = document.getElementById('status');
+    statusSelect.innerHTML = '<option value="">Select Status</option>';
+    nextStatuses.forEach(s => {
+        const opt = document.createElement('option');
+        opt.value = s;
+        opt.textContent = s;
+        statusSelect.appendChild(opt);
+    });
+
     bookingModal.classList.add('active');
 }
 
@@ -151,7 +175,7 @@ async function loadBookings(page = 1) {
                 <td class="status-${b.status ? b.status.toLowerCase() : ''}">${b.status}</td>
                 <td>
                     <button class="btn-view" onclick="openBookingInfoModal(${b.booking_id})">View</button>
-                    <button class="btn-edit" onclick="openBookingModal(${b.booking_id})">Update Status</button>
+                    ${b.status !== 'COMPLETED' ? `<button class="btn-edit" onclick="openBookingModal(${b.booking_id})">Update Status</button>` : ''}
                 </td>
             `;
             bookingsBody.appendChild(tr);
@@ -202,8 +226,11 @@ updateStatusForm.addEventListener('submit', async (e) => {
             credentials: 'include'
         });
 
-        if (!res.ok) throw new Error('Failed to update status');
         const data = await res.json();
+        if (!res.ok) {
+            alert(data.message || 'Failed to update status');
+            return;
+        }
         alert(data.message);
         closeBookingModal();
         loadBookings(currentPage);

@@ -130,14 +130,33 @@ const getPackageSuggestions = async (req, res) => {
 const updateBookingStatus = async (req, res) => {
     try {
         const { status } = req.body;
-        const validStatuses = ['PENDING', 'CONFIRMED', 'COMPLETED', 'CANCELLED'];
-        if (!validStatuses.includes(status)) {
-            return res.status(400).json({ message: 'Invalid status value' });
+        const bookingId = req.params.id;
+
+        const currentStatus = await bookingModel.getBookingStatusById(bookingId);
+        if (currentStatus === null) {
+            return res.status(404).json({ message: 'Booking not found' });
         }
 
-        const affectedRows = await bookingModel.updateBookingStatusById(req.params.id, status);
-        if (affectedRows === 0) return res.status(404).json({ message: 'Booking not found' });
+        const allowedTransitions = {
+            PENDING: ['CONFIRMED'],
+            CONFIRMED: ['COMPLETED'],
+            COMPLETED: [],
+        };
 
+        const allowed = allowedTransitions[currentStatus];
+        if (allowed === undefined) {
+            return res.status(400).json({ message: `No transitions defined for status: ${currentStatus}` });
+        }
+        if (allowed.length === 0) {
+            return res.status(400).json({ message: 'Booking is already completed and cannot be changed' });
+        }
+        if (!allowed.includes(status)) {
+            return res.status(400).json({
+                message: `Invalid transition: '${currentStatus}' can only move to '${allowed.join(', ')}'`
+            });
+        }
+
+        await bookingModel.updateBookingStatusById(bookingId, status);
         res.json({ message: 'Booking status updated successfully' });
     } catch (error) {
         console.error('updateBookingStatus error:', error);
