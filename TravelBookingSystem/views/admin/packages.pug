@@ -41,4 +41,26 @@ block content
       span#pageNumber 1
     button#next Next
 
+  // ✅ VIEW MODAL (added)
+  .modal-overlay#viewPackageModal
+    .modal.modal-view
+      button.modal-close#closeViewPackageModalBtn &times;
+
+      .view-pkg-header
+        h3#viewPkgTitle -
+        span#viewPkgDestination -
+
+      .view-pkg-meta
+        p
+          strong Created By:
+          span#viewPkgAgent -
+
+        p
+          strong Price:
+          span#viewPkgPrice -
+
+      .view-pkg-section
+        label Description
+        p#viewPkgDescription -
+
   script(src="/js/packages.js")

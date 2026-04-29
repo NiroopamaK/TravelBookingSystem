@@ -3,8 +3,40 @@ let page = 1;
 const limit = 5;
 
 document.addEventListener("DOMContentLoaded", () => {
+
     loadUsers();
+
+    // FILTER CHANGE
+    document.getElementById("roleFilter").addEventListener("change",()=>{
+        page = 1;
+        renderTable();
+    });
+
+    // PAGINATION
+    document.getElementById("next").onclick=()=>{
+        page++;
+        renderTable();
+    };
+
+    document.getElementById("prev").onclick=()=>{
+        if(page>1) page--;
+        renderTable();
+    };
+
+    // CLOSE MODAL
+    document.getElementById("closeUserModalBtn").onclick = () => {
+        document.getElementById("viewUserModal").classList.remove("active");
+    };
+
+    // CLICK OUTSIDE CLOSE
+    document.getElementById("viewUserModal").onclick = (e) => {
+        if(e.target.id === "viewUserModal"){
+            e.currentTarget.classList.remove("active");
+        }
+    };
+
 });
+
 
 async function loadUsers(){
 
@@ -13,6 +45,7 @@ async function loadUsers(){
 
     renderTable();
 }
+
 
 function renderTable(){
 
@@ -33,7 +66,7 @@ function renderTable(){
 
     table.innerHTML="";
 
-    paginated.forEach((u,i)=>{
+    paginated.forEach((u)=>{
 
         const row = document.createElement("tr");
 
@@ -41,52 +74,31 @@ function renderTable(){
             <td>${u.first_name} ${u.last_name}</td>
             <td>${u.email}</td>
             <td>${u.role}</td>
-            <td><button onclick="toggleDetails(${i})">View</button></td>
-        `;
-
-        const details = document.createElement("tr");
-
-        details.id="details-"+i;
-        details.style.display="none";
-
-        details.innerHTML=`
-        <td colspan="4">
-            Address: ${u.address}<br>
-            Telephone: ${u.telephone}<br>
-            Passport: ${u.passport}
-        </td>
+            <td><button class="btn-view" onclick="openUserModal(${u.user_id})">View</button></td>
         `;
 
         table.appendChild(row);
-        table.appendChild(details);
 
     });
 
     document.getElementById("pageNumber").textContent = page;
-
 }
 
-function toggleDetails(i){
 
-    const row = document.getElementById("details-"+i);
+// ✅ OPEN MODAL
+function openUserModal(id){
 
-    row.style.display =
-        row.style.display === "table-row" ? "none" : "table-row";
+    const user = users.find(u => u.user_id === id);
+    if(!user) return;
+
+    document.getElementById("viewUserName").textContent =
+        `${user.first_name} ${user.last_name}`;
+
+    document.getElementById("viewUserRole").textContent = user.role;
+    document.getElementById("viewUserEmail").textContent = user.email;
+    document.getElementById("viewUserAddress").textContent = user.address;
+    document.getElementById("viewUserTelephone").textContent = user.telephone;
+    document.getElementById("viewUserPassport").textContent = user.passport;
+
+    document.getElementById("viewUserModal").classList.add("active");
 }
-
-document.getElementById("roleFilter").addEventListener("change",()=>{
-    page = 1;
-    renderTable();
-});
-
-document.getElementById("next").onclick=()=>{
-    page++;
-    renderTable();
-};
-
-document.getElementById("prev").onclick=()=>{
-    if(page>1) page--;
-    renderTable();
-};
-
-loadUsers();

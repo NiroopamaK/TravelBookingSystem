@@ -145,3 +145,115 @@ tr[id^="details-"] td {
     font-size: 14px;
     color: #5b463b;
 }
+
+/* MODAL OVERLAY (same system as agent.css) */
+.modal-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 200;
+  justify-content: center;
+  align-items: center;
+}
+
+/* SHOW MODAL */
+.modal-overlay.active {
+  display: flex;
+}
+
+/* MODAL BOX */
+.modal {
+  background: white;
+  border-radius: 12px;
+  padding: 28px;
+  width: 100%;
+  max-width: 600px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+  position: relative;
+}
+
+/* CLOSE BUTTON */
+.modal-close {
+  position: absolute;
+  top: 16px;
+  right: 20px;
+  background: none;
+  border: none;
+  font-size: 22px;
+  cursor: pointer;
+  color: #8b5e3c;
+}
+
+.modal-close:hover {
+  color: #5a381e;
+}
+
+/* VIEW MODAL STYLING */
+.modal-view {
+  max-width: 680px;
+}
+
+.view-pkg-header {
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 2px solid #f0e6db;
+}
+
+.view-pkg-header h3 {
+  font-size: 1.4rem;
+  color: #5a381e;
+  margin-bottom: 6px;
+}
+
+.view-pkg-destination {
+  display: inline-block;
+  background: #f5ede5;
+  color: #8b5e3c;
+  font-size: 0.85rem;
+  font-weight: 600;
+  padding: 3px 10px;
+  border-radius: 20px;
+}
+
+.view-pkg-meta {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.view-pkg-meta p {
+  background: #faf6f2;
+  border: 1px solid #ede0d4;
+  border-radius: 8px;
+  padding: 10px 12px;
+  margin: 0;
+  color: #3d2209;
+  font-size: 0.9rem;
+}
+
+.view-pkg-section {
+  margin-bottom: 20px;
+}
+
+.view-pkg-section label {
+  display: block;
+  font-size: 0.75rem;
+  color: #a07850;
+  font-weight: 700;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+
+.view-pkg-section p {
+  font-size: 0.95rem;
+  color: #3d2209;
+  line-height: 1.6;
+  background: #faf6f2;
+  border: 1px solid #ede0d4;
+  border-radius: 8px;
+  padding: 12px;
+}
