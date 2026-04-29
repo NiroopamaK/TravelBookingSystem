@@ -21,6 +21,16 @@ document.addEventListener("DOMContentLoaded", () => {
         renderTable();
     };
 
+    document.getElementById("closeViewPackageModalBtn").onclick = () => {
+        document.getElementById("viewPackageModal").classList.remove("active");
+    };
+
+    document.getElementById("viewPackageModal").onclick = (e) => {
+        if(e.target.id === "viewPackageModal"){
+            e.currentTarget.classList.remove("active");
+        }
+    };
+
 });
 
 
@@ -73,22 +83,10 @@ function renderTable(){
             <td>${p.destination}</td>
             <td>${p.agent_first_name} ${p.agent_last_name}</td>
             <td>$${p.price}</td>
-            <td><button onclick="toggleDetails(${p.package_id})">View</button></td>
-        `;
-
-        const details = document.createElement("tr");
-
-        details.id = "details-"+p.package_id;
-        details.style.display = "none";
-
-        details.innerHTML = `
-            <td colspan="5">
-                <strong>Description:</strong> ${p.description}
-            </td>
+            <td><button class="btn-view" onclick="openModal(${p.package_id})">View</button></td>
         `;
 
         table.appendChild(row);
-        table.appendChild(details);
 
     });
 
@@ -99,18 +97,17 @@ function renderTable(){
 
 }
 
+function openModal(id){
 
-// TOGGLE PACKAGE DETAILS
-function toggleDetails(id){
+    const pkg = packages.find(p => p.package_id === id);
+    if(!pkg) return;
 
-    const row = document.getElementById("details-"+id);
+    document.getElementById("viewPkgTitle").textContent = pkg.title;
+    document.getElementById("viewPkgDestination").textContent = pkg.destination;
+    document.getElementById("viewPkgAgent").textContent =
+        `${pkg.agent_first_name} ${pkg.agent_last_name}`;
+    document.getElementById("viewPkgPrice").textContent = "$" + pkg.price;
+    document.getElementById("viewPkgDescription").textContent = pkg.description;
 
-    if(!row) return;
-
-    if(row.style.display === "none"){
-        row.style.display = "table-row";
-    }else{
-        row.style.display = "none";
-    }
-
+    document.getElementById("viewPackageModal").classList.add("active");
 }

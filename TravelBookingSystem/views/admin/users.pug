@@ -2,6 +2,7 @@ extends ../layout
 
 block content
   link(rel="stylesheet", href="/css/users.css")
+
   h1 Users
 
   .filters
@@ -27,5 +28,31 @@ block content
     span Page 
       span#pageNumber 1
     button#next Next
+
+  // ✅ MODAL (same style as agent/packages)
+  .modal-overlay#viewUserModal
+    .modal.modal-view
+      button.modal-close#closeUserModalBtn &times;
+
+      .view-pkg-header
+        h3#viewUserName -
+        span.view-pkg-destination#viewUserRole -
+
+      .view-pkg-meta
+        p
+          strong Email:
+          span#viewUserEmail -
+
+      .view-pkg-section
+        label Address
+        p#viewUserAddress -
+
+      .view-pkg-section
+        label Telephone
+        p#viewUserTelephone -
+
+      .view-pkg-section
+        label Passport
+        p#viewUserPassport -
 
   script(src="/js/users.js")

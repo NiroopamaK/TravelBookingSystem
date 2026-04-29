@@ -57,7 +57,7 @@ function renderPackages(packages) {
 
   container.innerHTML = packages.map(pkg => `
     <div class="package-card">
-      <img class="card-img" src="/assets/Hawaii.png" alt="Package image" />
+      <img class="card-img" src="/assets/packages.png" alt="Package image" />
       <div class="card-info">
         <h3>${escapeHtml(pkg.title)}</h3>
         <p>📍 ${escapeHtml(pkg.destination)}</p>
